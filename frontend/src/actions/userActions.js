@@ -15,12 +15,25 @@ import {
   userDetailsRequest,
   userDetailsSuccess,
   userDetailsFail,
+
+  userListRequest,
+  userListSuccess,
+  userListFail,
+ 
+  removeUserRequest,
+  removeUserSuccess,
+  removeUserFail,
+
+  userUpdateAdminRequest,
+  userUpdateAdminSuccess,
+  userUpdateAdminFail
 } from '../reducers/userDetailsSlice'
 
 import {
-  userUpdateRequest,userUpdateSuccess, userUpdateFail
+  userUpdateRequest,
+  userUpdateSuccess,
+  userUpdateFail,
 } from '../reducers/userUpdateSlice'
-
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -97,7 +110,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState()
 
-    console.log(userInfo)
+ 
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -127,8 +140,6 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState()
 
-    
-
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -137,12 +148,111 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     }
     console.log(user)
 
-    const { data } = await axios.put(`/api/users/profile`,user, config)
+    const { data } = await axios.put(`/api/users/profile`, user, config)
 
     dispatch(userUpdateSuccess(data))
+    dispatch(userLoginSuccess(data))
+    dispatch(userDetailsSuccess(data))
+    localStorage.setItem('userInfo', JSON.stringify(data))
   } catch (error) {
     dispatch(
       userUpdateFail(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    )
+  }
+}
+
+export const listUsers = (user) => async (dispatch, getState) => {
+  try {
+    dispatch(userListRequest())
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+
+    const { data } = await axios.get(`/api/users`, config)
+
+    dispatch(userListSuccess(data))
+  } catch (error) {
+    dispatch(
+      userListFail(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    )
+  }
+}
+
+// removeUserRequest,
+// removeUserSuccess,
+// removeUserFail
+
+export const removeUser = (id) => async (dispatch, getState) => {
+  try {
+    dispatch(removeUserRequest())
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+ 
+    await axios.delete(`/api/users/${id}`, config)
+    
+    dispatch(removeUserSuccess())
+  } catch (error) {
+    dispatch(
+      removeUserFail(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    )
+  }
+}
+
+// userUpdateAdminRequest,
+//   userUpdateAdminSuccess,
+//   userUpdateAdminFail
+
+export const updateUser = (user) => async (dispatch, getState) => {
+  try {
+    dispatch(userUpdateAdminRequest())
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+ 
+    const { data } = await axios.put(`/api/users/${user._id}`,user, config)
+    
+    dispatch(userUpdateAdminSuccess(data))
+  } catch (error) {
+    dispatch(
+      userUpdateAdminFail(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message

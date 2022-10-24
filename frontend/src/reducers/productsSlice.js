@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const initialState = {
   products: [],
+  pages: {},
+  page: {}
 }
 
 const productSlice = createSlice({
@@ -11,10 +13,15 @@ const productSlice = createSlice({
     productListRequest: (state) => {
       state.loading = true
       state.error =  false;
+      state.success = false
     },
     productListSuccess: (state, action) => {
+      state.error =  false;
       state.loading = false
-      state.products = action.payload
+      state.success = true
+      state.products = action.payload.products
+      state.pages = action.payload.pages
+      state.page = action.payload.page
     },
     productListFail: (state, action) => {
       state.loading = false

@@ -1,14 +1,24 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { PayPalButton } from 'react-paypal-button-v2'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Form, Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { getOrderDetails } from '../actions/orderActions'
+import {
+  getOrderDetails,
+  payOrder,
+  orderDeliver,
+} from '../actions/orderActions'
+import { orderPayReset } from '../reducers/orderPaySlice'
+import { orderDeliverReset } from '../reducers/orderSlice'
+import QRCode from 'qrcode'
 
 const OrderScreen = () => {
   const { id } = useParams()
+
+  const navigate = useNavigate()
 
   const [sdkReady, setSdkReady] = useState(false)
 
@@ -18,9 +28,31 @@ const OrderScreen = () => {
   const { order, loading, error } = orderDetails
 
   const orderPay = useSelector((state) => state.orderDetails)
-  const {  loading:loadingPay, success:successPay } = orderDetails
+  const { loading: loadingPay, success: successPay } = orderPay
+
+  const deliverOrder = useSelector((state) => state.orderCreate)
+  const { loading: loadingDeliver, success: successDeliver } = deliverOrder
+
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
+  let notOrder = order.user ? true : false
+
+  const [qr, setQr] = useState('')
+  const generateQR = async (text) => {
+    try {
+      setQr(await QRCode.toDataURL(text))
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   useEffect(() => {
+    if (!userInfo) {
+      navigate('/login')
+    }
+    generateQR(`http://localhost:3000/order/${id}`)
+
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get('/api/config/paypal')
       const script = document.createElement('script')
@@ -33,11 +65,38 @@ const OrderScreen = () => {
       document.body.appendChild(script)
     }
 
-    addPayPalScript()
-    
+    if (!notOrder || successPay || successDeliver || order._id !== id) {
+      dispatch(orderPayReset())
+      dispatch(orderDeliverReset())
+      dispatch(getOrderDetails(id))
+    }
+    if (!order.isPaid) {
+      if (!window.paypal) {
+        addPayPalScript()
+      } else {
+        setSdkReady(true)
+      }
+    }
 
+    // dispatch(getOrderDetails(id))
+  }, [
+    dispatch,
+    id,
+    successPay,
+    notOrder,
+    successDeliver,
+    order.isPaid,
+    successDeliver,
+  ])
+
+  const successPaymentHandler = (paymentResult) => {
+    dispatch(payOrder(id, paymentResult))
     dispatch(getOrderDetails(id))
-  }, [dispatch, id])
+  }
+
+  const deliverHandler = () => {
+    dispatch(orderDeliver(order))
+  }
 
   return loading ? (
     <Loader />
@@ -108,7 +167,8 @@ const OrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x ${item.price} = RS{' '}
+                          {item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -120,37 +180,66 @@ const OrderScreen = () => {
         </Col>
 
         <Col md={4}>
-          <Card>
-            <ListGroup variant='flush'>
-              <ListGroup.Item>
-                <h2>Order Summary</h2>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Sub Total</Col>
-                  <Col>${order.subTotal}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Shipping</Col>
-                  <Col>${order.shippingPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Tax</Col>
-                  <Col>${order.taxPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Total</Col>
-                  <Col>${order.totalPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-            </ListGroup>
-          </Card>
+          <Row>
+            <Card>
+              <ListGroup variant='flush'>
+                <ListGroup.Item>
+                  <h2>Order Summary</h2>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Sub Total</Col>
+                    <Col>${order.subTotal}</Col>
+                  </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Shipping</Col>
+                    <Col>${order.shippingPrice}</Col>
+                  </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Tax</Col>
+                    <Col>RS {order.taxPrice}</Col>
+                  </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Total</Col>
+                    <Col>RS {order.totalPrice}</Col>
+                  </Row>
+                </ListGroup.Item>
+                {!order.isPaid && order.paymentMethod === 'PayaPal' && (
+                  <ListGroup.Item>
+                    {loadingPay && <Loader />}
+                    {!sdkReady ? (
+                      <Loader />
+                    ) : (
+                      <PayPalButton
+                        amount={order.totalPrice}
+                        onSuccess={successPaymentHandler}
+                      />
+                    )}
+                  </ListGroup.Item>
+                )}
+
+                {loadingDeliver && <Loader />}
+                {userInfo && userInfo.isAdmin && !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type='button'
+                      className='btn btn-block'
+                      onClick={deliverHandler}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
+              </ListGroup>
+            </Card>
+          </Row>
+          <img src={qr} alt='Red dot' style={{ width: '250px' }} />
         </Col>
       </Row>
     </>

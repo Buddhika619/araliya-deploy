@@ -12,6 +12,12 @@ import ShippingScreen from './screens/ShippingScreen'
 import PaymentScreen from './screens/PaymentScreen'
 import PlaceOrderScreen from './screens/PlaceOrderScreen'
 import OrderScreen from './screens/OrderScreen'
+import UserListScreen from './screens/UserListScreen'
+import UserEditScreen from './screens/UserEditScreen'
+import ProductlistScreen from './screens/ProductlistScreen'
+import ProductEditScreen from './screens/ProductEditScreen'
+import OrderListScreen from './screens/OrderListScreen'
+
 
 const App = () => {
   return (
@@ -32,6 +38,19 @@ const App = () => {
               <Route index element={<CartScreen />} />
               <Route path=':id' element={<CartScreen />} />
             </Route>
+            <Route path='/admin/userlist' element={<UserListScreen />} />
+            
+            <Route path='/admin/user/:id/edit' element={<UserEditScreen />} />
+
+            <Route path='/admin/productlist' element={<ProductlistScreen />} />
+            <Route path='/admin/productlist/:pagenumber' element={<ProductlistScreen />} />
+
+            <Route path='/admin/products/:id/edit' element={<ProductEditScreen />} exact/>
+            <Route path='/admin/orderlist' element={<OrderListScreen />} exact/>
+
+            <Route path='/search/:keyword' element={<HomeScreen />} exact />
+            <Route path='/page/:pagenumber' element={<HomeScreen />} exact />
+            <Route path='/search/:keyword/page/:pagenumber' element={<HomeScreen />} exact />
             <Route path='/' element={<HomeScreen />} exact />
           </Routes>
         </Container>

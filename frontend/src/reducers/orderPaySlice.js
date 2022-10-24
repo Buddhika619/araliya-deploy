@@ -12,6 +12,7 @@ const orderPaySlice = createSlice({
     // getOne
     orderPayRequest: (state) => {
       state.loading = true
+      state.success = false
       state.error = false
     },
     orderPaySuccess: (state, action) => {
