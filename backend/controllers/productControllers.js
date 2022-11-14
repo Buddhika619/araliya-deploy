@@ -1,14 +1,16 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
+import sendEmail from '../Utils/sendEmail.js'
+import cron from 'node-cron'
 
-// @des  Fetch all products
+// @des  Fetch active products
 // @route GET /api/products
 // @access Public
 
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 10
   const page = Number(req.query.pagenumber) || 1
-  console.log(page)
+
   const keyword = req.query.keyword
     ? {
         name: {
@@ -17,11 +19,78 @@ const getProducts = asyncHandler(async (req, res) => {
         },
       }
     : {}
+  let products = ''
+  let resultCount = ''
 
-  const count = await Product.countDocuments({...keyword})
-  const products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1))
+  const filter = req.query.filter
+  switch (filter) {
+    case 'asc':
+      products = await Product.find({ ...keyword, active: true })
+        .sort({ price: 1 })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
 
-  res.json( {products, page, pages: Math.ceil(count/ pageSize)})
+      break
+    case 'dsc':
+      products = await Product.find({ ...keyword, active: true })
+        .sort({ price: -1 })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+
+      break
+    case 'top':
+      products = await Product.find({ ...keyword, active: true })
+        .sort({ rating: -1 })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+
+      break
+    default:
+      products = await Product.find({ ...keyword, active: true })
+        .sort({ createdAt: -1 })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+  }
+
+  resultCount = await Product.countDocuments({ ...keyword, active: true })
+
+  res.json({
+    products,
+    page,
+    pages: Math.ceil(resultCount / pageSize),
+
+    resultCount,
+  })
+})
+
+// @des  Fetch active/reorder/deactive products
+// @route GET /api/products/admin
+// @access admin
+
+const getProductListAdmin = asyncHandler(async (req, res) => {
+  const path = req.query.path
+  let products = ''
+  console.log('ddd')
+  switch (path) {
+    case 'active':
+      products = await Product.find({ active: true })
+      break
+
+    case 'outofstock':
+      // products = await Product.find({active: true, $expr:{$gt:["$reOrderLevel", "$countInStock"]}}) //out of stock if reorder level is used---dont delete this line needed for future reference
+      products = await Product.find({active: true,  countInStock: 0 })
+      break
+
+    case 'deactivated':
+      products = await Product.find({ active: false })
+      break
+  }
+
+  //  products = await Product.find({ active: true })
+
+  res.json({
+    products,
+  })
 })
 
 // @des  Fetch  single product
@@ -42,10 +111,34 @@ const getProductById = asyncHandler(async (req, res) => {
 // @route DELETE /api/products/:id
 // @access Private/Admin
 const deleteProduct = asyncHandler(async (req, res) => {
+  console.log('dang')
   const product = await Product.findById(req.params.id)
 
   if (product) {
     await product.remove()
+    res.json({ message: 'product removed' })
+  } else {
+    res.status(404)
+    throw new Error('Product not found!')
+  }
+})
+
+// @des  delete multiple products
+// @route Delete /api/products/delete
+// @access Private/Admin
+const deleteManyProducts = asyncHandler(async (req, res) => {
+  //todo-----split req.headers.data by , TO mAKE AN ARRAY
+  const ids = req.headers.data.split(',')
+  console.log(ids)
+
+  console.log(ids)
+  if (ids.length > 0) {
+    console.log(ids)
+    await Product.deleteMany({
+      _id: {
+        $in: ids,
+      },
+    })
     res.json({ message: 'product removed' })
   } else {
     res.status(404)
@@ -64,9 +157,12 @@ const createProduct = asyncHandler(async (req, res) => {
     image: '/image/sample.jpg',
     brand: 'test',
     category: 'Sample Category',
+    reOrderLevel: 0,
     countInStock: 0,
+    dailyCapacity:0,
     numReviews: 0,
     description: 'sample',
+    active: true,
   })
 
   const createProduct = await product.save()
@@ -78,8 +174,18 @@ const createProduct = asyncHandler(async (req, res) => {
 // @access Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
   console.log(req.body)
-  const { name, price, description, image, brand, category, countInStock } =
-    req.body
+  const {
+    name,
+    price,
+    description,
+    image,
+    brand,
+    category,
+    countInStock,
+ 
+    dailyCapacity,
+    active,
+  } = req.body
 
   console.log(req.body)
   const product = await Product.findById(req.params.id)
@@ -92,6 +198,9 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.brand = brand
     product.category = category
     product.countInStock = countInStock
+    // product.reOrderLevel = reOrderLevel
+    product.dailyCapacity = dailyCapacity
+    product.active = active
     const updatedProduct = await product.save()
     res.json(updatedProduct)
   } else {
@@ -99,6 +208,29 @@ const updateProduct = asyncHandler(async (req, res) => {
     throw new Error('Product not found')
   }
 })
+
+const updateDailyCapacity = asyncHandler(async (req, res) => {
+  
+  // await Product.updateMany({"active": true}, {"$set":{"countInStock": $dailyCapacity}});
+  await  Product.updateMany(
+    {"active": true},
+    [
+         {"$set": {"countInStock":  "$dailyCapacity"}}
+        // {"$set": {"name":  "kamutha"}}
+    ]
+)
+
+
+})
+
+//first star represent a minute, seconde hour as on
+//this function will run in 6.34AM everyday
+cron.schedule('34 06 * * *', () => {
+  updateDailyCapacity()
+  console.log('brah')
+});
+
+// updateDailyCapacity()
 
 // @des  Create new review
 // @route POST /api/products/:id/reviews
@@ -144,17 +276,31 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @route POST /api/products/top
 // @access Private
 const getTopProducts = asyncHandler(async (req, res) => {
-   const products = await Product.find({}).sort({rating: -1}).limit(3)
+  const products = await Product.find({}).sort({ rating: -1 }).limit(6)
 
-   res.json(products)
+  res.json(products)
+})
+
+//testing mail
+const email = asyncHandler(async (req, res) => {
+  try {
+    await sendEmail()
+    res.status(200).json({ success: true, message: 'Reset Email Sent' })
+  } catch (error) {
+    res.status(500)
+    throw new Error('Email not sent, please try again')
+  }
 })
 
 export {
   getProducts,
   getProductById,
+  getProductListAdmin,
   deleteProduct,
   createProduct,
   updateProduct,
   createProductReview,
-  getTopProducts
+  getTopProducts,
+  email,
+  deleteManyProducts,
 }

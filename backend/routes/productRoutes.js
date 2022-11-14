@@ -4,14 +4,21 @@ import { protect, admin } from '../middleware/authMiddleware.js'
 import {
   getProductById,
   getProducts,
+  getProductListAdmin,
   deleteProduct,
   createProduct,
   updateProduct,
   createProductReview,
-  getTopProducts
+  getTopProducts,
+  email,
+  deleteManyProducts,
 } from '../controllers/productControllers.js'
 
-router.route('/').get(getProducts).post(protect, admin, createProduct)
+router
+  .route('/')
+  .get(getProducts)
+  .post(protect, admin, createProduct)
+  .delete(protect, admin, deleteManyProducts)
 router.route('/:id/reviews').post(protect, createProductReview)
 router.get('/top', getTopProducts)
 router
@@ -19,5 +26,12 @@ router
   .get(getProductById)
   .delete(protect, admin, deleteProduct)
   .put(protect, admin, updateProduct)
+
+router.get('/admin/productList',protect, admin, getProductListAdmin)
+
+//testing mail
+router.post('/email', email)
+
+
 
 export default router

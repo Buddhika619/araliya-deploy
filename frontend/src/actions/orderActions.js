@@ -7,14 +7,19 @@ import {
   myOrdersRequest,
   myOrdersSuccess,
   myOrdersFail,
-  orderListRequest,
-  orderListSuccess,
-  orderListFail,
   orderDeliverRequest,
   orderDeliverSuccess,
   orderDeliverFail,
 } from '../reducers/orderSlice'
 
+
+import {
+
+  orderListRequest,
+  orderListSuccess,
+  orderListFail,
+
+} from '../reducers/orderListSlice'
 import {
   orderDetailsRequest,
   orderDetailsSuccess,
@@ -89,7 +94,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
 
 export const payOrder =
   (orderId, paymentResult) => async (dispatch, getState) => {
-    console.log(paymentResult)
+    
     try {
       dispatch(orderPayRequest())
 
@@ -97,7 +102,7 @@ export const payOrder =
         userLogin: { userInfo },
       } = getState()
 
-      console.log(userInfo.token)
+     
 
       const config = {
         headers: {
@@ -165,7 +170,7 @@ export const myOrderList = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState()
 
-    console.log(userInfo.token)
+    
 
     const config = {
       headers: {
@@ -195,7 +200,7 @@ export const listOrders = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState()
 
-    console.log(userInfo.token)
+  
 
     const config = {
       headers: {

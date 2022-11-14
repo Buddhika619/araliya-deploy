@@ -70,6 +70,22 @@ const productSchema = mongoose.Schema({
         required: true,
         default: 0,
     },
+    reOrderLevel: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
+    dailyCapacity: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
+    active: {
+        type: Boolean,
+        required: true,
+        default: true,
+    },
+
 },{
     timestamps:true
 })

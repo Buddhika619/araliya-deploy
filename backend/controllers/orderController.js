@@ -1,4 +1,5 @@
 import Order from '../models/orderModel.js'
+import Product from '../models/productModel.js'
 import asyncHandler from 'express-async-handler'
 
 // @des  Create new order
@@ -21,21 +22,44 @@ const addOrderItems = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error('No order Items')
   } else {
-    const order = new Order({
-      orderItems,
-      user: req.user._id,
-      shippingAddress,
-      paymentMethod,
-      subTotal,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
-    })
+    let checkArr = []
+    for (let i = 0; i < orderItems.length; i++) {
+      const product = await Product.findById(orderItems[i].product)
+      if (product.countInStock >= orderItems[i].qty) {
+        checkArr.push(0)
+      } else {0
+        checkArr.push(1)
+      }
+    }
 
-    const CreatedOrder = await order.save()
+    let checkSum = checkArr.reduce((acc, cv) => acc + cv, 0)
 
-    res.status(201).json(CreatedOrder)
+    if (checkSum < 1) {
+      for (let i = 0; i < orderItems.length; i++) {
+        const product = await Product.findById(orderItems[i].product)
+        product.countInStock -= orderItems[i].qty
+        await product.save()
+      }
+
+      const order = new Order({
+        orderItems,
+        user: req.user._id,
+        shippingAddress,
+        paymentMethod,
+        subTotal,
+        itemsPrice,
+        taxPrice,
+        shippingPrice,
+        totalPrice,
+      })
+
+      const CreatedOrder = await order.save()
+
+      res.status(201).json(CreatedOrder)
+    } else {
+      res.status(500)
+      throw new Error('Order Failed, Please reset your cart and try again')
+    }
   }
 })
 
@@ -125,5 +149,5 @@ export {
   updateOrderToPaid,
   getMyOrders,
   getOrders,
-  updateOrderToDelivered
+  updateOrderToDelivered,
 }

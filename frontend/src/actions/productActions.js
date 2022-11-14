@@ -3,8 +3,16 @@ import {
   productListRequest,
   productListSuccess,
   productListFail,
+
 } from '../reducers/productsSlice'
 
+
+import {
+
+  adminProductListRequest,
+  adminProductListSuccess,
+  adminProductListFail,
+} from '../reducers/adminProductList'
 import {
   productDetailsRequest,
   productDetailsSuccess,
@@ -16,14 +24,12 @@ import {
   productUpdateSuccess,
   productUpdateFail,
   productUpdateReset,
- 
 } from '../reducers/singleProductSlice'
-
 
 import {
   productCreateReviewRequest,
   productCreateReviewSuccess,
-  productCreateReviewFail
+  productCreateReviewFail,
 } from '../reducers/productReviewSlice'
 
 import {
@@ -31,30 +37,69 @@ import {
   productCreateSuccess,
   productCreateFail,
   productCreateReset,
- } from '../reducers/productCreateSlice'
+} from '../reducers/productCreateSlice'
 
+import {
+  productTopRequest,
+  productTopSuccess,
+  productTopFail,
+} from '../reducers/productTopRatedSlice'
 
- import {
-  productTopRequest, productTopSuccess, productTopFail
- } from '../reducers/productTopRatedSlice'
+export const listProducts =
+  (keyword = '', pagenumber = '', filter = '') =>
+  async (dispatch) => {
+    try {
+      dispatch(productListRequest())
 
-export const listProducts = (keyword= '',pagenumber = '') => async (dispatch) => {
-  try {
-    dispatch(productListRequest())
-
-    const { data } = await axios.get(`/api/products?keyword=${keyword}&pagenumber=${pagenumber}`)
-
-    dispatch(productListSuccess(data))
-  } catch (error) {
-    dispatch(
-      productListFail(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
+      const { data } = await axios.get(
+        `/api/products?keyword=${keyword}&pagenumber=${pagenumber}&filter=${filter}`
       )
-    )
+
+      dispatch(productListSuccess(data))
+    } catch (error) {
+      dispatch(
+        productListFail(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      )
+    }
   }
-}
+
+  export const listProductsAdmin =
+  (path='') =>
+  async (dispatch,getState) => {
+    try {
+      dispatch(adminProductListRequest())
+
+
+      const {
+      userLogin: { userInfo },
+    } = getState()
+
+      const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+
+      const { data } = await axios.get(
+        `/api/products/admin/productList?path=${path}`, config
+      )
+
+      dispatch(adminProductListSuccess(data))
+    } catch (error) {
+      dispatch(
+        adminProductListFail(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      )
+    }
+  }
 
 export const listProductsDetails = (id) => async (dispatch) => {
   try {
@@ -72,7 +117,8 @@ export const listProductsDetails = (id) => async (dispatch) => {
   }
 }
 
-export const removeProduct = (id) => async (dispatch, getState) => {
+export const removeProduct = (ids) => async (dispatch, getState) => {
+  console.log(ids)
   try {
     dispatch(productRemoveRequest())
 
@@ -82,11 +128,17 @@ export const removeProduct = (id) => async (dispatch, getState) => {
 
     const config = {
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
+        data: ids,
       },
     }
 
-    await axios.delete(`/api/products/${id}`, config)
+    //deleteOne
+    // await axios.delete(`/api/products/${id}`, config)
+
+    //deleteMultiple
+    axios.delete(`/api/products`, config)
 
     dispatch(productRemoveSuccess())
   } catch (error) {
@@ -114,7 +166,7 @@ export const createProduct = () => async (dispatch, getState) => {
       },
     }
 
-   const { data } = await axios.post(`/api/products/`,{}, config)
+    const { data } = await axios.post(`/api/products/`, {}, config)
 
     dispatch(productCreateSuccess(data))
   } catch (error) {
@@ -144,8 +196,11 @@ export const updateProduct = (product) => async (dispatch, getState) => {
       },
     }
 
-   const { data } = await axios.put(`/api/products/${product._id}`,product, config)
-
+    const { data } = await axios.put(
+      `/api/products/${product._id}`,
+      product,
+      config
+    )
 
     dispatch(productUpdateSuccess(data))
   } catch (error) {
@@ -159,36 +214,35 @@ export const updateProduct = (product) => async (dispatch, getState) => {
   }
 }
 
-export const createProductReview = (productId, review) => async (dispatch, getState) => {
-  try {
-    dispatch(productCreateReviewRequest())
+export const createProductReview =
+  (productId, review) => async (dispatch, getState) => {
+    try {
+      dispatch(productCreateReviewRequest())
 
-  
-    const {
-      userLogin: { userInfo },
-    } = getState()
+      const {
+        userLogin: { userInfo },
+      } = getState()
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
 
-   await axios.post(`/api/products/${productId}/reviews`,review, config)
+      await axios.post(`/api/products/${productId}/reviews`, review, config)
 
-
-    dispatch(productCreateReviewSuccess())
-  } catch (error) {
-    dispatch(
-      productCreateReviewFail(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
+      dispatch(productCreateReviewSuccess())
+    } catch (error) {
+      dispatch(
+        productCreateReviewFail(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
       )
-    )
+    }
   }
-}
 
 export const listTopProducts = () => async (dispatch) => {
   try {

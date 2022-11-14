@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const initialState = {
+  user : {}
 }
+
 
 const userUpdateSlice = createSlice({
   name: 'userInfo',
@@ -21,10 +23,15 @@ const userUpdateSlice = createSlice({
     userUpdateFail: (state, action) => {
       state.loading = false
       state.error = action.payload
-    }
+    },
+    userUpdateReset: (state, action) => {
+      state.loading = false
+      state.success = false
+    },
+
   },
 })
 
-export const { userUpdateRequest, userUpdateSuccess, userUpdateFail } =
+export const { userUpdateRequest, userUpdateSuccess, userUpdateFail,userUpdateReset } =
 userUpdateSlice.actions
 export default userUpdateSlice.reducer

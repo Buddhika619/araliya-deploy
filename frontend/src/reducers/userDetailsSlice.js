@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const initialState = {
   user: {},
-  users: [],
+ 
 }
 
 const userDetailsSlice = createSlice({
@@ -22,32 +22,43 @@ const userDetailsSlice = createSlice({
       state.loading = false
       state.error = action.payload
     },
-    userListRequest: (state) => {
-      state.loading = true
-      state.error = false
+
+    userDetailsReset: (state, action) => {
+      state.user = {}
     },
-    userListSuccess: (state, action) => {
-      state.loading = false
-      state.users = action.payload
-    },
-    userListFail: (state, action) => {
-      state.loading = false
-      state.error = action.payload
-    },
-    userListReset: (state, action) => {
-      state.users = []
-    },
+    // userListRequest: (state) => {
+    //   state.loading = true
+    //   state.error = false
+    //   state.success = false
+    // },
+    // userListSuccess: (state, action) => {
+    //   state.loading = false
+    //   state.success = true
+    //   state.users = action.payload
+    // },
+    // userListFail: (state, action) => {
+    //   state.success = false
+    //   state.loading = false
+    //   state.error = action.payload
+    // },
+    // userListReset: (state, action) => {
+    //   state.success = false
+    //   state.users = []
+    // },
     removeUserRequest: (state) => {
       state.loading = true
       state.error = false
+      state.success = false
     },
     removeUserSuccess: (state, action) => {
       state.loading = false
       state.success = true
+
     },
     removeUserFail: (state, action) => {
       state.loading = false
       state.error = action.payload
+      state.success = false
     },
     removeUserReset: (state) => {
       state.success = false
@@ -76,6 +87,7 @@ export const {
   userDetailsRequest,
   userDetailsSuccess,
   userDetailsFail,
+  userDetailsReset,
   userListRequest,
   userListSuccess,
   userListFail,

@@ -4,22 +4,23 @@ import {
   userLoginSuccess,
   userLoginFail,
   userLogout,
-} from '../reducers/userSlice'
-import {
+
   userRegisterRequest,
   userRegisterSuccess,
   userRegisterFail,
-} from '../reducers/userRegisterSlice'
+} from '../reducers/userSlice'
+// import {
+//   userRegisterRequest,
+//   userRegisterSuccess,
+//   userRegisterFail,
+// } from '../reducers/userRegisterSlice'
 
 import {
   userDetailsRequest,
   userDetailsSuccess,
   userDetailsFail,
+  userDetailsReset,
 
-  userListRequest,
-  userListSuccess,
-  userListFail,
- 
   removeUserRequest,
   removeUserSuccess,
   removeUserFail,
@@ -34,6 +35,15 @@ import {
   userUpdateSuccess,
   userUpdateFail,
 } from '../reducers/userUpdateSlice'
+
+import {
+  userListRequest,
+  userListSuccess,
+  userListFail,} from '../reducers/userListSlice'
+
+import { myOrdersReset } from '../reducers/orderSlice'
+
+
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -66,8 +76,12 @@ export const login = (email, password) => async (dispatch) => {
 }
 
 export const logout = () => (dispatch) => {
+  dispatch(userDetailsReset())
+  dispatch(myOrdersReset())
   localStorage.removeItem('userInfo')
   dispatch(userLogout())
+ 
+
 }
 
 export const register = (name, email, password) => async (dispatch) => {
@@ -198,7 +212,7 @@ export const listUsers = (user) => async (dispatch, getState) => {
 // removeUserSuccess,
 // removeUserFail
 
-export const removeUser = (id) => async (dispatch, getState) => {
+export const removeUser = (ids) => async (dispatch, getState) => {
   try {
     dispatch(removeUserRequest())
 
@@ -209,11 +223,13 @@ export const removeUser = (id) => async (dispatch, getState) => {
     const config = {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
+        'data': ids
       },
     }
 
  
-    await axios.delete(`/api/users/${id}`, config)
+    // await axios.delete(`/api/users/${id}`, config)
+    await axios.delete(`/api/users/`, config)
     
     dispatch(removeUserSuccess())
   } catch (error) {

@@ -1,81 +1,273 @@
 const products = [
   {
-
-    name: 'Airpods Wireless Bluetooth Headphones',
-    image: '/images/airpods.jpg',
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
     description:
-      'Bluetooth technology lets you connect it with compatible devices wirelessly High-quality AAC audio offers immersive listening experience Built-in microphone allows you to take calls while working',
-    brand: 'Apple',
-    category: 'Electronics',
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Araliya',
+    category: 'Burger',
     price: 89.99,
     countInStock: 10,
     rating: 4.5,
     numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 50,
   },
   {
-
-    name: 'iPhone 11 Pro 256GB Memory',
-    image: '/images/phone.jpg',
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
     description:
-      'Introducing the iPhone 11 Pro. A transformative triple-camera system that adds tons of capability without complexity. An unprecedented leap in battery life',
-    brand: 'Apple',
-    category: 'Electronics',
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Burger',
+    category: 'Drinks',
     price: 599.99,
     countInStock: 7,
     rating: 4.0,
     numReviews: 8,
+    reOrderLevel: 0,
+    dailyCapacity: 50,
   },
   {
-
-    name: 'Cannon EOS 80D DSLR Camera',
-    image: '/images/camera.jpg',
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
     description:
-      'Characterized by versatile imaging specs, the Canon EOS 80D further clarifies itself using a pair of robust focusing systems and an intuitive design',
-    brand: 'Cannon',
-    category: 'Electronics',
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Rice',
+    category: 'Drinks',
     price: 929.99,
     countInStock: 5,
     rating: 3,
     numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 50,
   },
   {
-
-    name: 'Sony Playstation 4 Pro White Version',
-    image: '/images/playstation.jpg',
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
     description:
-      'The ultimate home entertainment center starts with PlayStation. Whether you are into gaming, HD movies, television, music',
-    brand: 'Sony',
-    category: 'Electronics',
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Araliya',
+    category: 'Seafoods',
     price: 399.99,
     countInStock: 11,
     rating: 5,
     numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 50,
   },
   {
-
-    name: 'Logitech G-Series Gaming Mouse',
-    image: '/images/mouse.jpg',
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
     description:
-      'Get a better handle on your games with this Logitech LIGHTSYNC gaming mouse. The six programmable buttons allow customization for a smooth playing experience',
-    brand: 'Logitech',
-    category: 'Electronics',
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Araliya',
+    category: 'kottu',
     price: 49.99,
     countInStock: 7,
     rating: 3.5,
     numReviews: 10,
+    reOrderLevel: 0,
+    dailyCapacity: 550,
   },
   {
-
-    name: 'Amazon Echo Dot 3rd Generation',
-    image: '/images/alexa.jpg',
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
     description:
-      'Meet Echo Dot - Our most popular smart speaker with a fabric design. It is our most compact smart speaker that fits perfectly into small space',
-    brand: 'Amazon',
-    category: 'Electronics',
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'kottu',
+    category: 'Drinks',
     price: 29.99,
     countInStock: 0,
     rating: 4,
     numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 80,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Araliya',
+    category: 'Burger',
+    price: 89.99,
+    countInStock: 10,
+    rating: 4.5,
+    numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Burger',
+    category: 'Drinks',
+    price: 599.99,
+    countInStock: 7,
+    rating: 4.0,
+    numReviews: 8,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Rice',
+    category: 'Drinks',
+    price: 929.99,
+    countInStock: 5,
+    rating: 3,
+    numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Araliya',
+    category: 'Seafoods',
+    price: 399.99,
+    countInStock: 11,
+    rating: 5,
+    numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Araliya',
+    category: 'kottu',
+    price: 49.99,
+    countInStock: 7,
+    rating: 3.5,
+    numReviews: 10,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'kottu',
+    category: 'Drinks',
+    price: 29.99,
+    countInStock: 0,
+    rating: 4,
+    numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Araliya',
+    category: 'Burger',
+    price: 89.99,
+    countInStock: 10,
+    rating: 4.5,
+    numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Burger',
+    category: 'Drinks',
+    price: 599.99,
+    countInStock: 7,
+    rating: 4.0,
+    numReviews: 8,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Rice',
+    category: 'Drinks',
+    price: 929.99,
+    countInStock: 5,
+    rating: 3,
+    numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Araliya',
+    category: 'Seafoods',
+    price: 399.99,
+    countInStock: 11,
+    rating: 5,
+    numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'Araliya',
+    category: 'kottu',
+    price: 49.99,
+    countInStock: 7,
+    rating: 3.5,
+    numReviews: 10,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
+  },
+  {
+    name: 'Whopper',
+    image:
+      'https://cdn.sanity.io/images/czqk28jt/prod_bk_us/84743a96a55cb36ef603c512d5b97c9141c40a33-1333x1333.png?w=320&q=40&fit=max&auto=format',
+    description:
+      'A ¼ lb* of flame-grilled beef patty topped with juicy tomatoes, crisp lettuce, creamy mayonnaise, ketchup, crunchy pickles, and sliced white onions on a toasted sesame seed bun',
+    brand: 'kottu',
+    category: 'Drinks',
+    price: 29.99,
+    countInStock: 0,
+    rating: 4,
+    numReviews: 12,
+    reOrderLevel: 0,
+    dailyCapacity: 28,
   },
 ]
 

@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const initialState = {
-    userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
+  userInfo: localStorage.getItem('userInfo')
+    ? JSON.parse(localStorage.getItem('userInfo'))
+    : null,
 }
 
 const userLoginReducer = createSlice({
@@ -22,13 +24,33 @@ const userLoginReducer = createSlice({
       state.loading = false
       state.error = action.payload
     },
-    userLogout: (state) => {
-        state.userInfo = null
+    userRegisterRequest: (state) => {
+      state.loading = true
+      state.error = false
     },
- 
+    userRegisterSuccess: (state, action) => {
+      state.loading = false
+      state.userInfo = action.payload
+    },
+    userRegisterFail: (state, action) => {
+      state.loading = false
+      state.error = action.payload
+    },
+    userLogout: (state) => {
+      state.userInfo = null
+      state.error = false
+    },
   },
 })
 
-export const { userLoginRequest, userLoginSuccess, userLoginFail, userLogout} =
-  userLoginReducer.actions
+export const {
+  userLoginRequest,
+  userLoginSuccess,
+  userLoginFail,
+
+  userRegisterRequest,
+  userRegisterSuccess,
+  userRegisterFail,
+  userLogout,
+} = userLoginReducer.actions
 export default userLoginReducer.reducer
