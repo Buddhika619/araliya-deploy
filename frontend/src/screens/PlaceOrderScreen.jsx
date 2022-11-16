@@ -39,6 +39,8 @@ const PlaceOrderScreen = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const [distance, setDistance] = useState(0)
+  const [distanceLoading, setDistanceLoading] = useState(false)
   const fetchCart = useSelector((state) => state.cart)
   const cart = { ...fetchCart }
 
@@ -53,7 +55,7 @@ const PlaceOrderScreen = () => {
 
   cart.itemsPrice = cart.itemsPrice.toFixed(2)
 
-  cart.shippingPrice = Math.ceil(cart.shippingAddress.distance) * 22
+  cart.shippingPrice = Math.ceil(distance) * 22
   // cart.taxPrice = Number((0.15 *  cart.itemsPrice ).toFixed(2))
 
   cart.totalPrice = Number(cart.itemsPrice) + Number(cart.shippingPrice)
@@ -63,6 +65,27 @@ const PlaceOrderScreen = () => {
   const { order, success, error } = orderCreate
 
   useEffect(() => {
+
+    const fetchDistance = async (location) => {
+      try {
+        const { data } = await axios.get(
+          `/api/distance?lat=${location.lat}&lng=${location.long}`
+        )
+        console.log(data.rows[0].elements[0].distance.text)
+        const distance = Number(
+          data.rows[0].elements[0].distance.text.split(' ')[0]
+        )
+        setDistance(distance)
+        setDistanceLoading(false)
+      } catch (error) {
+        toast.error('Faild to fetch location')
+        console.log(error)
+        setDistanceLoading(false)
+      }
+    }
+
+    fetchDistance(cart.shippingAddress.location)
+
     
     dispatch(orderCreateReset())
     if (success) {

@@ -62,15 +62,13 @@ const ShippingScreen = () => {
     long: '',
   })
 
-  const [distance, setDistance] = useState(0)
-  const [distanceLoading, setDistanceLoading] = useState(false)
   const dispatch = useDispatch()
 
   const submitHandler = (e) => {
     e.preventDefault()
     if (location.lat > 0 ) {
       dispatch(
-        ShippingDetails({ lineOne, lineTwo, lineThree, phone, location, distance })
+        ShippingDetails({ lineOne, lineTwo, lineThree, phone, location })
       )
       navigate(`/payment/${location.lat}-${location.long}`)
     } else {
@@ -96,25 +94,10 @@ const ShippingScreen = () => {
     getLocation()
     showPosition()
 
-    const fetchDistance = async (location) => {
-      try {
-        const { data } = await axios.get(
-          `/api/distance?lat=${location.lat}&lng=${location.long}`
-        )
-        console.log(data.rows[0].elements[0].distance.text)
-        const distanceL = Number(
-          data.rows[0].elements[0].distance.text.split(' ')[0]
-        )
-        setDistance(distanceL)
-        setDistanceLoading(false)
-      } catch (error) {
-        toast.error('Faild to fetch location')
-        console.log(error)
-        setDistanceLoading(false)
-      }
-    }
 
-    fetchDistance(cart.shippingAddress.location)
+     
+    
+   
   }, [])
   return (
     <>
