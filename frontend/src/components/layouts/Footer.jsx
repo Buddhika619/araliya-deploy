@@ -2,12 +2,14 @@ import { style } from '@mui/system'
 import { Row, Col, Form, Button, Container } from 'react-bootstrap'
 import styled from 'styled-components'
 
-
 //TODO - neeed to fix overflow issue in footer
 
 const Wrapper = styled.div`
   background-color: #222935;
   overflow-x: none !important;
+  @media (max-width: 1000px) {
+    display: none;
+  }
 `
 
 const Link = styled.a`
@@ -67,16 +69,24 @@ const Footer = () => {
             <h5 className='text-white mb-3'>Find Us On</h5>
             <ul className='list-unstyled text-muted'>
               <li className='mb-1'>
-                <Link href='#'><i className="fa-brands fa-facebook fa-l"></i> Facebook</Link>
+                <Link href='#'>
+                  <i className='fa-brands fa-facebook fa-l'></i> Facebook
+                </Link>
               </li>
               <li className='mb-1'>
-                <Link href='#'><i className="fa-brands fa-instagram fa-l"></i> Instagram</Link>
-              </li >
-              <li className='mb-1'>
-                <Link href='#'><i className="fa-brands fa-whatsapp fa-l"></i> Whatsapp</Link>
+                <Link href='#'>
+                  <i className='fa-brands fa-instagram fa-l'></i> Instagram
+                </Link>
               </li>
               <li className='mb-1'>
-                <Link href='#'><i className="fa-brands fa-twitter fa-l"></i> Twitter</Link>
+                <Link href='#'>
+                  <i className='fa-brands fa-whatsapp fa-l'></i> Whatsapp
+                </Link>
+              </li>
+              <li className='mb-1'>
+                <Link href='#'>
+                  <i className='fa-brands fa-twitter fa-l'></i> Twitter
+                </Link>
               </li>
             </ul>
           </Col>

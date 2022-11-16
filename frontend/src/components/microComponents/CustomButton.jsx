@@ -8,7 +8,7 @@ import styled from 'styled-components'
 const CustomButton = ({children, type, onClick, className, visibility}) => {
 
     const CustomButton = styled(Button)`
-    background-color: #d23f57;
+    background-color: #00cc66;
     color:white;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;

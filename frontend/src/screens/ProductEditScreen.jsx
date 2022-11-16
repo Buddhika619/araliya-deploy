@@ -8,31 +8,47 @@ import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { listProductsDetails, updateProduct } from '../actions/productActions'
 import { productUpdateReset } from '../reducers/singleProductSlice'
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 
-const ProductEditScreen = () => {
+import Spinner from '../components/Spinner'
+import { toast } from 'react-toastify'
+
+const CreateListing = () => {
   const { id } = useParams()
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState(0)
-  const [image, setImage] = useState('')
-  const [brand, setBrand] = useState('')
-  const [category, setCategory] = useState('')
-  const [reOrderLevel, setReOrderLevel] = useState(0)
-  const [countInStock, setCountInStock] = useState(0)
-  const [dailyCapacity, setDailyCapacity] = useState(0)
-
-  const [description, setDescription] = useState('')
-  const [active, setActive] = useState(true)
   const [uploading, setUploading] = useState(false)
+  const [image, setImage] = useState('')
+
+  const [formData, setFormData] = useState({
+    name: '',
+    price: 0,
+    brand: '',
+    category: '',
+    reOrderLevel: 0,
+    countInStock: 0,
+    dailyCapacity: 0,
+    description: 0,
+    active: true,
+    discountedPrice: 0,
+  })
+
+  const {
+    name,
+    price,
+    brand,
+    category,
+    reOrderLevel,
+    countInStock,
+    dailyCapacity,
+    description,
+    active,
+  } = formData
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
 
   const productDetails = useSelector((state) => state.productDetails)
-  const { loading, error, product } = productDetails
-
+  const { loading, error, success, product } = productDetails
+  console.log(product)
   const productUpdate = useSelector((state) => state.productDetails)
   const {
     loading: loadingUpdate,
@@ -40,13 +56,6 @@ const ProductEditScreen = () => {
     product: updatedProduct,
     success: successUpdate,
   } = productUpdate
-
-  //   const uesrUpdate = useSelector((state) => state.userDetails)
-  //   const {
-  //     loading: loadingUpdate,
-  //     error: errorUpdate,
-  //     success: successUpdate,
-  //   } = uesrUpdate
 
   useEffect(() => {
     if (successUpdate) {
@@ -56,18 +65,56 @@ const ProductEditScreen = () => {
       if (!product.name || product._id !== id) {
         dispatch(listProductsDetails(id))
       } else {
-        setName(product.name)
-        setPrice(product.price)
+        setFormData(product)
         setImage(product.image)
-        setBrand(product.brand)
-        setCategory(product.category)
-        setDailyCapacity(product.dailyCapacity)
-        setCountInStock(product.countInStock)
-        setDescription(product.description)
-        setActive(product.active)
       }
     }
   }, [id, dispatch, product, successUpdate])
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    dispatch(
+      updateProduct({
+        _id: id,
+        name,
+        price,
+        image,
+        brand,
+        category,
+        description,
+        dailyCapacity,
+        countInStock,
+        active,
+      })
+    )
+  }
+
+  const onMutate = (e) => {
+    let boolean = null
+
+    if (e.target.value === 'true') {
+      boolean = true
+    }
+    if (e.target.value === 'false') {
+      boolean = false
+    }
+
+    // Files
+    if (e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        images: e.target.files,
+      }))
+    }
+
+    // Text/Booleans/Numbers
+    if (!e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: boolean ?? e.target.value, //if e.target.id is boolean set as true or false, if it's null set as e.target.value ?? ---nulish operator
+      }))
+    }
+  }
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0]
@@ -87,27 +134,12 @@ const ProductEditScreen = () => {
       setImage(data)
       setUploading(false)
     } catch (error) {
-      console.error(error)
+      toast.error('Image upload Failed')
       setUploading(false)
     }
   }
-
-  const submitHandler = (e) => {
-    e.preventDefault()
-    dispatch(
-      updateProduct({
-        _id: id,
-        name,
-        price,
-        image,
-        brand,
-        category,
-        description,
-        dailyCapacity,
-        countInStock,
-        active,
-      })
-    )
+  if (loading) {
+    return <Spinner />
   }
 
   console.log(location.pathname.split('/')[3])
@@ -120,127 +152,152 @@ const ProductEditScreen = () => {
   }
 
   return (
-    <>
-      <ToastContainer hideProgressBar={true} />
+    <div className='profile'>
+      <main  className='pb-4'>
       <Button className='btn btn-light my-3' onClick={back}>
         Go Back
       </Button>
-      {/* {successUpdate && <Message varient='success'>Profile Updated</Message>} */}
-      <FormContainer>
-        <h1>Edit Product</h1>
-        {/* {loadingUpdate && <Loader />}
-        {errorUpdate && <Message varient='danger'>{errorUpdate}</Message>} */}
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <Message varient='danger'>{error}</Message>
-        ) : (
-          <Form onSubmit={submitHandler}>
-            <Form.Group controlId='name'>
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter name'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+        <FormContainer>
+          <form onSubmit={onSubmit}>
+            <header>
+              <p className='pageHeader'> Create a Product</p>
+            </header>
+           
+            <label className='formLabel'>Name</label>
+            <input
+              className='formInputName'
+              type='text'
+              id='name'
+              value={name}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            />
+            <label className='formLabel'>Price</label>
+            <input
+              className='formInputName'
+              type='number'
+              id='price'
+              value={price}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            />
 
-            <Form.Group controlId='price'>
-              <Form.Label>price</Form.Label>
-              <Form.Control
-                type='number'
-                placeholder='Enter price'
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+            <label className='formLabel'>Brand</label>
+            <input
+              className='formInputName'
+              type='text'
+              id='brand'
+              value={brand}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            />
 
-            <Form.Group controlId='image'>
-              <Form.Label>Image</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter image url'
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+            <label className='formLabel'>Daily Capacity</label>
+            <input
+              className='formInputName'
+              type='number'
+              id='dailyCapacity'
+              value={dailyCapacity}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            />
 
-            <Form.Group controlId='image-file' className='mb-3'>
-              <Form.Control
-                type='file'
-                label='Choose File'
-                onChange={uploadFileHandler}
-              />
-            </Form.Group>
+            <label className='formLabel'>count In Stock</label>
+            <input
+              className='formInputName'
+              type='number'
+              id='countInStock'
+              value={countInStock}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            />
 
-            <Form.Group controlId='brand'>
-              <Form.Label>Brand</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter brand'
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+            <label className='formLabel'>category</label>
+            <input
+              className='formInputName'
+              type='text'
+              id='category'
+              value={category}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            />
+           
+           <label className='formLabel'>Description</label>
+            <textarea
+              className='formInputName'
+              type='text'
+              id='description'
+              value={description}
+              onChange={onMutate}
+              required
+            />
 
-            <Form.Group controlId='dailyCapacity'>
-              <Form.Label>Daily Capacity</Form.Label>
-              <Form.Control
-                type='number'
-                placeholder='Enter Daily capacity'
-                value={dailyCapacity}
-                onChange={(e) => setReOrderLevel(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+            <label className='formLabel'>Active</label>
+            <div className='formButtons'>
+              <button
+                className={active ? 'formButtonActive' : 'formButton'}
+                type='button'
+                id='active'
+                value={true}
+                onClick={onMutate}
+                min='1'
+                max='50'
+              >
+                Yes
+              </button>
+              <button
+                className={
+                  !active && active !== null ? 'formButtonActive' : 'formButton'
+                }
+                type='button'
+                id='active'
+                value={false}
+                onClick={onMutate}
+              >
+                No
+              </button>
+            </div>
 
-            <Form.Group controlId='countInStock'>
-              <Form.Label>count In Stock</Form.Label>
-              <Form.Control
-                type='number'
-                placeholder='Enter Counter In Stock'
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='category'>
-              <Form.Label>category</Form.Label>
-              <Form.Control
-                type='text'
-                placeholder='Enter category'
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-            <Form.Group controlId='description'>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as='textarea'
-                type='text'
-                placeholder='Enter description'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='isAdmin'>
-              <Form.Check
-                type='checkbox'
-                label='Active'
-                checked={active}
-                onChange={(e) => setActive(e.target.checked)}
-              ></Form.Check>
-            </Form.Group>
-
-            <Button className='my-3' type='submit' variant='primary'>
-              Update
-            </Button>
-          </Form>
-        )}
-      </FormContainer>
-    </>
+          
+            <label className='formLabel'>Image</label>
+            <input
+              className='formInputName'
+              type='text'
+              id='image'
+              value={image}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            />
+            <input
+              className='formInputFile'
+              type='file'
+              label='Choose File'
+              onChange={uploadFileHandler}
+              // max='6'
+              // accept='.jpg,.png,.jpeg'
+            />
+            <button type='submit' className='primaryButton createListingButton'>
+                Update
+            </button>
+          </form>
+        </FormContainer>
+      </main>
+    </div>
   )
 }
 
-export default ProductEditScreen
+export default CreateListing

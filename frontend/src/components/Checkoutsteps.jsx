@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 const CheckoutNav = styled(Nav)`
   .link {
-    color: #4bb543;
+    color: #00cc66;
     font-weight: 500;
   }
   i {
@@ -34,11 +34,11 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
           <LinkContainer to='/shipping'>
             <Nav.Link className='link'>
               <i className='fa-sharp fa-solid fa-circle-check fa-lg'></i>{' '}
-              Shipping
+              Delivery Details
             </Nav.Link>
           </LinkContainer>
         ) : (
-          <Nav.Link disabled>Shipping</Nav.Link>
+          <Nav.Link disabled> Delivery Details</Nav.Link>
         )}
       </Nav.Item>
 

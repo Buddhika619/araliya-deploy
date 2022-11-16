@@ -102,11 +102,11 @@ const SearchBar = styled(Form)`
 `
 
 const SearchContainer = styled(Col)`
-  border: ${(props) => (props.hover ? '2px solid skyblue' : 'white')};
+  border: ${(props) => (props.hover ? '2px solid #00cc66;' : 'white')};
 `
 
 const DropButton = styled.button`
-  border: ${(props) => (props.hover ? '2px solid skyblue' : 'white')};
+  border: ${(props) => (props.hover ? '2px solid #00cc66;' : 'white')};
 `
 
 const SearchBox = () => {

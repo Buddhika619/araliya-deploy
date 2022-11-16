@@ -33,7 +33,7 @@ const ProductList = styled(ListGroup)`
     color: black;
   }
 
-  .input {
+  .inputIn {
     border-width: 0.5px;
     outline: none;
 
@@ -42,7 +42,7 @@ const ProductList = styled(ListGroup)`
       border-width: 1px;
     }
     &:focus {
-      border-color: #d23f57;
+      border-color: #00cc66;
       border-width: 2px;
       box-shadow: none;
     }
@@ -118,12 +118,13 @@ const CartScreen = () => {
                     <Col md={3}>
                       <Link to={`/product/${item.product}`}>{item.name}</Link>
                     </Col>
-                    <Col md={2}>${item.price}</Col>
+                    <Col md={2}>Rs{item.price}</Col>
                     <Col md={2}>
                       <Form.Control
                         as='select'
-                        className='input'
+                        className='inputIn'
                         value={item.qty}
+                      
                         onChange={(e) =>
                           dispatch(
                             addTocart(item.product, Number(e.target.value))

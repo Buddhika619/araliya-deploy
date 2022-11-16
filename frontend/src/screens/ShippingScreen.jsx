@@ -8,12 +8,12 @@ import FormContainer from '../components/FormContainer'
 import { ShippingDetails } from '../actions/cartActions'
 import styled from 'styled-components'
 import CustomButton from '../components/microComponents/CustomButton'
-
+import { toast } from 'react-toastify'
+import axios from 'axios'
 const Title = styled.div`
   text-align: center;
 
   h1 {
-    
     font-weight: 500;
     font-family: 'Roboto', sans-serif;
   }
@@ -23,7 +23,7 @@ const Line = styled.div`
   margin-top: -10px;
   margin-bottom: 25px;
   height: 2px;
-  background-color: #d23f57;
+  background-color: #00cc66;
   width: 250px;
 `
 
@@ -31,7 +31,7 @@ const ShippingForm = styled(Form)`
   * {
     margin: 5px 0px;
   }
-  .input {
+  .inputIn {
     border-width: 0.5px;
     outline: none;
     background-color: #f6f9fc;
@@ -41,7 +41,7 @@ const ShippingForm = styled(Form)`
       border-width: 1px;
     }
     &:focus {
-      border-color: #d23f57;
+      border-color: #00cc66;
       border-width: 2px;
       box-shadow: none;
     }
@@ -57,19 +57,69 @@ const ShippingScreen = () => {
   const [lineTwo, setLineTwo] = useState(shippingAddress.lineTwo)
   const [lineThree, setLineThree] = useState(shippingAddress.lineThree)
   const [phone, setPhone] = useState(shippingAddress.phone)
+  const [location, setLocation] = useState({
+    lat: '',
+    long: '',
+  })
 
+  const [distance, setDistance] = useState(0)
+  const [distanceLoading, setDistanceLoading] = useState(false)
   const dispatch = useDispatch()
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(ShippingDetails({ lineOne, lineTwo, lineThree, phone }))
-    navigate('/payment')
+    if (location.lat > 0 ) {
+      dispatch(
+        ShippingDetails({ lineOne, lineTwo, lineThree, phone, location, distance })
+      )
+      navigate(`/payment/${location.lat}-${location.long}`)
+    } else {
+      toast.error('Location not available')
+    }
   }
 
+  useEffect(() => {
+    async function getLocation() {
+      if (navigator.geolocation) {
+        await navigator.geolocation.getCurrentPosition(showPosition)
+      } else {
+        console.log('dddd')
+      }
+    }
+
+    async function showPosition(position) {
+      const lat = await position?.coords.latitude
+      const long = await position?.coords.longitude
+      setLocation({ lat, long })
+    }
+
+    getLocation()
+    showPosition()
+
+    const fetchDistance = async (location) => {
+      try {
+        const { data } = await axios.get(
+          `/api/distance?lat=${location.lat}&lng=${location.long}`
+        )
+        console.log(data.rows[0].elements[0].distance.text)
+        const distanceL = Number(
+          data.rows[0].elements[0].distance.text.split(' ')[0]
+        )
+        setDistance(distanceL)
+        setDistanceLoading(false)
+      } catch (error) {
+        toast.error('Faild to fetch location')
+        console.log(error)
+        setDistanceLoading(false)
+      }
+    }
+
+    fetchDistance(cart.shippingAddress.location)
+  }, [])
   return (
     <>
       <FormContainer>
-        <Checkoutsteps step1='step1'  />
+        <Checkoutsteps step1='step1' />
         <Title>
           <h1>Shipping</h1>
           <Line />
@@ -78,7 +128,7 @@ const ShippingScreen = () => {
           <Form.Group controlId='lineOne'>
             <Form.Label>Address Line One</Form.Label>
             <Form.Control
-              className='input'
+              className='inputIn'
               type='text'
               placeholder='Enter Address Line One'
               value={lineOne}
@@ -91,7 +141,7 @@ const ShippingScreen = () => {
             <Form.Label>Address Line Two</Form.Label>
             <Form.Control
               type='text'
-              className='input'
+              className='inputIn'
               placeholder='Enter Address Line Two'
               value={lineTwo}
               required
@@ -103,7 +153,7 @@ const ShippingScreen = () => {
             <Form.Label>Address Line Three</Form.Label>
             <Form.Control
               type='text'
-              className='input'
+              className='inputIn'
               placeholder='Enter Address Line Three'
               value={lineThree}
               required
@@ -115,7 +165,7 @@ const ShippingScreen = () => {
             <Form.Label>Phone Number</Form.Label>
             <Form.Control
               type='text'
-              className='input'
+              className='inputIn'
               placeholder='Enter Phone Number'
               value={phone}
               required

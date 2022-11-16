@@ -16,6 +16,7 @@ import PrintView from '../screens/PrintView'
 import NotFound from '../screens/NotFound'
 
 import OrderListScreen from '../screens/Admin/OrderListScreen'
+import MobileNavbar from '../components/layouts/MobileNavBar'
 
 const GenricRoutes = () => {
   return (
@@ -25,7 +26,7 @@ const GenricRoutes = () => {
         <Container>
           <Routes>
             <Route path='/shipping' element={<ShippingScreen />} />
-            <Route path='/payment' element={<PaymentScreen />} />
+            <Route path='/payment/:location' element={<PaymentScreen />} />
             <Route path='/placeorder' element={<PlaceOrderScreen />} />
             <Route path='/order/:id' element={<OrderScreen />} />
             <Route path='/login' element={<LoginScreen />} />
@@ -43,6 +44,7 @@ const GenricRoutes = () => {
         </Container>
       </main>
       <Footer />
+      <MobileNavbar/>
       <Routes>
         
       </Routes>

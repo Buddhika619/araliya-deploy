@@ -5,39 +5,26 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { getUserDetails, logout, updateUserProfile } from '../actions/userActions'
+import {
+  getUserDetails,
+  logout,
+  updateUserProfile,
+} from '../actions/userActions'
 import { myOrderList } from '../actions/orderActions'
 import styled from 'styled-components'
-import CustomButton from '../components/microComponents/CustomButton'
 
-const ProfileForm = styled(Form)`
- * {
-  background-color: #f6f9fc;
-  margin: 5px 0px;
- }
+import { toast } from 'react-toastify'
 
- .input {
-    border-width: 0.5px;
-    outline: none;
+import { Container } from 'react-bootstrap'
+import { userUpdateReset } from '../reducers/userUpdateSlice'
 
-    &:hover {
-      border-color: black;
-      border-width: 1px;
-    }
-    &:focus {
-      border-color: #d23f57;
-      border-width: 2px;
-      box-shadow: none;
-    }
-  }
-`
-
-const ProfileScreen = () => {
+const Profile = () => {
+  const [changeDetails, setChangeDetails] = useState(false)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [message, setMessage] = useState(null)
+  const [passwordField, setPasswordField] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -46,26 +33,32 @@ const ProfileScreen = () => {
   const uerDetails = useSelector((state) => state.userDetails)
   const { loading, error, user } = uerDetails
   //log out if token is not valid
-  
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
   const userUpdateProfile = useSelector((state) => state.userUpdate)
-  const { success } = userUpdateProfile
-  console.log(success)
+  const { success, error: updateError } = userUpdateProfile
 
   const myOrders = useSelector((state) => state.orderCreate)
-  const { loading: loadingOrders, error: errorOrders, orders,  } = myOrders
+  const { loading: loadingOrders, error: errorOrders, orders } = myOrders
 
 
-  if(error && errorOrders === 'Not Authorized, token failed'){
-    dispatch(logout())
+  if (updateError) {
+    toast.error(updateError)
   }
 
+
+  if (success) {
+    toast.success('Successfully updated the profile')
+  }
+
+  if (error && errorOrders === 'Not Authorized, token failed') {
+    dispatch(logout())
+  }
   useEffect(() => {
     // dispatch(userUpdateReset())
-   
+    dispatch(userUpdateReset())
     if (!userInfo) {
       navigate('/login')
     } else {
@@ -77,140 +70,169 @@ const ProfileScreen = () => {
         setEmail(user.email)
       }
     }
-  }, [dispatch, navigate, userInfo, user,success])
+  }, [dispatch, navigate, userInfo, user, success])
 
-  const submitHandler = (e) => {
-    e.preventDefault()
+  const onLogout = () => {
+    dispatch(logout())
+    navigate('/')
+  }
+
+  const onSubmit = async () => {
     if (password !== confirmPassword) {
-      setMessage('passWords do not match')
+      toast.error('Passwords do not Match!')
     } else {
       dispatch(updateUserProfile({ id: user._id, name, email, password }))
     }
   }
 
+  const onEdit = (listingId) => navigate(`/editlisting/${listingId}`)
+
   return (
     <>
+      <main>
+        <Container className='mt-2' style={{ height: '100vh' }}>
+          <header className='profileHeader'>
+            <p className='pageHeader'>My Profile</p>
+            <button type='button' className='logOut' onClick={onLogout}>
+              LogOut
+            </button>
+          </header>
+          <div className='profile'>
+            <div className='profileDetailsHeader'>
+              <p className='profileDetailsText'>Personal Details</p>
+              <p
+                className='changePersonalDetails'
+                onClick={() => {
+                  setPasswordField(!passwordField)
+                  changeDetails && onSubmit()
+                  setChangeDetails(!changeDetails)
+                
+                }}
+              >
+                {changeDetails ? 'done' : 'change'}
+              </p>
+            </div>
 
-      <Row>
-        <Col md={3}>
-          <h2>User Profile</h2>
-          {message && <Message varient='danger'>{message}</Message>}
-          {error && <Message varient='danger'>{error}</Message>}
-          {success && <Message varient='success'>Profile Updated</Message>}
-          {loading && <Loader />}
+            <div className='profileCard'>
+              <form>
+                <input
+                  style={{ padding: '4px' }}
+                  type='text'
+                  id='name'
+                  className={
+                    !changeDetails ? 'profileName' : 'profileNameActive'
+                  }
+                  disabled={!changeDetails}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
 
-          <ProfileForm onSubmit={submitHandler}>
-            <Form.Group controlId='name'>
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-              className='input'
-                type='name'
-                placeholder='Enter name'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+                <input
+                  style={{ padding: '4px', fontWeight: '600' }}
+                  type='email'
+                  id='email'
+                  className={
+                    !changeDetails ? 'profileEmail' : 'profileEmailActive'
+                  }
+                  disabled={!changeDetails}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
 
-            <Form.Group controlId='email'>
-              <Form.Label>email Address</Form.Label>
-              <Form.Control
-               className='input'
-                type='email'
-                placeholder='Enter email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
+                {passwordField && (
+                  <>
+                    <input
+                      style={{ padding: '4px' }}
+                      type='password'
+                      className={
+                        !changeDetails ? 'profileEmail' : 'profileEmailActive'
+                      }
+                      disabled={!changeDetails}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder='Enter new password'
+                    />
 
-            <Form.Group controlId='password'>
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-               className='input'
-                type='password'
-                placeholder='Enter password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId='confirmPasswrod'>
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-               className='input'
-                type='password'
-                placeholder='Confirm password'
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              ></Form.Control>
-            </Form.Group>
-
-
-            <CustomButton  type='submit'>Update</CustomButton>
-          </ProfileForm>
-        </Col>
-        <Col md={9}>
-          <h2>My orders</h2>
-          {loadingOrders ? (
-            <Loader />
-          ) : errorOrders ? (
-            <Message varient='danger'>{errorOrders}</Message>
-          ) : (
-            <Table striped bordered hover responsive className='table-sm'>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>DATE</th>
-                  <th>TOTAL</th>
-                  <th>PAID</th>
-                  <th>DELIVERED</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order) => (
-                  <tr key={order._id}>
-                    <td>{order._id}</td>
-                    <td>{order.createdAt.slice(0, 10)}</td>
-                    <td>{order.totalPrice}</td>
-                    <td>
-                      {order.isPaid ? (
-                        order.paidAt.slice(0, 10)
-                      ) : (
-                        <i
-                          className='fas fa-times'
-                          style={{ color: 'red' }}
-                        ></i>
-                      )}
-                    </td>
-                    <td>
-                      {order.isDelivered ? (
-                        order.deliveredAt.slice(0, 10)
-                      ) : (
-                        <i
-                          className='fas fa-times'
-                          style={{ color: 'red' }}
-                        ></i>
-                      )}
-                    </td>
-                    <td>
-                      <LinkContainer to={`/order/${order._id}`}>
-                        <Button variant='light' className='btn-sm'>
-                          DetailS
-                        </Button>
-
-                        
-                      </LinkContainer>
-                    </td>
+                    <input
+                      style={{ padding: '4px' }}
+                      type='password'
+                      className={
+                        !changeDetails ? 'profileEmail' : 'profileEmailActive'
+                      }
+                      disabled={!changeDetails}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder='Confirm password'
+                    />
+                  </>
+                )}
+              </form>
+            </div>
+            <h2>My orders</h2>
+            {loadingOrders ? (
+              <Loader />
+            ) : errorOrders ? (
+              <Message varient='danger'>{errorOrders}</Message>
+            ) : (
+              <Table striped bordered hover responsive className='table-sm'>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>DATE</th>
+                    <th>TOTAL</th>
+                    <th>PAID</th>
+                    <th>DELIVERED</th>
+                    <th></th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
-        </Col>
-      </Row>
-
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order._id}>
+                      <td>{order._id}</td>
+                      <td>{order.createdAt.slice(0, 10)}</td>
+                      <td>{order.totalPrice}</td>
+                      <td>
+                        {order.isPaid ? (
+                          order.paidAt.slice(0, 10)
+                        ) : (
+                          <i
+                            className='fas fa-times'
+                            style={{ color: 'red' }}
+                          ></i>
+                        )}
+                      </td>
+                      <td>
+                        {order.isDelivered ? (
+                          order.deliveredAt.slice(0, 10)
+                        ) : (
+                          <i
+                            className='fas fa-times'
+                            style={{ color: 'red' }}
+                          ></i>
+                        )}
+                      </td>
+                      <td>
+                        <LinkContainer to={`/order/${order._id}`}>
+                          <Button variant='light' className='btn-sm'>
+                            Details
+                          </Button>
+                        </LinkContainer>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+            {/* <Link to='/createlisting' className='createListing'>
+            <img src={homeIcon} alt='home' />
+            <p>Sell or rent your home</p>
+            <img src={arrowRight} alt='arrow Right' />
+          </Link> */}
+          </div>
+        </Container>
+      </main>
     </>
   )
 }
 
-export default ProfileScreen
+export default Profile

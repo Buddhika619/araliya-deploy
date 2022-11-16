@@ -33,7 +33,7 @@ const HeroCarousel = styled(Carousel)`
     left: 46vw;
     width: 150px;
     height: 50px;
-    background-color: #f67d1f;
+    background-color: #00cc66;
     @media (max-width: 480px) {
       display: none;
     }

@@ -8,6 +8,7 @@ import FormContainer from '../components/FormContainer'
 import { savePaymentMethod } from '../actions/cartActions'
 import CustomButton from '../components/microComponents/CustomButton'
 import styled from 'styled-components'
+import { orderCreateReset } from '../reducers/orderSlice'
 
 
 const Title = styled.div`
@@ -24,7 +25,7 @@ const Line = styled.div`
   margin-top: -10px;
   margin-bottom: 25px;
   height: 2px;
-  background-color: #d23f57;
+  background-color:#00cc66;
   width: 250px;
 `
 
@@ -50,6 +51,11 @@ const PaymentScreen = () => {
     dispatch(savePaymentMethod(paymentMethod))
     navigate('/placeorder')
   }
+
+   useEffect(() => {
+    dispatch(orderCreateReset())
+  }, [])
+  
 
   return (
     <>

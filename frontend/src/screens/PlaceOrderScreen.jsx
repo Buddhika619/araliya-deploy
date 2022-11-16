@@ -9,6 +9,8 @@ import { createOrder } from '../actions/orderActions'
 import { orderCreateReset } from '../reducers/orderSlice'
 import styled from 'styled-components'
 import CustomButton from '../components/microComponents/CustomButton'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
 const OrderDetails = styled(ListGroup)`
   * {
@@ -42,7 +44,7 @@ const PlaceOrderScreen = () => {
 
   //   calculate prices
 
-  console.log(cart.length)
+
 
   cart.itemsPrice = cart.cartItems.reduce(
     (acc, item) => acc + item.price * item.qty,
@@ -51,7 +53,7 @@ const PlaceOrderScreen = () => {
 
   cart.itemsPrice = cart.itemsPrice.toFixed(2)
 
-  cart.shippingPrice = cart.itemsPrice > 1000 ? 0 : 100
+  cart.shippingPrice = Math.ceil(cart.shippingAddress.distance) * 22
   // cart.taxPrice = Number((0.15 *  cart.itemsPrice ).toFixed(2))
 
   cart.totalPrice = Number(cart.itemsPrice) + Number(cart.shippingPrice)
@@ -61,6 +63,7 @@ const PlaceOrderScreen = () => {
   const { order, success, error } = orderCreate
 
   useEffect(() => {
+    
     dispatch(orderCreateReset())
     if (success) {
       navigate(`/order/${order._id}`)
@@ -131,7 +134,8 @@ const PlaceOrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x Rs {item.price} = Rs{' '}
+                          {item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -182,14 +186,13 @@ const PlaceOrderScreen = () => {
               )}
 
               <ListGroup.Item>
-          
                 <CustomButton
                   type='button'
                   onClick={placeOrderHandler}
                   className='col-12'
                   visibility={cart.cartItems.length}
                 >
-                  Proceed To Checkout
+                  Place Order
                 </CustomButton>
               </ListGroup.Item>
             </ListGroup>

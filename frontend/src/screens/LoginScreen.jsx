@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Form, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
+import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg'
+import visibilityIcon from '../assets/svg/visibilityIcon.svg'
+import { toast } from 'react-toastify'
 import { login } from '../actions/userActions'
+import { Container, Spinner } from 'react-bootstrap'
 import styled from 'styled-components'
-import CustomButton from '../components/microComponents/CustomButton'
+import { resetErrors } from '../reducers/userSlice'
 
-const LoginForm = styled(Form)`
-  * {
-    margin: 5px 0px;
-    background-color: #f6f9fc;
-  }
 
-  .input {
+const LoginForm = styled.form`
+
+
+  .inputIn {
     border-width: 0.5px;
     outline: none;
 
@@ -24,7 +23,7 @@ const LoginForm = styled(Form)`
       border-width: 1px;
     }
     &:focus {
-      border-color: #d23f57;
+      border-color: #00cc66;
       border-width: 2px;
       box-shadow: none;
     }
@@ -32,15 +31,17 @@ const LoginForm = styled(Form)`
 
  
 `
-const RegisterLink = styled(Link)`
-  color: black;
-  font-weight: bold;
-  margin-left: 5px;
-`
 
-const LoginScreen = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+
+
+const Signin = () => {
+  const [showPassword, setShowPasssword] = useState(false)
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  })
+
+  const { email, password } = formData
 
   const dispatch = useDispatch()
 
@@ -54,62 +55,88 @@ const LoginScreen = () => {
   const redirect = search ? search.split('=')[1] : '/'
   console.log(userInfo)
 
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+
+      [e.target.id]: e.target.value,
+    }))
+  }
+
+  dispatch(resetErrors()) 
   useEffect(() => {
+   // reset error msg
     if (userInfo) {
       navigate(redirect)
     }
   }, [navigate, userInfo, redirect])
 
-  const submitHandler = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     dispatch(login(email, password))
   }
 
+  if(error) {
+    toast.error(error)
+  }
+
+  
+  if(loading) {
+    return  <Spinner/>
+  }
+
   return (
-    <>
-      <FormContainer>
-        <h1>Sign In</h1>
-        {error && <Message varient='danger'>{error}</Message>}
-        {loading && <Loader />}
-        <LoginForm onSubmit={submitHandler}>
-          <Form.Group controlId='email'>
-            <Form.Label>email Address</Form.Label>
-            <Form.Control
-              className='input'
-              type='email'
-              placeholder='Enter email'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
+    
+    <FormContainer>
+      <div className='pageContainer'>
+        <header>
+          <p className='pageHeader'>Welcome Back!</p>
+        </header>
+        {/* <main> */}
+        <LoginForm onSubmit={onSubmit}>
+          <input
+            type='email'
+            id='email'
+            className='emailInput inputIn'
+            placeholder='Email'
+            value={email}
+            onChange={onChange}
+          />
 
-          <Form.Group controlId='password'>
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              className='input'
-              type='password'
-              placeholder='Enter password'
+          <div className='passwordInputDiv'>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              className='passwordInput inputIn'
+              placeholder='Password'
+              id='password'
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></Form.Control>
-          </Form.Group>
-
-          <CustomButton type='submit'>Sign In</CustomButton>
+              onChange={onChange}
+            />
+            <img
+              src={visibilityIcon}
+              alt='show password'
+              className='showPassword'
+              onClick={() => setShowPasssword(!showPassword)}
+            />
+          </div>
+          <Link to='/forgotpassword' className='forgotPasswordLink'>
+            Forgot Password
+          </Link>
+          <div className='signInBar'>
+            <p className='signInText'>Sign In</p>
+            <button className='signInButton'>
+              <ArrowRightIcon fill='#fff' width='34px' height='34px' />
+            </button>
+          </div>
         </LoginForm>
 
-        <Row className='py-3'>
-          <Col>
-            New Customer?
-            <RegisterLink
-              className='link'
-              to={redirect ? `/register?redirect=${redirect}` : `/register`}
-            >
-              Register
-            </RegisterLink>
-          </Col>
-        </Row>
-      </FormContainer>
-    </>
+        <Link to={redirect ? `/register?redirect=${redirect}` : `/register`} className='registerLink' >
+          Sign Up Instead
+        </Link>
+        {/* </main> */}
+      </div>
+    </FormContainer>
   )
 }
-export default LoginScreen
+
+export default Signin

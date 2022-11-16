@@ -10,6 +10,7 @@ import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
+import fetch from 'node-fetch';
 
 dotenv.config()
 
@@ -33,6 +34,22 @@ app.use('/api/upload', uploadRoutes)
 app.get('/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 )
+
+//getting distance
+app.get('/api/distance', async(req, res) => {
+
+  console.log(req.query)
+  const url = `https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${req.query.lat}, ${req.query.lng}&=&origins=7.297516055555007, 80.73621449338462&key=${process.env.GOOGLE_API_KEY}`
+  // fetch(url)
+  // .then((response) => response.json())
+  // .then((data) => res.json(data));
+  const response= await fetch(url)
+  const data = await response.json()
+  res.json(data)
+
+  })
+
+
 //we dont access __dirname when working with ES modules, it only available for common js modules, so path.resolve is used to mimic the __driname
 const __dirname = path.resolve()
 

@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react'
 import { listProductsDetails } from '../../actions/productActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { addTocart } from '../../actions/cartActions'
+import { toast } from 'react-toastify'
 
 const Wrapper = styled(Row)`
   display: flex;
@@ -42,7 +43,7 @@ const Wrapper = styled(Row)`
     font-family: 'Roboto', sans-serif;
   }
 
-  .category {
+  .categoryIn {
     margin-top: -15px;
     color:#aeb4be;
     font-size:22px;
@@ -58,7 +59,7 @@ const Wrapper = styled(Row)`
     font-weight: 700;
   }
 
-  .rating {
+  .ratingIn {
     margin-top: -15px;
     margin-bottom: 10px;
   }
@@ -81,7 +82,7 @@ const Wrapper = styled(Row)`
   }
 
   .button{
-    background-color: #d23f57;
+    background-color: #00cc66;;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     padding:10px 25px;
@@ -123,7 +124,7 @@ function MyVerticallyCenteredModal(props) {
           </Col>
           <Col className='col2'>
             <h1 className='name'>{props.product.name}</h1>
-            <p className='category'>{props.product.category}</p>
+            <p className='categoryIn'>{props.product.category}</p>
             {/* <Rating value={product.rating} text={`${product.numReviews} reviews`} /> */}
             {(props.product.countInStock  > 0 ? (
               <p className='price'>RS {props.product.price}</p>
@@ -132,7 +133,7 @@ function MyVerticallyCenteredModal(props) {
             ))}
             
            
-            <Rating className="rating"
+            <Rating className="ratingIn"
               value={props.product.rating}
               text={`(${props.product.numReviews})`}
             />
@@ -162,6 +163,7 @@ function MyVerticallyCenteredModal(props) {
               onClick={() => {
                 addToCartHandler()
                 props.onHide()
+                toast.success('Item Added to the Cart!')
               }}
               className='button'
               type='button'

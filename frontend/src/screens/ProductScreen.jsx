@@ -52,7 +52,7 @@ const Reviews = styled(ListGroup)`
       border-width: 1px;
     }
     &:focus {
-      border-color: #d23f57;
+      border-color: #00cc66;
       border-width: 2px;
       box-shadow: none;
     }

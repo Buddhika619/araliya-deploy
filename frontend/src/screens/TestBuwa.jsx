@@ -1,53 +1,34 @@
 import React from 'react'
-import styled from 'styled-components'
-import Button from 'react-bootstrap/Button';
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import MobileNavbar from '../components/layouts/MobileNavBar'
 
-const Wrapper = styled.div`
-  background-color: #f5f5f5;
-  display: flex;
-  padding:20px;
-  
+const containerStyle = {
+  width: '400px',
+  height: '400px'
+};
 
-  .div1{
-    flex:2;
-  }
+const center = {
+  lat: -3.745,
+  lng: -38.523
+};
 
-  .button{
-    padding: 5px 15px;
-    &:hover{
-      background-color: #ff000012;
-    }
-  }
-  p{
-    font-weight: 500;
-  }
-
-  .div1{
-    flex:1;
-  }
-  img{
-    width:200px
-  }
-`
-
-
-
-const TestBuwa = ({ props }) => {
+function MyComponent() {
   return (
-    <Wrapper>
-      <div className='div1'>
-        <p >Till 10 Dec,2021</p>
-        <h1>25% Special off Today Only for Vegetables</h1>
-        <Button variant="outline-danger" className='button'>Shop Now</Button>
-      </div>
-      <div className='div2'>
-        <img
-          src='https://bazaar.ui-lib.com/_next/image?url=%2Fassets%2Fimages%2FGroceries%20Shop%2FOffer%20Card.png&w=1080&q=75'
-          alt='' 
-        />
-      </div>
-    </Wrapper>
+    <LoadScript
+      googleMapsApiKey="AIzaSyCB9DM92shtpgL4FYAAq1XWRM_Vp2jj-7Y"
+    >
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={10}
+      >
+        { /* Child components, such as markers, info windows, etc. */ }
+        <></>
+      </GoogleMap>
+
+      <MobileNavbar/>
+    </LoadScript>
   )
 }
 
-export default TestBuwa
+export default React.memo(MyComponent)

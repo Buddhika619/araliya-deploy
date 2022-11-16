@@ -19,7 +19,7 @@ import TopRateCarouselMobile from '../components/Carousels/TopRateCarouselMobile
 import styled from 'styled-components'
 import ProductFilter from '../components/ProductFilter'
 import PromotionsCard from '../components/PromotionsCard'
-
+import MobileNavbar from '../components/layouts/MobileNavBar'
 // import { ToastContainer, toast } from 'react-toastify'
 // import 'react-toastify/dist/ReactToastify.css'
 
@@ -41,7 +41,7 @@ const Line = styled.div`
   margin-top: -10px;
   margin-bottom: 25px;
   height: 2px;
-  background-color: #d23f57;
+  background-color: #00cc66;
   width: 250px;
 `
 
@@ -108,7 +108,7 @@ const FilterWrapper = styled(Container)`
       border-width: 1px;
     }
     &:focus {
-      border-color: #d23f57;
+      border-color: #00cc66;
       border-width: 2px;
       box-shadow: none;
     }
@@ -139,12 +139,13 @@ const HomeScreen = () => {
 
   
   useEffect(() => {
-    
+    window.scrollTo(0, 0);
     dispatch(listProducts(keyword, pagenumber, filter))
   }, [dispatch, keyword, pagenumber, filter])
 
   const handleChange = (e) => {
     //  setFilter(e.currentTarget.value)
+    window.scrollTo(0, 800);
     if (keyword) {
       const filter = e.target.value
 
@@ -276,26 +277,8 @@ const HomeScreen = () => {
         </Col>
       </main>
       <Footer />
-      {/* <div>
-        <button onClick={notify}>Notify!</button>
-        <ToastContainer />
-      </div> */}
-
-      {/* <h1>Latest Prodcuts</h1>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message varient='danger'>{error}</Message>
-      ) : (
-        <Row>
-        {console.log(products)}
-          {products?.map((product, index) => (
-            <Col sm={12} md={6} lg={4} xl={3} key={index}>
-              <Product product={product} />
-            </Col>
-          ))}
-        </Row>
-      )} */}
+      <MobileNavbar/>
+    
     </>
   )
 }
