@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { PayPalButton } from 'react-paypal-button-v2'
+
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Form, Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -77,30 +77,14 @@ const OrderScreen = () => {
     }
     generateQR(`${window.location.href}}`)
 
-    const addPayPalScript = async () => {
-      const { data: clientId } = await axios.get('/api/config/paypal')
-      const script = document.createElement('script')
-      script.type = 'text/javascript'
-      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
-      script.async = true
-      script.onload = () => {
-        setSdkReady(true)
-      }
-      document.body.appendChild(script)
-    }
+
 
     if (!notOrder || successPay || successDeliver || order._id !== id) {
       dispatch(orderPayReset())
       dispatch(orderDeliverReset())
       dispatch(getOrderDetails(id))
     }
-    if (!order.isPaid) {
-      if (!window.paypal) {
-        addPayPalScript()
-      } else {
-        setSdkReady(true)
-      }
-    }
+
 
     // dispatch(getOrderDetails(id))
   }, [
@@ -250,19 +234,7 @@ const OrderScreen = () => {
                         <Col>RS {order.totalPrice}</Col>
                       </Row>
                     </ListGroup.Item>
-                    {!order.isPaid && order.paymentMethod === 'PayaPal' && (
-                      <ListGroup.Item>
-                        {loadingPay && <Loader />}
-                        {!sdkReady ? (
-                          <Loader />
-                        ) : (
-                          <PayPalButton
-                            amount={order.totalPrice}
-                            onSuccess={successPaymentHandler}
-                          />
-                        )}
-                      </ListGroup.Item>
-                    )}
+
 
                     {loadingDeliver && <Loader />}
                     {userInfo && userInfo.isAdmin && !order.isDelivered && (

@@ -36,7 +36,7 @@ a {
 .carousel-indicators  { visibility: hidden; }
 
 /* sideBar style */
-.navbarListItemNameActive {
+.navbarListINameActive {
   background-color: rgb(240, 240, 255);
 }
 

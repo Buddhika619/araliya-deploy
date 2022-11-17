@@ -7,36 +7,34 @@ import {
   DropdownButton,
   Dropdown,
 } from 'react-bootstrap'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 const SearchBar = styled(Form)`
   .formContainer {
     display: flex;
-    
+
     /* align-items: center; */
   }
   .searchContainer {
-    flex:4;
+    flex: 4;
     border-radius: 80px;
     margin-left: 200px;
     background-color: white;
     padding-right: 0px;
     position: relative;
     @media (max-width: 1200px) {
-      
     }
     @media (max-width: 992px) {
-      flex:0.75;
+      flex: 0.75;
       width: 0px;
       margin-left: 10px;
-      
     }
     @media (max-width: 500px) {
-      flex:0.5;
+      flex: 0.5;
       width: 0px;
       margin-left: 10px;
-      
     }
   }
   .searchIcon {
@@ -51,17 +49,17 @@ const SearchBar = styled(Form)`
     }
   }
   .search {
-    width:450px;
+    width: 450px;
     margin-right: 0px;
     border: 0px;
     outline: none;
     outline: none;
     box-shadow: none;
-      @media (max-width: 1200px) {
-        width:350px;
+    @media (max-width: 1200px) {
+      width: 350px;
     }
     @media (max-width: 480px) {
-      width:200px;
+      width: 200px;
     }
     &::placeholder {
       /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -75,7 +73,6 @@ const SearchBar = styled(Form)`
     margin-left: -20px;
     background-color: white;
     @media (max-width: 480px) {
-      
     }
   }
 
@@ -85,11 +82,10 @@ const SearchBar = styled(Form)`
     padding-right: 25px;
     border-radius: 0 50px 50px 0;
     border-left: none;
-     @media (max-width: 1200px) {
+    @media (max-width: 1200px) {
       padding-right: 10px;
     }
     @media (max-width: 992px) {
-     
     }
   }
 
@@ -113,6 +109,8 @@ const SearchBox = () => {
   const navigate = useNavigate()
   const [keyWord, setKeyword] = useState('')
   const [hover, setHover] = useState(0)
+  const params = useParams()
+  console.log(params.category)
 
   // const submitHandler = (e) => {
   //   e.preventDefault()
@@ -123,6 +121,10 @@ const SearchBox = () => {
   //     navigate('/')
   //   }
   // }
+  const dispatch = useDispatch()
+
+  const productList = useSelector((state) => state.productList)
+  const { loading, error, success, categories } = productList
 
   const inputHandler = (e) => {
     setKeyword(e.target.value)
@@ -145,91 +147,73 @@ const SearchBox = () => {
     }
   }, [keyWord])
 
+  const handleCategory = (cat) => {
+    navigate(`/category/${cat}`)
+  }
+
   return (
-    // <Form action='#'>
-    //           <Form.Group className='input-group mb-3'>
-    //             <Input
-    //               className='form-control'
-    //               type='email'
-    //               placeholder="Recipient's username"
-    //             />
-    //             <Button
-    //               className='btn btn-primary'
-    //               id='button-addon2'
-    //               type='button'
-    //             >
-    //               <i className='fas fa-paper-plane'></i>
-    //             </Button>
-    //           </Form.Group>
-    <SearchBar>
-      <Row className='mt-2 formContainer'>
-        <SearchContainer xs={8} className='searchContainer' hover={hover}>
-          <i
-            className='fa-solid fa-magnifying-glass searchIcon'
-           
-          ></i>
+    <>
+    
+        <SearchBar>
+          <Row className='mt-2 formContainer'>
+            <SearchContainer xs={8} className='searchContainer' hover={hover}>
+              <i className='fa-solid fa-magnifying-glass searchIcon'></i>
 
-          
-          <Form.Control
-            type='text'
-            name='q'
-            onChange={inputHandler}
-            onFocus={hoverHandler}
-            onBlur={hoverOutHandler}
-            placeholder='Search Products'
-            className='ms-sm-2 me-sm-2 search override'
-          ></Form.Control>
-        </SearchContainer>
-        <Col xs={1} className='buttonContainer dropdown'>
-          {/* <Button type='submit' className='btn btn-primary'>
-          <i className='fas fa-paper-plane'></i>
-          </Button> */}
+              <Form.Control
+                type='text'
+                name='q'
+                onChange={inputHandler}
+                onFocus={hoverHandler}
+                onBlur={hoverOutHandler}
+                placeholder='Search Products'
+                className='ms-sm-2 me-sm-2 search override'
+              ></Form.Control>
+            </SearchContainer>
+            {success && (
+            <Col xs={1} className='buttonContainer dropdown'>
+              {/* <Button type='submit' className='btn btn-primary'>
+         <i className='fas fa-paper-plane'></i>
+         </Button> */}
 
-          <DropButton
-            className='btn btn-secondary dropdown-toggle dropButton'
-            hover={hover}
-            type='button'
-            data-bs-toggle='dropdown'
-            aria-expanded='false'
-          >
-            All Products
-          </DropButton>
-          <ul className='dropdown-menu'>
-            <li>
-              <a className='dropdown-item' href='#'>
-                Action
-              </a>
-            </li>
-            <li>
-              <a className='dropdown-item' href='#'>
-                Another action
-              </a>
-            </li>
-            <li>
-              <a className='dropdown-item' href='#'>
-                Something else
-              </a>
-            </li>
-            <li>
-              <a className='dropdown-item' href='#'>
-                Something else
-              </a>
-            </li>
-            <li>
-              <a className='dropdown-item' href='#'>
-                Something else
-              </a>
-            </li>
+              <DropButton
+                className='btn btn-secondary dropdown-toggle dropButton'
+                hover={hover}
+                type='button'
+                data-bs-toggle='dropdown'
+                aria-expanded='false'
+              >
+                {params.category ? params.category : 'All products'}
+              </DropButton>
 
-            <li>
-              <a className='dropdown-item' href='#'>
-                Something else
-              </a>
-            </li>
-          </ul>
-        </Col>
-      </Row>
-    </SearchBar>
+              <ul className='dropdown-menu'>
+                <li>
+                  <a
+                    className='dropdown-item'
+                    href='#'
+                    onClick={() => handleCategory('All Products')}
+                  >
+                    All Products
+                  </a>
+                </li>
+
+                {categories.map((cat,index) => (
+                  <li key={index}>
+                    <a
+                      className='dropdown-item'
+                      href='#'
+                      onClick={() => handleCategory(cat)}
+                    >
+                      {cat}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </Col>
+            )}
+          </Row>
+        </SearchBar>
+   
+    </>
   )
 }
 

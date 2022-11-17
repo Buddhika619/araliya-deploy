@@ -25,40 +25,124 @@ const getProducts = asyncHandler(async (req, res) => {
   const filter = req.query.filter
   switch (filter) {
     case 'asc':
-      products = await Product.find({ ...keyword, active: true })
-        .sort({ price: 1 })
-        .limit(pageSize)
-        .skip(pageSize * (page - 1))
-
+      if (req.query.category) {
+        if (req.query.category === 'All Products') {
+          products = await Product.find({ ...keyword, active: true })
+            .sort({ price: 1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+        } else {
+          products = await Product.find({
+            category: req.query.category,
+            active: true,
+          })
+            .sort({ price: 1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+        }
+      } else {
+        products = await Product.find({ ...keyword, active: true })
+          .sort({ price: 1 })
+          .limit(pageSize)
+          .skip(pageSize * (page - 1))
+      }
       break
+
     case 'dsc':
-      products = await Product.find({ ...keyword, active: true })
-        .sort({ price: -1 })
-        .limit(pageSize)
-        .skip(pageSize * (page - 1))
-
+      if (req.query.category) {
+        if (req.query.category === 'All Products') {
+          products = await Product.find({ ...keyword, active: true })
+            .sort({ price: -1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+        } else {
+          products = await Product.find({
+            category: req.query.category,
+            active: true,
+          })
+            .sort({ price: -1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+        }
+      } else {
+        products = await Product.find({ ...keyword, active: true })
+          .sort({ price: -1 })
+          .limit(pageSize)
+          .skip(pageSize * (page - 1))
+      }
       break
+
     case 'top':
-      products = await Product.find({ ...keyword, active: true })
-        .sort({ rating: -1 })
-        .limit(pageSize)
-        .skip(pageSize * (page - 1))
-
+      if (req.query.category) {
+        if (req.query.category === 'All Products') {
+          products = await Product.find({ ...keyword, active: true })
+            .sort({ rating: -1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+        } else {
+          products = await Product.find({
+            category: req.query.category,
+            active: true,
+          })
+            .sort({ rating: -1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+        }
+      } else {
+        products = await Product.find({ ...keyword, active: true })
+          .sort({ rating: -1 })
+          .limit(pageSize)
+          .skip(pageSize * (page - 1))
+      }
       break
+
     default:
-      products = await Product.find({ ...keyword, active: true })
-        .sort({ createdAt: -1 })
-        .limit(pageSize)
-        .skip(pageSize * (page - 1))
+      if (req.query.category) {
+        if (req.query.category === 'All Products') {
+          products = await Product.find({ ...keyword, active: true })
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+        } else {
+          products = await Product.find({
+            category: req.query.category,
+            active: true,
+          })
+            .sort({ createdAt: -1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1))
+        }
+      } else {
+        products = await Product.find({ ...keyword, active: true })
+          .sort({ createdAt: -1 })
+          .limit(pageSize)
+          .skip(pageSize * (page - 1))
+      }
   }
 
-  resultCount = await Product.countDocuments({ ...keyword, active: true })
 
+  if (req.query.category) {
+    if (req.query.category === 'All Products') {
+      resultCount = await Product.countDocuments({ ...keyword, active: true })
+    } else {
+      resultCount = await Product.countDocuments({
+        category: req.query.category,
+        active: true,
+      })
+    }
+  } else {
+    resultCount = await Product.countDocuments({ ...keyword, active: true })
+  }
+
+  let categories = await Product.distinct('category')
+  console.log(categories)
+
+  console.log(products)
   res.json({
     products,
     page,
     pages: Math.ceil(resultCount / pageSize),
-
+    categories,
     resultCount,
   })
 })
@@ -78,7 +162,7 @@ const getProductListAdmin = asyncHandler(async (req, res) => {
 
     case 'outofstock':
       // products = await Product.find({active: true, $expr:{$gt:["$reOrderLevel", "$countInStock"]}}) //out of stock if reorder level is used---dont delete this line needed for future reference
-      products = await Product.find({active: true,  countInStock: 0 })
+      products = await Product.find({ active: true, countInStock: 0 })
       break
 
     case 'deactivated':
@@ -159,7 +243,7 @@ const createProduct = asyncHandler(async (req, res) => {
     category: 'Sample Category',
     reOrderLevel: 0,
     countInStock: 0,
-    dailyCapacity:0,
+    dailyCapacity: 0,
     numReviews: 0,
     description: 'sample',
     active: true,
@@ -182,7 +266,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     brand,
     category,
     countInStock,
- 
+
     dailyCapacity,
     active,
   } = req.body
@@ -210,17 +294,11 @@ const updateProduct = asyncHandler(async (req, res) => {
 })
 
 const updateDailyCapacity = asyncHandler(async (req, res) => {
-  
   // await Product.updateMany({"active": true}, {"$set":{"countInStock": $dailyCapacity}});
-  await  Product.updateMany(
-    {"active": true},
-    [
-         {"$set": {"countInStock":  "$dailyCapacity"}}
-        // {"$set": {"name":  "kamutha"}}
-    ]
-)
-
-
+  await Product.updateMany({ active: true }, [
+    { $set: { countInStock: '$dailyCapacity' } },
+    // {"$set": {"name":  "kamutha"}}
+  ])
 })
 
 //first star represent a minute, seconde hour as on
@@ -228,7 +306,7 @@ const updateDailyCapacity = asyncHandler(async (req, res) => {
 cron.schedule('34 06 * * *', () => {
   updateDailyCapacity()
   console.log('brah')
-});
+})
 
 // updateDailyCapacity()
 
@@ -276,7 +354,7 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @route POST /api/products/top
 // @access Private
 const getTopProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(6)
+  const products = await Product.find( {active: true}).sort({ rating: -1 }).limit(6)
 
   res.json(products)
 })

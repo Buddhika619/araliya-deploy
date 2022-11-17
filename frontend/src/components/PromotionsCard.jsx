@@ -51,7 +51,7 @@ const PromotionsCard = ({ props }) => {
       {view && (
         <Wrapper>
           <div className='div1'>
-            <p>Till 10 Dec,2021</p>
+            <p>Till 10 Dec,2022</p>
             <h1>25% Special off Today Only for Whoppers</h1>
             <Button variant='outline-danger' className='button'>
               Shop Now

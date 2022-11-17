@@ -46,13 +46,13 @@ import {
 } from '../reducers/productTopRatedSlice'
 
 export const listProducts =
-  (keyword = '', pagenumber = '', filter = '') =>
+  (keyword = '', pagenumber = '', filter = '', category='') =>
   async (dispatch) => {
     try {
       dispatch(productListRequest())
 
       const { data } = await axios.get(
-        `/api/products?keyword=${keyword}&pagenumber=${pagenumber}&filter=${filter}`
+        `/api/products?keyword=${keyword}&pagenumber=${pagenumber}&filter=${filter}&category=${category}`
       )
 
       dispatch(productListSuccess(data))

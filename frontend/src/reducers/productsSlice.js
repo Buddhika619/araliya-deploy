@@ -25,6 +25,7 @@ const productSlice = createSlice({
       state.pages = action.payload.pages
       state.page = action.payload.page
       state.resultCount = action.payload.resultCount
+      state.categories = action.payload.categories
     },
     productListFail: (state, action) => {
       state.loading = false

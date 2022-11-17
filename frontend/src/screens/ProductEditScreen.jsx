@@ -277,7 +277,7 @@ const CreateListing = () => {
               type='text'
               id='image'
               value={image}
-              onChange={onMutate}
+              onChange={(e) => (setImage(e.target.value))}
               // maxLength='32'
               // minLength='10'
               required

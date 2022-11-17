@@ -81,6 +81,7 @@ const ProductScreen = () => {
   const { id } = useParams()
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     dispatch(listProductsDetails(id))
     dispatch(productCreateReviewReset())
     if (successProductReview) {
@@ -119,12 +120,15 @@ const ProductScreen = () => {
           <Meta title={product.name} />
           <DetailsWrapper>
             <Col md={6}>
-              <Image src={product.image} alt={product.name} fluid />
+              <Image src={product.image}  alt={product.name} fluid />
             </Col>
             <Col md={3}>
               <ListGroup variant='flush'>
                 <ListGroup.Item>
                   <h3>{product.name}</h3>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <h6>Category: {product.category}</h6>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <Rating

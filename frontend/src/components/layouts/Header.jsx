@@ -76,7 +76,7 @@ const TopNav = styled(Navbar)`
   }
 `
 
-const Header = () => {
+const Header = ({categories}) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const userLogin = useSelector((state) => state.userLogin)
@@ -116,7 +116,7 @@ const Header = () => {
 
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
-            <SearchBox className='search' />
+            <SearchBox className='search'categories={categories} />
             <Nav className='ms-auto navEnd'>
               <LinkContainer to='/cart'>
                 <Nav.Link>

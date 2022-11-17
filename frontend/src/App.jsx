@@ -16,8 +16,10 @@ const App = () => {
           <Route path='/test' element={<TestBuwa />} />
           <Route path='/admin/*' element={<AdminRoutes />} />
           <Route path='/*' element={<GenericRoutes />} />
-          {/* overiding default layouts */}
+
+          {/* home routes */}
           <Route path='/search/:keyword' element={<HomeScreen />} exact />
+
           <Route path='/page/:pagenumber' element={<HomeScreen />} exact />
           <Route
             path='/search/:keyword/page/:pagenumber'
@@ -43,7 +45,27 @@ const App = () => {
             exact
           />
 
+          <Route path='/category/:category' element={<HomeScreen />} exact />
+          <Route
+            path='/category/:category/sort/:filter'
+            element={<HomeScreen />}
+            exact
+          />
+          <Route
+            path='/category/:category/page/:pagenumber'
+            element={<HomeScreen />}
+            exact
+          />
+
+          <Route
+            path='/category/:category/sort/:filter/page/:pagenumber'
+            element={<HomeScreen />}
+            exact
+          />
+
           <Route path='/' element={<HomeScreen />} exact />
+
+          {/* overiding default layouts */}
           <Route path='/order/print/:id' element={<PrintView />} />
         </Routes>
       </Router>

@@ -126,7 +126,9 @@ const HomeScreen = () => {
   const [view, setView] = useState('')
 
   const navigate = useNavigate()
-  const { keyword, filter } = useParams()
+  const { keyword, filter, category } = useParams()
+
+
 
   const { pagenumber } = useParams() || 1
 
@@ -134,14 +136,14 @@ const HomeScreen = () => {
 
   const productList = useSelector((state) => state.productList)
 
-  const { loading, error, products, success, page, pages, resultCount } =
+  const { loading, error, products, success, page, pages, resultCount,categories } =
     productList
 
-  
+  console.log(products)
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(listProducts(keyword, pagenumber, filter))
-  }, [dispatch, keyword, pagenumber, filter])
+    dispatch(listProducts(keyword, pagenumber, filter, category))
+  }, [dispatch, keyword, pagenumber, filter,category])
 
   const handleChange = (e) => {
     //  setFilter(e.currentTarget.value)
@@ -155,6 +157,12 @@ const HomeScreen = () => {
 
       console.log(filter)
       navigate(`/sort/${filter}`)
+    }
+
+
+    if(category){
+      const filter = e.target.value
+      navigate(`/category/${category}/sort/${filter}`)
     }
   }
 
@@ -179,10 +187,10 @@ const HomeScreen = () => {
     <>
       <Meta />
 
-      <Header />
+      <Header categories={categories}/>
       <main>
         <Col className='col-12'>
-          {!keyword ? (
+          {!keyword && !filter && !category? (
             <>
               <MainCarousel />
         
@@ -270,6 +278,7 @@ const HomeScreen = () => {
                   pages={pages}
                   page={page}
                   keyword={keyword ? keyword : ''}
+                  category = {category ? category : ''}
                 />
               </>
             )}

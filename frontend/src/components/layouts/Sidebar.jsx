@@ -133,8 +133,8 @@ const Sidebar = ({ view,  success }) => {
                     <SidebarListItem
                         className={
                           pathMatchRoute('/admin/products/active')
-                            ? 'navbarListItemNameActive'
-                            : 'navbarListItemName'
+                            ? 'navbarListINameActive'
+                            : 'navbarListIName'
                         }
                       >
                         <i className='fa-sharp fa-solid fa-spinner'></i>
@@ -160,8 +160,8 @@ const Sidebar = ({ view,  success }) => {
                       <SidebarListItem
                         className={
                           pathMatchRoute('/admin/products/active')
-                            ? 'navbarListItemNameActive'
-                            : 'navbarListItemName'
+                            ? 'navbarListINameActive'
+                            : 'navbarListIName'
                         }
                       >
                         <i className='fa-sharp fa-solid fa-spinner'></i>
