@@ -48,6 +48,7 @@ const OrderScreen = () => {
   const navigate = useNavigate()
 
   const [distanceLoading, setDistanceLoading] = useState(true)
+  const [distance, setDistance] = useState(0)
   const fetchCart = useSelector((state) => state.cart)
   const cart = { ...fetchCart }
   const [api, setApi] = useState('')
@@ -86,7 +87,11 @@ const OrderScreen = () => {
           `/api/distance?lat=${location.lat}&lng=${location.long}`
         )
 
+        const distance = Number(
+          data.rows[0].elements[0].distance.text.split(' ')[0]
+        )
         setApi(data.api)
+        setDistance(distance)
 
         setDistanceLoading(false)
       } catch (error) {
@@ -188,6 +193,10 @@ const OrderScreen = () => {
                     {order.shippingAddress.lineTwo},{' '}
                     {order.shippingAddress.lineThree}
                   </p>
+                  <p>
+                <strong>Dilivery Distance: </strong>
+                {distance} km
+              </p>
                   <p>
                     <strong>Phone Number: </strong>
                     {order.shippingAddress.phone}

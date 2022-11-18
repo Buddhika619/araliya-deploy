@@ -139,6 +139,10 @@ const PlaceOrderScreen = () => {
                 {cart.shippingAddress.lineThree},{' '}
               </p>
               <p>
+                <strong>Dilivery Distance: </strong>
+                {distance} km
+              </p>
+              <p>
                 <strong>Phone Number: </strong>
                 {cart.shippingAddress.phone}
               </p>
