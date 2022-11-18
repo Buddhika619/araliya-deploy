@@ -45,6 +45,7 @@ app.get('/api/distance', async(req, res) => {
   // .then((data) => res.json(data));
   const response= await fetch(url)
   const data = await response.json()
+  data.api = process.env.GOOGLE_API_KEY
   res.json(data)
 
   })

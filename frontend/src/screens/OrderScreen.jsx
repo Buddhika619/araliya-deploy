@@ -18,6 +18,9 @@ import QRCode from 'qrcode'
 import { LinkContainer } from 'react-router-bootstrap'
 import styled from 'styled-components'
 import CustomButton from '../components/microComponents/CustomButton'
+import TestBuwa from './TestBuwa'
+import MapComponent from '../components/MapComponent'
+import { toast } from 'react-toastify'
 
 const PrintLink = styled(LinkContainer)`
   /* @media (max-width: 480px) {
@@ -26,8 +29,8 @@ const PrintLink = styled(LinkContainer)`
 `
 
 const ShippingWrapper = styled(Row)`
-  a{
-    color:#000;
+  a {
+    color: #000;
   }
 `
 
@@ -44,12 +47,17 @@ const OrderScreen = () => {
 
   const navigate = useNavigate()
 
-  const [sdkReady, setSdkReady] = useState(false)
+  const [distanceLoading, setDistanceLoading] = useState(true)
+  const fetchCart = useSelector((state) => state.cart)
+  const cart = { ...fetchCart }
+  const [api, setApi] = useState('')
+  const [lat, setLat] = useState(0)
+  const [long, setLong] = useState(0)
 
   const dispatch = useDispatch()
 
   const orderDetails = useSelector((state) => state.orderDetails)
-  const { order, loading, error } = orderDetails
+  const { order, loading, success, error } = orderDetails
 
   const orderPay = useSelector((state) => state.orderDetails)
   const { loading: loadingPay, success: successPay } = orderPay
@@ -72,12 +80,28 @@ const OrderScreen = () => {
   }
 
   useEffect(() => {
+    const fetchDistance = async (location) => {
+      try {
+        const { data } = await axios.get(
+          `/api/distance?lat=${location.lat}&lng=${location.long}`
+        )
+
+        setApi(data.api)
+
+        setDistanceLoading(false)
+      } catch (error) {
+        toast.error('Faild to fetch location')
+
+        setDistanceLoading(false)
+      }
+    }
+
+    fetchDistance(cart.shippingAddress.location)
+
     if (!userInfo) {
       navigate('/login')
     }
     generateQR(`${window.location.href}}`)
-
-
 
     if (!notOrder || successPay || successDeliver || order._id !== id) {
       dispatch(orderPayReset())
@@ -85,7 +109,14 @@ const OrderScreen = () => {
       dispatch(getOrderDetails(id))
     }
 
-
+    if (order.location) {
+      {
+        setLat(order.location.lat)
+      }
+      {
+        setLong(order.location.long)
+      }
+    }
     // dispatch(getOrderDetails(id))
   }, [
     dispatch,
@@ -94,7 +125,11 @@ const OrderScreen = () => {
     notOrder,
     successDeliver,
     order.isPaid,
-    successDeliver,
+
+    cart.shippingAddress.location,
+    navigate,
+    order._id,
+    userInfo,
   ])
 
   const successPaymentHandler = (paymentResult) => {
@@ -110,20 +145,32 @@ const OrderScreen = () => {
     navigate(`/orders/print/${order._id}`)
   }
 
+  if (distanceLoading) {
+    return <Loader />
+  }
+
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message varient='danger'>{error}</Message>
-      ) : (
+      {loading && <Loader />}
+
+      {error && <Message varient='danger'>{error}</Message>}
+
+      {success && (
         <>
           <ShippingWrapper>
             <Title>Order {order._id}</Title>
             <Col md={8}>
+              <h2>Delivery Location</h2>
+              <div >
+                <MapComponent api={api} zoom={17} lat={lat} long={long} />
+              </div>
+
+              {/* <CustomButton type='button' onClick={() => navigate('/test')}>
+                View Delivery Location
+              </CustomButton> */}
               <ListGroup variant='flush'>
                 <ListGroup.Item>
-                  <h2>Shipping</h2>
+                  <h2>Delivery Details</h2>
                   <p>
                     <strong>Name:</strong> {order.user.name}
                   </p>
@@ -140,11 +187,10 @@ const OrderScreen = () => {
                     {order.shippingAddress.lineOne},{' '}
                     {order.shippingAddress.lineTwo},{' '}
                     {order.shippingAddress.lineThree}
-                   
                   </p>
                   <p>
-                  <strong>Phone Number: </strong>
-                  {order.shippingAddress.phone}
+                    <strong>Phone Number: </strong>
+                    {order.shippingAddress.phone}
                   </p>
                   {order.isDelivered ? (
                     <Message varient='success'>
@@ -192,7 +238,7 @@ const OrderScreen = () => {
                             </Col>
                             <Col md={4}>
                               {item.qty} x RS {item.price} = RS{' '}
-                              {item.qty * item.price}
+                              {(item.qty * item.price).toFixed(2)}
                             </Col>
                           </Row>
                         </ListGroup.Item>
@@ -212,29 +258,28 @@ const OrderScreen = () => {
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <Row>
-                        <Col>Sub Total</Col>
-                        <Col>Rs {order.subTotal}</Col>
+                        <Col>Cart Total</Col>
+                        <Col>Rs {order.subTotal.toFixed(2)}</Col>
                       </Row>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <Row>
-                        <Col>Shipping</Col>
-                        <Col>Rs {order.shippingPrice}</Col>
+                        <Col>Dilivery Charge</Col>
+                        <Col>Rs {order.shippingPrice.toFixed(2)}</Col>
                       </Row>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <Row>
                         <Col>Tax</Col>
-                        <Col>RS {order.taxPrice}</Col>
+                        <Col>RS {order.taxPrice.toFixed(2)}</Col>
                       </Row>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <Row>
                         <Col>Total</Col>
-                        <Col>RS {order.totalPrice}</Col>
+                        <Col>RS {order.totalPrice.toFixed(2)}</Col>
                       </Row>
                     </ListGroup.Item>
-
 
                     {loadingDeliver && <Loader />}
                     {userInfo && userInfo.isAdmin && !order.isDelivered && (
@@ -243,9 +288,8 @@ const OrderScreen = () => {
                           type='button'
                           onClick={deliverHandler}
                           className='col-12'
-                          
                         >
-                           Mark As Delivered
+                          Mark As Delivered
                         </CustomButton>
                       </ListGroup.Item>
                     )}

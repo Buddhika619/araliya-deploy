@@ -1,46 +1,30 @@
-import { useState, useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-// import Swiper core and required modules
-
-import Spinner from '../components/Spinner'
-import shareIcon from '../assets/svg/shareIcon.svg'
-
 import React from 'react'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import MobileNavbar from '../components/layouts/MobileNavBar'
+import { useSelector } from 'react-redux'
 
-const Listing = () => {
-  const [listing, setListing] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [shareLinkCopied, setShareLinkCopied] = useState(false)
+const containerStyle = {
+  width: '400px',
+  height: '400px',
+}
 
-  const navigate = useNavigate()
-  const params = useParams()
-
-  useEffect(() => {}, [])
-
-  if (loading) {
-    return <Spinner />
+function MyComponent({ lat, long }) {
+  const fetchCart = useSelector((state) => state.cart)
+  const cart = { ...fetchCart }
+  const center = {
+    lat: cart.shippingAddress.location.lat,
+    lng: cart.shippingAddress.location.long,
   }
 
-
-  const position = [51.505, -0.09]
   return (
-    <main>
-     <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
-    <TileLayer
-      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    />
-    <Marker position={position}>
-      <Popup>
-        A pretty CSS3 popup. <br /> Easily customizable.
-      </Popup>
-    </Marker>
-  </MapContainer>
-     
+    <LoadScript googleMapsApiKey='AIzaSyCB9DM92shtpgL4FYAAq1XWRM_Vp2jj-7Y'>
+      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={10}>
+        <Marker position={center} />
+      </GoogleMap>
 
-    </main>
+      <MobileNavbar />
+    </LoadScript>
   )
 }
 
-export default Listing
+export default React.memo(MyComponent)

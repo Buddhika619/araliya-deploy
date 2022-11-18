@@ -16,7 +16,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
     taxPrice,
     shippingPrice,
     totalPrice,
+    location,
   } = req.body
+
+  console.log(location)
 
   if (orderItems && orderItems.length === 0) {
     res.status(400)
@@ -51,6 +54,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
         taxPrice,
         shippingPrice,
         totalPrice,
+        location
       })
 
       const CreatedOrder = await order.save()
@@ -74,6 +78,7 @@ const getOrderById = asyncHandler(async (req, res) => {
   )
 
   if (order) {
+    console.log(order)
     res.json(order)
   } else {
     res.status(404)

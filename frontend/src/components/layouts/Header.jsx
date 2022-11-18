@@ -95,7 +95,7 @@ const Header = ({categories}) => {
 
   const profileHandler = () => {
     navigate('/profile')
-    window.location.reload()
+    // window.location.reload()
   }
 
   //handling userinfo fetching for admin dashboard

@@ -5,12 +5,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import Checkoutsteps from '../components/Checkoutsteps'
 import Message from '../components/Message'
 import { createOrder } from '../actions/orderActions'
-
+import MapComponent from '../components/MapComponent'
 import { orderCreateReset } from '../reducers/orderSlice'
 import styled from 'styled-components'
 import CustomButton from '../components/microComponents/CustomButton'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import TestBuwa from './TestBuwa'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import Loader from '../components/Loader'
 
 const OrderDetails = styled(ListGroup)`
   * {
@@ -40,13 +43,12 @@ const PlaceOrderScreen = () => {
   const navigate = useNavigate()
 
   const [distance, setDistance] = useState(0)
-  const [distanceLoading, setDistanceLoading] = useState(false)
+  const [distanceLoading, setDistanceLoading] = useState(true)
   const fetchCart = useSelector((state) => state.cart)
   const cart = { ...fetchCart }
+  const [api, setApi] = useState('')
 
   //   calculate prices
-
-
 
   cart.itemsPrice = cart.cartItems.reduce(
     (acc, item) => acc + item.price * item.qty,
@@ -55,38 +57,39 @@ const PlaceOrderScreen = () => {
 
   cart.itemsPrice = cart.itemsPrice.toFixed(2)
 
-  cart.shippingPrice = Math.ceil(distance) * 22
+ 
+
+  cart.shippingPrice = (Math.ceil(distance) * 22).toFixed(2)
   // cart.taxPrice = Number((0.15 *  cart.itemsPrice ).toFixed(2))
 
-  cart.totalPrice = Number(cart.itemsPrice) + Number(cart.shippingPrice)
+  cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice)).toFixed(2)
 
   const orderCreate = useSelector((state) => state.orderCreate)
 
   const { order, success, error } = orderCreate
 
   useEffect(() => {
-
     const fetchDistance = async (location) => {
       try {
         const { data } = await axios.get(
           `/api/distance?lat=${location.lat}&lng=${location.long}`
         )
-        console.log(data.rows[0].elements[0].distance.text)
+
         const distance = Number(
           data.rows[0].elements[0].distance.text.split(' ')[0]
         )
+        setApi(data.api)
         setDistance(distance)
         setDistanceLoading(false)
       } catch (error) {
         toast.error('Faild to fetch location')
-        console.log(error)
+
         setDistanceLoading(false)
       }
     }
 
     fetchDistance(cart.shippingAddress.location)
 
-    
     dispatch(orderCreateReset())
     if (success) {
       navigate(`/order/${order._id}`)
@@ -102,19 +105,34 @@ const PlaceOrderScreen = () => {
         subTotal: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         // taxPrice: cart.taxPrice,
+        location :cart.shippingAddress.location,
         totalPrice: cart.totalPrice,
       })
     )
   }
 
+  if (distanceLoading) {
+    return <Loader />
+  }
+
+  // if (window.matchMedia("(max-width: 700px)").matches) {
+  //   // Viewport is less or equal to 700 pixels wide
+  // } else {
+  //   // Viewport is greater than 700 pixels wide
+  // }
   return (
     <>
       <Checkoutsteps step1='step1' step2='step2' step3='step3' />
       <Row>
         <Col md={8}>
+          <div className='ms-3'>
+            <h2>Delivery Location</h2>
+            <MapComponent api={api} zoom={17} lat={cart.shippingAddress.location.lat} long={cart.shippingAddress.location.long}/>
+          </div>
+
           <OrderDetails variant='flush'>
             <ListGroup.Item>
-              <h2>Delivery Charge</h2>
+             
               <p>
                 <strong>Address: </strong>
                 {cart.shippingAddress.lineOne}, {cart.shippingAddress.lineTwo},{' '}
@@ -158,7 +176,7 @@ const PlaceOrderScreen = () => {
                         </Col>
                         <Col md={4}>
                           {item.qty} x Rs {item.price} = Rs{' '}
-                          {item.qty * item.price}
+                          {(item.qty * item.price).toFixed(2)}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -177,13 +195,13 @@ const PlaceOrderScreen = () => {
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Items</Col>
+                  <Col>Cart Total</Col>
                   <Col>RS {cart.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping</Col>
+                  <Col>Delivery Charge</Col>
                   <Col>RS {cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
@@ -195,7 +213,7 @@ const PlaceOrderScreen = () => {
               </ListGroup.Item> */}
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
+                  <Col>Sub Total</Col>
                   <Col>RS {cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
