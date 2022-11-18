@@ -134,6 +134,7 @@ const Signin = () => {
           Sign Up Instead
         </Link>
         {/* </main> */}
+        <br/> <br/> <br/> <br/> <br/><br/> <br/>
       </div>
     </FormContainer>
   )

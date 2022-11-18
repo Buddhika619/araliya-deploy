@@ -177,6 +177,7 @@ const CartScreen = () => {
           </Summary>
         </Col>
       </Row>
+      <br/> <br/> <br/> <br/> <br/><br/> <br/>
     </>
   )
 }

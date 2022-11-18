@@ -96,6 +96,7 @@ const PaymentScreen = () => {
           </Form>
         </Wrapper>
       </FormContainer>
+      <br/> <br/> <br/> <br/> <br/><br/> <br/>
     </>
   )
 }
