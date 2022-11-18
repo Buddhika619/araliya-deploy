@@ -176,8 +176,9 @@ const CartScreen = () => {
             </CustomButton>
           </Summary>
         </Col>
+        <br/> <br/> <br/> <br/> <br/><br/> <br/> <br/> <br/> <br/> <br/> <br/>
       </Row>
-      <br/> <br/> <br/> <br/> <br/><br/> <br/>
+     
     </>
   )
 }
