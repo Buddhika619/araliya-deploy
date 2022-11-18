@@ -27,12 +27,11 @@ const orderSchema = mongoose.Schema(
       phone: { type: String, required: true },
     },
 
-    location: 
-      {
-        lat: { type: Number, required: true },
-        long: { type: Number, required: true },
-      },
-    
+    location: {
+      lat: { type: Number, required: true },
+      long: { type: Number, required: true },
+    },
+    distance: { type: Number, required: true },
     paymentMethod: {
       type: String,
       required: true,

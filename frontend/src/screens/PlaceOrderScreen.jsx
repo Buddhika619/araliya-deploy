@@ -106,6 +106,7 @@ const PlaceOrderScreen = () => {
         shippingPrice: cart.shippingPrice,
         // taxPrice: cart.taxPrice,
         location :cart.shippingAddress.location,
+        distance: distance,
         totalPrice: cart.totalPrice,
       })
     )

@@ -24,13 +24,13 @@ const MapComponent = ({api , zoom, lat ,long}) => {
   }
   
 
-  let address = `${cart.shippingAddress.lineOne}, ${cart.shippingAddress.lineTwo}, ${cart.shippingAddress.lineThree}`
+  
 
 
   return (
     <LoadScript googleMapsApiKey={api}>
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={zoom}>
-        <Marker position={center} title= {address}/>
+        <Marker position={center}/>
       </GoogleMap>
 
     

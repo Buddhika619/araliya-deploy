@@ -17,6 +17,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     shippingPrice,
     totalPrice,
     location,
+    distance
   } = req.body
 
   console.log(location)
@@ -54,7 +55,8 @@ const addOrderItems = asyncHandler(async (req, res) => {
         taxPrice,
         shippingPrice,
         totalPrice,
-        location
+        location,
+        distance
       })
 
       const CreatedOrder = await order.save()

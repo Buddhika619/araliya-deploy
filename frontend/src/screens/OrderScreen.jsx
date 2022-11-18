@@ -195,7 +195,7 @@ const OrderScreen = () => {
                   </p>
                   <p>
                 <strong>Dilivery Distance: </strong>
-                {distance} km
+                {order.distance} km
               </p>
                   <p>
                     <strong>Phone Number: </strong>
