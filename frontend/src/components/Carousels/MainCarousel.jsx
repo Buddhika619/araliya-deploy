@@ -85,12 +85,7 @@ const MainCarousel = () => {
       {products?.map((product) => (
         <Carousel.Item key={product._id}>
           {/* <Link to={`/product/${product._id}`}> */}
-          <Button
-            className='heroButton'
-            onClick={() => pramoHandler(product._id)}
-          >
-            Buy Now
-          </Button>
+       
           <Image
             src='https://cdn.glitch.global/04ac2eab-7093-47ad-976f-739938dcbb74/food-delivery-man-with-motorcycles-customers-ordering-on-the-mobile-application-the-motorcyclist-goes-according-to-the-gps-map-decorated-with-smartphone-scddooters-food-bags-paper-coffee-mugs-vector.png?v=1667918485087'
             alt={product.name}

@@ -80,6 +80,7 @@ const ProductScreen = () => {
 
   const { id } = useParams()
 
+  
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(listProductsDetails(id))
