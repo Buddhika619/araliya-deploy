@@ -240,6 +240,7 @@ const PlaceOrderScreen = () => {
           </Summary>
         </Col>
       </Row>
+      <br/> <br/> <br/> <br/> <br/><br/> <br/>
     </>
   )
 }

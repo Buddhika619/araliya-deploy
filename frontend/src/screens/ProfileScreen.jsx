@@ -230,6 +230,7 @@ const Profile = () => {
           </Link> */}
           </div>
         </Container>
+        <br/> <br/> <br/> <br/> <br/><br/> <br/>
       </main>
     </>
   )

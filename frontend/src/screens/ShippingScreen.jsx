@@ -159,6 +159,7 @@ const ShippingScreen = () => {
           <CustomButton type='submit'>Continue</CustomButton>
         </ShippingForm>
       </FormContainer>
+      <br/> <br/> <br/> <br/> <br/><br/> <br/>
     </>
   )
 }

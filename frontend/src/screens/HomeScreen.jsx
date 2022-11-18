@@ -284,8 +284,10 @@ const HomeScreen = () => {
             )}
           </Container>
         </Col>
+        <br/> <br/> <br/> <br/> <br/><br/> <br/>
       </main>
       <Footer />
+     
       <MobileNavbar/>
     
     </>

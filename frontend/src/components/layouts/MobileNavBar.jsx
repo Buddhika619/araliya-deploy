@@ -7,7 +7,6 @@ import styled from 'styled-components'
 const Footer = styled.footer`
  display: none;
  @media(max-width:800px){
-  margin-top: 10%;
     display: flex;
     position: fixed;
    
