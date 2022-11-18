@@ -8,7 +8,7 @@ const Footer = styled.footer`
  display: none;
  @media(max-width:800px){
     display: flex;
-    position: sticky;
+    position: fixed;
    
  }
 `
