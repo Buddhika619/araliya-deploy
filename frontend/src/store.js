@@ -21,8 +21,8 @@ import productReviewReducer from './reducers/productReviewSlice'
 import productTopRatedReducer from './reducers/productTopRatedSlice'
 import userListReducer from './reducers/userListSlice'
 import adminProductListReducer from './reducers/adminProductList'
-
-
+import orderRemoveReducer from './reducers/orderRemoveSlice'
+import configReducer from './reducers/configSlice'
 // export default configureStore({
 //     reducer: {
 //       cart: cartReducer,
@@ -45,7 +45,9 @@ const reducer = combineReducers({
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
   productReview: productReviewReducer, 
-  orderList:orderListReducer
+  orderList:orderListReducer,
+  orderRemove:orderRemoveReducer,
+  configUpdate :configReducer
   
 })
 
@@ -54,7 +56,7 @@ const middleware = []
 const store = configureStore(
   { reducer: reducer,
    },
-  composeWithDevTools(applyMiddleware(...middleware))
+  // composeWithDevTools(applyMiddleware(...middleware))
 )
 
 export default store

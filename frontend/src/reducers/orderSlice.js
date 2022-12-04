@@ -60,7 +60,26 @@ const orderSlice = createSlice({
     },
     orderDeliverReset: (state, action) => {
       state.order = {}
+      state.success = false
     },
+    orderStateUpdateRequest: (state) => {
+      state.loading = true
+      state.error = false
+      state.success = false
+    },
+    orderStateUpdateSuccess: (state) => {
+      state.loading = false
+      state.success = true
+    },
+    orderStateUpdateFail: (state, action) => {
+      state.loading = false
+      state.error = action.payload
+    },
+    orderStateUpdateReset: (state) => {
+      state.success = false
+      state.loading=false
+    },
+ 
     
   },
 })
@@ -77,6 +96,11 @@ export const {
   orderDeliverRequest,
   orderDeliverSuccess,
   orderDeliverFail,
-  orderDeliverReset
+  orderDeliverReset,
+  orderStateUpdateRequest,
+  orderStateUpdateSuccess,
+  orderStateUpdateFail,
+  orderStateUpdateReset
+
 } = orderSlice.actions
 export default orderSlice.reducer

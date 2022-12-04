@@ -13,6 +13,7 @@ const App = () => {
     <>
       <Router>
         <Routes>
+
           <Route path='/test' element={<TestBuwa />} />
           <Route path='/admin/*' element={<AdminRoutes />} />
           <Route path='/*' element={<GenericRoutes />} />
@@ -67,6 +68,7 @@ const App = () => {
 
           {/* overiding default layouts */}
           <Route path='/order/print/:id' element={<PrintView />} />
+          
         </Routes>
       </Router>
       <ToastContainer />

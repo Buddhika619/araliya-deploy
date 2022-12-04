@@ -8,17 +8,17 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import {
   getOrderDetails,
-  payOrder,
+
   orderDeliver,
 } from '../actions/orderActions'
 import { orderPayReset } from '../reducers/orderPaySlice'
-import { orderDeliverReset } from '../reducers/orderSlice'
+import {  orderDeliverReset } from '../reducers/orderSlice'
 
 import QRCode from 'qrcode'
 import { LinkContainer } from 'react-router-bootstrap'
 import styled from 'styled-components'
 import CustomButton from '../components/microComponents/CustomButton'
-import TestBuwa from './TestBuwa'
+
 import MapComponent from '../components/MapComponent'
 import { toast } from 'react-toastify'
 
@@ -48,6 +48,7 @@ const OrderScreen = () => {
   const navigate = useNavigate()
 
   const [distanceLoading, setDistanceLoading] = useState(true)
+
   const [distance, setDistance] = useState(0)
   const fetchCart = useSelector((state) => state.cart)
   const cart = { ...fetchCart }
@@ -60,11 +61,17 @@ const OrderScreen = () => {
   const orderDetails = useSelector((state) => state.orderDetails)
   const { order, loading, success, error } = orderDetails
 
-  const orderPay = useSelector((state) => state.orderDetails)
-  const { loading: loadingPay, success: successPay } = orderPay
+
 
   const deliverOrder = useSelector((state) => state.orderCreate)
   const { loading: loadingDeliver, success: successDeliver } = deliverOrder
+
+  if(successDeliver){
+    toast.success("Woohoo order is Completed!", {
+      theme: "colored",
+    })
+  }
+
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -108,7 +115,7 @@ const OrderScreen = () => {
     }
     generateQR(`${window.location.href}}`)
 
-    if (!notOrder || successPay || successDeliver || order._id !== id) {
+    if (!notOrder || successDeliver || order._id !== id) {
       dispatch(orderPayReset())
       dispatch(orderDeliverReset())
       dispatch(getOrderDetails(id))
@@ -126,29 +133,23 @@ const OrderScreen = () => {
   }, [
     dispatch,
     id,
-    successPay,
     notOrder,
     successDeliver,
     order.isPaid,
-
     cart.shippingAddress.location,
     navigate,
     order._id,
     userInfo,
   ])
 
-  const successPaymentHandler = (paymentResult) => {
-    dispatch(payOrder(id, paymentResult))
-    dispatch(getOrderDetails(id))
-  }
+
 
   const deliverHandler = () => {
     dispatch(orderDeliver(order))
+    dispatch(getOrderDetails(id))
   }
 
-  const printHandler = () => {
-    navigate(`/orders/print/${order._id}`)
-  }
+  
 
   if (distanceLoading) {
     return <Loader />
@@ -157,16 +158,14 @@ const OrderScreen = () => {
   return (
     <>
       {loading && <Loader />}
-
       {error && <Message varient='danger'>{error}</Message>}
-
       {success && (
         <>
           <ShippingWrapper>
             <Title>Order {order._id}</Title>
             <Col md={8}>
               <h2>Delivery Location</h2>
-              <div >
+              <div>
                 <MapComponent api={api} zoom={17} lat={lat} long={long} />
               </div>
 
@@ -194,19 +193,24 @@ const OrderScreen = () => {
                     {order.shippingAddress.lineThree}
                   </p>
                   <p>
-                <strong>Dilivery Distance: </strong>
-                {order.distance} km
-              </p>
+                    <strong>Dilivery Distance: </strong>
+                    {order.distance} km
+                  </p>
                   <p>
                     <strong>Phone Number: </strong>
                     {order.shippingAddress.phone}
                   </p>
+
                   {order.isDelivered ? (
                     <Message varient='success'>
-                      Delivered on {order.paidAt}
+                      Delivered on{' '}
+                      {order.paidAt}
                     </Message>
                   ) : (
-                    <Message varient='danger'>Not Delivered</Message>
+                    <Message varient='warning'>
+                      <strong>Order Status: </strong>
+                      <strong> {order.orderStatus}</strong>
+                    </Message>
                   )}
                 </ListGroup.Item>
 
@@ -291,17 +295,20 @@ const OrderScreen = () => {
                     </ListGroup.Item>
 
                     {loadingDeliver && <Loader />}
-                    {userInfo && userInfo.isAdmin && !order.isDelivered && (
-                      <ListGroup.Item>
-                        <CustomButton
-                          type='button'
-                          onClick={deliverHandler}
-                          className='col-12'
-                        >
-                          Mark As Delivered
-                        </CustomButton>
-                      </ListGroup.Item>
-                    )}
+                    {userInfo &&
+                      (userInfo.isAdmin || userInfo.role === 'Rider') &&
+                      !order.isDelivered &&
+                      order.orderStatus === 'dispatched' && (
+                        <ListGroup.Item>
+                          <CustomButton
+                            type='button'
+                            onClick={deliverHandler}
+                            className='col-12'
+                          >
+                            Mark As Delivered
+                          </CustomButton>
+                        </ListGroup.Item>
+                      )}
                   </ListGroup>
                 </Card>
               </Summary>
@@ -315,7 +322,8 @@ const OrderScreen = () => {
           </PrintLink>
         </>
       )}
-      <br/> <br/> <br/> <br/> <br/><br/> <br/>
+      <br /> <br /> <br /> <br /> <br />
+      <br /> <br />
     </>
   )
 }

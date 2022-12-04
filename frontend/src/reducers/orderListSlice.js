@@ -22,6 +22,11 @@ const orderListSlice = createSlice({
       state.loading = false
       state.error = action.payload
   },
+  orderListReset: (state) => {
+      state.loading = false
+      state.success = false
+      state.orders = false
+  },
 }
 })
 
@@ -30,6 +35,6 @@ export const {
   orderListRequest,
   orderListSuccess,
   orderListFail,
-
+  orderListReset
 } = orderListSlice.actions
 export default orderListSlice.reducer

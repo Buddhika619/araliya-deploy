@@ -36,12 +36,12 @@ const orderSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    paymentResult: {
-      id: { type: String },
-      status: { type: String },
-      update_time: { type: String },
-      email_address: { type: String },
-    },
+    // paymentResult: {
+    //   id: { type: String },
+    //   status: { type: String },
+    //   update_time: { type: String },
+    //   email_address: { type: String },
+    // },
     subTotal: {
       type: Number,
       required: true,
@@ -75,6 +75,17 @@ const orderSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    orderStatus: {
+      type: String,
+      required: true,
+      default: 'pending'
+    },
+
+    deliveredBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+
     deliveredAt: {
       type: Date,
     },

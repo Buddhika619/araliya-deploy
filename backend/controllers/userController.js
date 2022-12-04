@@ -18,6 +18,7 @@ const authUser = asyncHandler( async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+            role: user.role,
             isAdmin: user.isAdmin,
             token: generateToken(user._id)
         })
@@ -55,6 +56,7 @@ const registerUser = asyncHandler( async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+            role: user.role,
             isAdmin: user.isAdmin,
             token: generateToken(user._id)
         })
@@ -189,8 +191,9 @@ const updateUser = asyncHandler( async (req, res) => {
     const user = await User.findById(req.params.id)
 
     if(user) {
-        user.name = req.body.name || user.name
-        user.email = req.body.email || user.email
+        // user.name = req.body.name || user.name
+        // user.email = req.body.email || user.email
+        user.role = req.body.role || user.role
         user.isAdmin = req.body.isAdmin 
 
     const updatedUser = await user.save()
@@ -199,6 +202,7 @@ const updateUser = asyncHandler( async (req, res) => {
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
+        role: updatedUser.role,
         isAdmin: updatedUser.isAdmin,
     })
 

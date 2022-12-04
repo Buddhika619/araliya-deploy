@@ -60,7 +60,8 @@ const CreateListing = () => {
   useEffect(() => {
     if (successUpdate) {
       dispatch(productUpdateReset())
-      navigate(`/admin/products/${path}`)
+      toast.success('Success')
+      setTimeout(function(){ window.close()   }, 1000);
     } else {
       if (!product.name || product._id !== id) {
         dispatch(listProductsDetails(id))
@@ -87,7 +88,10 @@ const CreateListing = () => {
         active,
       })
     )
+   
   }
+
+
 
   const onMutate = (e) => {
     let boolean = null

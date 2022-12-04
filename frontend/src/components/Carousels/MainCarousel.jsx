@@ -6,6 +6,7 @@ import Loader from '../Loader'
 import Message from '../Message'
 import { listTopProducts } from '../../actions/productActions'
 import styled from 'styled-components'
+import { getConfigdata } from '../../actions/configAction'
 
 
 
@@ -65,16 +66,14 @@ const MainCarousel = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const productTopRated = useSelector((state) => state.productTopRated)
-  const { loading, error, products } = productTopRated
+  const viewConfig = useSelector((state) => state.configUpdate)
+  const { loading, config, error } = viewConfig
 
   useEffect(() => {
-    dispatch(listTopProducts())
+    dispatch(getConfigdata())
   }, [dispatch])
 
-  const pramoHandler = (id) => {
-    navigate(`/product/${id}`)
-  }
+  
 
   return loading ? (
     <Loader />
@@ -82,13 +81,14 @@ const MainCarousel = () => {
     <Message variant='danger'>{error}</Message>
   ) : (
     <HeroCarousel pause='hover' className='mb-5' variant='dark'>
-      {products?.map((product) => (
-        <Carousel.Item key={product._id}>
+      {config.carousel?.map((item, index) => (
+        <Carousel.Item key={index}>
           {/* <Link to={`/product/${product._id}`}> */}
        
+       
           <Image
-            src='https://cdn.glitch.global/04ac2eab-7093-47ad-976f-739938dcbb74/food-delivery-man-with-motorcycles-customers-ordering-on-the-mobile-application-the-motorcyclist-goes-according-to-the-gps-map-decorated-with-smartphone-scddooters-food-bags-paper-coffee-mugs-vector.png?v=1667918485087'
-            alt={product.name}
+            src={item}
+            alt={item}
             className='carousel-img '
             fluid
           />

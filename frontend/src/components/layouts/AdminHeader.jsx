@@ -7,31 +7,29 @@ import { Badge, NavDropdown } from 'react-bootstrap'
 import { logout } from '../../actions/userActions'
 import SearchBox from '../SearchBox'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { LocalShipping } from '@material-ui/icons'
 
 const TopNav = styled(Navbar)`
   background-color: #222935;
 
-
-  .brand{
-    @media (max-width: 1400px) and  (min-width: 1200px) {
+  .brand {
+    @media (max-width: 1400px) and (min-width: 1200px) {
       margin-right: -120px;
-   
     }
 
-    @media (max-width: 1200px) and (min-width: 992px){
+    @media (max-width: 1200px) and (min-width: 992px) {
       margin-right: -160px;
-        
     }
     z-index: 1;
   }
 
-  .search{
-    margin:auto
+  .search {
+    margin: auto;
   }
-
- 
 
   .cart {
     background-color: #f3f5f9;
@@ -42,7 +40,7 @@ const TopNav = styled(Navbar)`
     @media (max-width: 480px) {
       margin-top: 10px;
     }
-    &:hover{
+    &:hover {
       transform: scale(1.2);
     }
   }
@@ -50,8 +48,8 @@ const TopNav = styled(Navbar)`
   .cartIcon {
     color: #222935;
     position: absolute;
-    top: 10px;
-    left: 8px;
+    top: 8px;
+    left: 7px;
   }
 
   .cartBadge {
@@ -68,7 +66,7 @@ const TopNav = styled(Navbar)`
     width: 35px;
     height: 35px;
     position: relative;
-    &:hover{
+    &:hover {
       transform: scale(1.2);
     }
   }
@@ -78,7 +76,6 @@ const TopNav = styled(Navbar)`
     position: absolute;
     top: 10px;
     left: 10px;
-    
   }
 `
 
@@ -87,6 +84,8 @@ const AdminHeader = () => {
   const navigate = useNavigate()
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+
+  const [newOrders, setNewOrders] = useState(0)
 
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
@@ -101,28 +100,51 @@ const AdminHeader = () => {
     window.location.reload()
   }
 
-  useEffect(() => {}, [cartItems])
+  useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+
+        const { data } = await axios.get(
+          `http://localhost:5000/api/orders/count`,
+          config
+        )
+
+        setNewOrders(data)
+        console.log(data)
+      } catch (error) {
+        toast.error(error)
+      }
+    }
+
+    fetchCount()
+    setInterval(() => {
+      fetchCount()
+    }, 55000)
+  }, [])
 
   return (
     <header>
       <TopNav variant='dark' expand='lg' className='pb-3 pt-3' collapseOnSelect>
         <Container>
-        
           <LinkContainer to='/'>
             <Navbar.Brand className='brand ms-5'>ARALIYA</Navbar.Brand>
           </LinkContainer>
 
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
-            <SearchBox className='search'/>
-            <Nav className='ms-auto navEnd' >
-              <LinkContainer to='/cart'>
+            <Nav className='ms-auto navEnd'>
+              <LinkContainer to='/admin/orders/neworders'>
                 <Nav.Link>
                   <div className='cart'>
-                    <i className='fas fa-cart-shopping fa-l cartIcon' />
-                    {cartItems.length > 0 && (
+                  <LocalShipping className='cartIcon'/>
+                    {newOrders > 0 && (
                       <Badge bg='danger' className='cartBadge'>
-                        {cartItems.length}
+                        {newOrders}
                       </Badge>
                     )}
                   </div>
@@ -148,7 +170,6 @@ const AdminHeader = () => {
                   </Nav.Link>
                 </LinkContainer>
               )}
-        
             </Nav>
           </Navbar.Collapse>
         </Container>

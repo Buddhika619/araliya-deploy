@@ -5,10 +5,10 @@ import styled from 'styled-components'
 
 
 
-const CustomButton = ({children, type, onClick, className, visibility}) => {
+const CustomButton = ({children, type, onClick, className, visibility, color}) => {
 
     const CustomButton = styled(Button)`
-    background-color: #00cc66;
+    background-color:  ${props => props.color ? color : "#00cc66;"};    
     color:white;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
@@ -32,6 +32,7 @@ const CustomButton = ({children, type, onClick, className, visibility}) => {
   return (
     <CustomButton
     className={className}
+    color = {color}
     type={type}
     onClick={onClick}
     disabled={visibility === 0}

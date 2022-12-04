@@ -10,6 +10,8 @@ import { Container } from 'react-bootstrap'
 import Footer from '../components/layouts/Footer'
 import NotFound from '../screens/NotFound'
 import AdminHeader from '../components/layouts/AdminHeader'
+import CarouselConfig from '../screens/Admin/CarouselConfig'
+import OfferConfig from '../screens/Admin/OfferConfig'
 
 const AdminRoutes = () => {
   return (
@@ -30,13 +32,20 @@ const AdminRoutes = () => {
             exact
           /> */}
 
+          <Route path='/config/carousel' element={<CarouselConfig />} />
+          <Route path='/config/offers' element= {<OfferConfig />} />
+
+
           <Route path='/products/active' element={<ProductlistScreen />} />
           <Route path='/products/outofstock' element={<ProductlistScreen />} />
           <Route path='/products/deactivated' element={<ProductlistScreen />} />
           <Route path='/products/:path/:id/edit' element={<ProductEditScreen />} />
           
 
-          <Route path='/orders' element={<OrderListScreen />} />
+          <Route path='/orders/neworders' element={<OrderListScreen />} />
+          <Route path='/orders/processing' element={<OrderListScreen />} />
+          <Route path='/orders/dispatched' element={<OrderListScreen />} />
+          <Route path='/orders/completed' element={<OrderListScreen />} />
 
           <Route path='/*' element={<NotFound />} />
 

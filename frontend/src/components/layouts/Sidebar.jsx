@@ -28,7 +28,7 @@ const SidebarContainer = styled.div`
   width: 300px;
   box-shadow: 0 10px 10px -5px;
   @media (max-width: 1190px) {
-    top:83px;
+    top: 83px;
     position: absolute;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   }
@@ -76,23 +76,20 @@ const SidebarListItem = styled.li`
   }
 `
 
-const Sidebar = ({ view,  success }) => {
-  
+const Sidebar = ({ view, success }) => {
   const location = useLocation()
- 
-  const path =location.pathname.split('/')[2]
+
+  const path = location.pathname.split('/')[2]
 
   const [productSub, setProductSub] = useState(false)
   const [orderSub, setOrderSub] = useState(false)
-
-
+  const [configSub, setConfigSub] = useState(false)
 
   const pathMatchRoute = (route) => {
     if (route == location.pathname) {
       return true
     }
   }
-
 
   // useEffect(() => {
   //   const buttonList = document.querySelectorAll('.button')
@@ -130,13 +127,7 @@ const Sidebar = ({ view,  success }) => {
                 {productSub ? (
                   <SubSidebarList>
                     <Link to='/admin/products/active'>
-                    <SidebarListItem
-                        className={
-                          pathMatchRoute('/admin/products/active')
-                            ? 'navbarListINameActive'
-                            : 'navbarListIName'
-                        }
-                      >
+                      <SidebarListItem>
                         <i className='fa-sharp fa-solid fa-spinner'></i>
                         Active
                       </SidebarListItem>
@@ -149,7 +140,7 @@ const Sidebar = ({ view,  success }) => {
                     </Link>
                     <Link to='/admin/products/deactivated'>
                       <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
+                        <i class='fa-solid fa-user-secret'></i>
                         Deactivated
                       </SidebarListItem>
                     </Link>
@@ -169,14 +160,26 @@ const Sidebar = ({ view,  success }) => {
                       </SidebarListItem>
                     </Link>
                     <Link to='/admin/products/outofstock'>
-                      <SidebarListItem>
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute('/admin/products/outofstock')
+                            ? 'navbarListINameActive'
+                            : 'navbarListIName'
+                        }
+                      >
                         <i className='fa-regular fa-circle-check'></i>
                         Out Of Stock
                       </SidebarListItem>
                     </Link>
                     <Link to='/admin/products/deactivated'>
-                      <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute('/admin/products/deactivated')
+                            ? 'navbarListINameActive'
+                            : 'navbarListIName'
+                        }
+                      >
+                        <i class='fa-solid fa-user-secret'></i>
                         Deactivated
                       </SidebarListItem>
                     </Link>
@@ -193,49 +196,97 @@ const Sidebar = ({ view,  success }) => {
                 {/* order links */}
                 {orderSub ? (
                   <SubSidebarList>
-                    <Link to='/admin/orders'>
+                    <Link to='/admin/orders/neworders'>
                       <SidebarListItem className='orders button'>
                         <i className='fa-sharp fa-solid fa-spinner'></i>
                         New Orders
                       </SidebarListItem>
                     </Link>
-                    <Link to='/products'>
+                    <Link to='/admin/orders/processing'>
+                      <SidebarListItem>
+                        <i className='fa-regular fa-circle-check'></i>
+                        Processing Orders
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/orders/dispatched'>
+                      <SidebarListItem>
+                        <i className='fa-regular fa-circle-check'></i>
+                        Dipatched Orders
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/orders/completed'>
                       <SidebarListItem>
                         <i className='fa-regular fa-circle-check'></i>
                         Completed Orders
                       </SidebarListItem>
                     </Link>
-                    <SidebarListItem>
-                      <AttachMoney />
-                      Transactions
-                    </SidebarListItem>
-                    <SidebarListItem>
-                      <BarChart />
-                      Reports
-                    </SidebarListItem>
                   </SubSidebarList>
                 ) : path === 'orders' ? (
                   <SubSidebarList>
-                    <Link to='/admin/orders'>
+                    <Link to='/admin/orders/neworders'>
                       <SidebarListItem className='orders button'>
                         <i className='fa-sharp fa-solid fa-spinner'></i>
                         New Orders
                       </SidebarListItem>
                     </Link>
-                    <Link to='/products'>
+                    <Link to='/admin/orders/processing'>
+                      <SidebarListItem>
+                        <i className='fa-regular fa-circle-check'></i>
+                        Processing Orders
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/orders/dispatched'>
+                      <SidebarListItem>
+                        <i className='fa-regular fa-circle-check'></i>
+                        Dipatched Orders
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/orders/completed'>
                       <SidebarListItem>
                         <i className='fa-regular fa-circle-check'></i>
                         Completed Orders
                       </SidebarListItem>
                     </Link>
-                    <SidebarListItem>
-                      <AttachMoney />
-                      Transactions
-                    </SidebarListItem>
-                    <SidebarListItem>
-                      <BarChart />
-                      Reports
-                    </SidebarListItem>
+                  </SubSidebarList>
+                ) : (
+                  console.log(123)
+                )}
+
+                <SidebarListItem onClick={() => setConfigSub(!configSub)}>
+                  <LocalShippingOutlined />
+                  Configuration
+                </SidebarListItem>
+
+                {/* Config links */}
+                {configSub ? (
+                  <SubSidebarList>
+                    <Link to='/admin/config/offers'>
+                      <SidebarListItem className='orders button'>
+                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        Offers
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/config/carousel'>
+                      <SidebarListItem className='orders button'>
+                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        carousel
+                      </SidebarListItem>
+                    </Link>
+                  </SubSidebarList>
+                ) : path === 'config' ? (
+                  <SubSidebarList>
+                    <Link to='/admin/config/offers'>
+                      <SidebarListItem className='orders button'>
+                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        Offers
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/config/carousel'>
+                      <SidebarListItem className='orders button'>
+                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        carousel
+                      </SidebarListItem>
+                    </Link>
                   </SubSidebarList>
                 ) : (
                   console.log(123)

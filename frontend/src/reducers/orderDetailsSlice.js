@@ -22,6 +22,12 @@ const orderDetailsSlice = createSlice({
       state.loading = false
       state.error = action.payload
     },
+
+    orderDetailsReset:(state, action) => {
+      state.success = false
+      state.loading = false
+      state.order = {}
+    }
   },
 })
 

@@ -181,7 +181,7 @@ function BasicDocument() {
               </View>
 
               <View style={styles.itemHeader}>
-                <Text style={{ flex: '1.5' }}>Qty</Text>
+                <Text style={{ flex: '1.5' }}>Product ID</Text>
                 <Text style={{ flex: '2'}}>Description</Text>
                 <Text style={{ flex: '1'}}>price</Text>
                 <Text style={{ flex: '1'}}>SubTotal</Text>

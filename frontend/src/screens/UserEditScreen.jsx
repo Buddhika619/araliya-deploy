@@ -10,13 +10,17 @@ import { userUpdatereset } from '../reducers/userDetailsSlice'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-
 const UserEditScreen = () => {
   const { id } = useParams()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [message, setMessage] = useState(null)
+  // const [isAdmin, setIsAdmin] = useState(false)
+  // const [role, setRole] = useState('')
+
+  const [formData, setFormData] = useState({
+    isAdmin: true,
+    role: '',
+  })
+
+  const { isAdmin, role } = formData
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -33,13 +37,12 @@ const UserEditScreen = () => {
 
   useEffect(() => {
     if (successUpdate) {
-      setName(user.name)
-      setEmail(user.email)
-      setIsAdmin(user.isAdmin)
+      setFormData(user)
+
       // navigate('/admin/userlist')
 
       toast.success(`User Updated!`, {
-        position: 'bottom-right',
+        position: 'top-right',
         autoClose: 1000,
         theme: 'colored',
       })
@@ -47,81 +50,130 @@ const UserEditScreen = () => {
       if (!user.name || user._id !== id) {
         dispatch(getUserDetails(id))
       } else {
-        setName(user.name)
-        setEmail(user.email)
-        setIsAdmin(user.isAdmin)
+        setFormData(user)
       }
     }
   }, [user, id, dispatch, navigate, successUpdate])
 
   const submitHandler = (e) => {
     e.preventDefault()
-    dispatch(updateUser({ _id: id, name, email, isAdmin }))
+    dispatch(updateUser({ _id: id, isAdmin, role }))
   }
 
-  const updateRest = () => {
-    dispatch(userUpdatereset())
+  const onMutate = (e) => {
+    let boolean = null
+
+    if (e.target.value === 'true') {
+      boolean = true
+    }
+    if (e.target.value === 'false') {
+      boolean = false
+    }
+
+    // Text/Booleans/Numbers
+    if (!e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: boolean ?? e.target.value, //if e.target.id is boolean set as true or false, if it's null set as e.target.value ?? ---nulish operator
+      }))
+    }
   }
+
+  // const updateRest = () => {
+  //   dispatch(userUpdatereset())
+  // }
 
   return (
     <>
-
-          <ToastContainer hideProgressBar={true} />
-          <Link
-            to='/admin/userlist'
-            className='btn btn-light my-3'
-            onClick={updateRest}
-          >
-            Go Back
-          </Link>
-          {/* {successUpdate && <Message varient='success'>Profile Updated</Message>} */}
-          <FormContainer>
-            <h1>Edit User</h1>
-            {/* {loadingUpdate && <Loader />}
+      <Link to='/admin/users' className='btn btn-light my-3'>
+        Go Back
+      </Link>
+      {/* {successUpdate && <Message varient='success'>Profile Updated</Message>} */}
+      <FormContainer>
+        <header>
+          <p className='pageHeader'> Update User</p>
+        </header>
+        {/* {loadingUpdate && <Loader />}
         {errorUpdate && <Message varient='danger'>{errorUpdate}</Message>} */}
-            {loading ? (
-              <Loader />
-            ) : error ? (
-              <Message varient='danger'>{error}</Message>
-            ) : (
-              <Form onSubmit={submitHandler}>
-                <Form.Group controlId='name'>
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type='name'
-                    placeholder='Enter name'
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  ></Form.Control>
-                </Form.Group>
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <Message varient='danger'>{error}</Message>
+        ) : (
+          <form onSubmit={submitHandler}>
+            <label className='formLabel'>Name</label>
+            <input
+              className='formInputName'
+              type='text'
+              value={user.name}
+              // maxLength='32'
+              // minLength='10'
+              readOnly
+            />
 
-                <Form.Group controlId='email'>
-                  <Form.Label>email Address</Form.Label>
-                  <Form.Control
-                    type='email'
-                    placeholder='Enter email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  ></Form.Control>
-                </Form.Group>
+            <label className='formLabel'>Email</label>
+            <input
+              className='formInputName'
+              type='email'
+              value={user.email}
+              // maxLength='32'
+              // minLength='10'
+              readOnly
+            />
 
-                <Form.Group controlId='isAdmin'>
-                  <Form.Check
-                    type='checkbox'
-                    label='isAdmin'
-                    checked={isAdmin}
-                    onChange={(e) => setIsAdmin(e.target.checked)}
-                  ></Form.Check>
-                </Form.Group>
+            <Form.Group controlId='role'>
+              <label className='formLabel'>Role</label>
+              <select className='formInputName' onChange={onMutate} id='role'>
+                <option className='formInputName'>{role}</option>
+                <option value='Customer' className='formInputName'>
+                  Customer
+                </option>
+                <option value='Rider' className='formInputName'>
+                  Rider
+                </option>
+                <option value='Manager' className='formInputName'>
+                  Manager
+                </option>
+                <option value='Admin' className='formInputName'>
+                  Admin
+                </option>
+              </select>
+            </Form.Group>
 
-                <Button className='my-3' type='submit' variant='primary'>
-                  Update
-                </Button>
-              </Form>
-            )}
-            <br/> <br/> <br/> <br/> <br/><br/> <br/>
-          </FormContainer>
+            <label className='formLabel'>Role</label>
+            <div className='formButtons'>
+              <button
+                className={isAdmin ? 'formButtonActive' : 'formButton'}
+                type='button'
+                id='isAdmin'
+                value={true}
+                onClick={onMutate}
+              >
+                Yes
+              </button>
+              <button
+                className={
+                  !isAdmin && isAdmin !== null
+                    ? 'formButtonActive'
+                    : 'formButton'
+                }
+                type='button'
+                id='isAdmin'
+                value={false}
+                onClick={onMutate}
+              >
+                No
+              </button>
+            </div>
 
+            <button type='submit' className='primaryButton createListingButton'>
+              Update
+            </button>
+          </form>
+        )}
+        <br /> <br /> <br /> <br /> <br />
+        <br /> <br />
+      </FormContainer>
     </>
   )
 }

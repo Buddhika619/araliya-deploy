@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 import {
-
   removeProduct,
   createProduct,
   listProductsAdmin,
@@ -35,7 +34,7 @@ const ToggleWrapper = styled('div')`
   position: relative;
   * {
     position: absolute;
-    top:-38px;
+    top: -38px;
     left: 20px;
     color: white;
     font-size: 35px;
@@ -48,12 +47,10 @@ const ProductListScreen = () => {
 
   const navigate = useNavigate()
   const location = useLocation()
-  
 
   //getting product list from redux store
   const productList = useSelector((state) => state.adminProductsList)
   const { loading, error, products, success } = productList
-
 
   const productRemove = useSelector((state) => state.productDetails)
   const { error: removeError, success: removeSuccess } = productRemove
@@ -78,7 +75,7 @@ const ProductListScreen = () => {
   const path = location.pathname.split('/')[3]
   useEffect(() => {
     //resting state
-  
+
     dispatch(productRemoveReset())
     dispatch(productCreateReset())
 
@@ -92,6 +89,7 @@ const ProductListScreen = () => {
       navigate(`/admin/products/${path}/${createdProduct._id}/edit`)
     }
   }, [dispatch, navigate, removeSuccess, successCreate, createProduct])
+
   const [selectionModel, setSelectionModel] = useState([])
 
   //remove
@@ -101,13 +99,11 @@ const ProductListScreen = () => {
     }
   }
 
-
-
   //update
- 
+
   const updateHandler = (id) => {
     if (selectionModel.length === 1) {
-      navigate(`/admin/products/${path}/${id}/edit`)
+      window.open(`/admin/products/${path}/${id}/edit`)
     }
   }
 
@@ -124,19 +120,24 @@ const ProductListScreen = () => {
 
   //data grid columns
   const columns = [
-    { field: 'id', width: 220 },
-    { field: 'NAME', width: 250 },
-    { field: 'CATEGORY', width: 100 },
-    { field: 'PRICE', width: 100 },
+    { field: 'id',headerName: 'ID',  width: 220 },
     {
       field: 'IMAGE',
-      width: 150,
-      editable: true,
+      headerName: 'Image',
+      width: 100,
       renderCell: (params) => (
         <img src={params.value} style={{ width: '50px' }} />
       ), // renderCell will render the component
     },
-    { field: 'CREATEDAT', width: 150 },
+    { field: 'NAME',headerName: 'Name',  width: 250 },
+    { field: 'CATEGORY',headerName: 'Category', width: 100 },
+    { field: 'PRICE', headerName: 'Price',width: 100 },
+    { field: 'BRAND', headerName: 'Brand',width: 100 },
+    { field: 'COUNTINSTOCK',headerName: 'Count In Stock', width: 120 },
+    { field: 'DAILYCAPACITY',headerName: 'Daily Capacity', width: 120 },
+    { field: 'RATING', headerName: 'Rating',width: 100 },
+    { field: 'REVIEWNUMBER', headerName: 'No of Reviews', width: 120 },
+   
 
     // {
     //   field: 'EDIT ',
@@ -175,10 +176,16 @@ const ProductListScreen = () => {
     console.log(success)
     rows = products.products?.map((row) => ({
       id: row._id,
+      IMAGE: row.image,
       NAME: row.name,
       CATEGORY: row.category,
+      BRAND : row.brand,
+      RATING: row.rating,
+      REVIEWNUMBER: row.numReviews,
+      COUNTINSTOCK : row.countInStock,
+      REORDERLEVEL: row.reOrderLevel,
+      DAILYCAPACITY: row.dailyCapacity,
       PRICE: `Rs ${row.price}`,
-      IMAGE: row.image,
       CREATEDAT: row.createdAt.slice(0, 16),
     }))
   }
@@ -188,6 +195,9 @@ const ProductListScreen = () => {
   //   visibleFields: VISIBLE_FIELDS,
   //   rowLength: 100,
   // })
+
+
+
 
   //data grid tool bar
   const CustomToolbar = () => {
@@ -217,7 +227,7 @@ const ProductListScreen = () => {
           <Button
             className='p-0 pe-2'
             variant='contained'
-            onClick={() => updateHandler(selectionModel[0])}
+            onClick={() => updateHandler(selectionModel)}
           >
             <EditOutlined style={{ color: 'orange' }} fontSize='small' />
             <span className='px-2' style={{ color: 'orange' }}>
@@ -246,9 +256,24 @@ const ProductListScreen = () => {
     )
   }
 
+
+  //handling header
+  let header = ''
+  switch (path) {
+    case 'active':
+        header = "Active Products"
+      break;
+      case 'outofstock':
+        header = "Out of Stock Products"
+      break;
+      case 'deactivated':
+        header = "Deactivated Products"
+      break;
+  }
+
   return (
     <>
-      <Row >
+      <Row>
         <Col className='' sm={3}>
           <ToggleWrapper>
             <i className='fa fa-bars fa-2xl' onClick={showSide}></i>
@@ -263,10 +288,20 @@ const ProductListScreen = () => {
             {removeError && <Message varient='danger'>{removeError}</Message>}
             {errorCreate && <Message varient='danger'>{errorCreate}</Message>}
 
-            <h1>Products</h1>
+            <h1>{header}</h1>
             {success && (
               <div style={{ height: 700, width: '100%' }}>
                 <DataGrid
+                  sx={{
+                    boxShadow: 3,
+                    border: 1,
+                    borderColor: '#00cc66',
+                    backgroundColor: 'white',
+                    '& .MuiDataGrid-cell:hover': {
+                      color: 'primary.main',
+                    },
+                  }}
+                  
                   rows={rows}
                   columns={columns}
                   pageSize={10}

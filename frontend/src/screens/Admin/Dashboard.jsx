@@ -65,7 +65,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user && user.isAdmin) {
-      dispatch(listOrders())
+    
     } else {
       navigate('/login')
     }

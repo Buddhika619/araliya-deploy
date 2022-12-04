@@ -13,10 +13,27 @@ import {
 import { myOrderList } from '../actions/orderActions'
 import styled from 'styled-components'
 
-import { toast } from 'react-toastify'
-
 import { Container } from 'react-bootstrap'
 import { userUpdateReset } from '../reducers/userUpdateSlice'
+
+import CustomButton from '../components/microComponents/CustomButton'
+
+import { DataGrid } from '@mui/x-data-grid'
+
+import { useParams } from 'react-router-dom'
+
+import {
+  listOrders,
+  removeOrder,
+  updateOrderState,
+} from '../actions/orderActions'
+
+import { toast } from 'react-toastify'
+
+import { myOrdersReset, orderStateUpdateReset } from '../reducers/orderSlice'
+import { orderRemoveReset } from '../reducers/orderRemoveSlice'
+import { orderListReset } from '../reducers/orderListSlice'
+import { userDetailsReset } from '../reducers/userDetailsSlice'
 
 const Profile = () => {
   const [changeDetails, setChangeDetails] = useState(false)
@@ -25,6 +42,8 @@ const Profile = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordField, setPasswordField] = useState(false)
+
+  const [selectedRows, setSelectedRows] = useState([])
 
   const dispatch = useDispatch()
 
@@ -41,13 +60,30 @@ const Profile = () => {
   const { success, error: updateError } = userUpdateProfile
 
   const myOrders = useSelector((state) => state.orderCreate)
-  const { loading: loadingOrders, error: errorOrders, orders } = myOrders
+  const {
+    loading: loadingOrders,
+    error: errorOrders,
+    success: myOrderSuccess,
+    orders,
+  } = myOrders
 
+  const orderRemove = useSelector((state) => state.orderRemove)
+  const { error: removeError, success: removeSuccess } = orderRemove
+  toast.error(removeError)
+  console.log(removeError)
+
+
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you sure?')) {
+      dispatch(removeOrder(id))
+      setSelectedRows([])
+    }
+
+  }
 
   if (updateError) {
     toast.error(updateError)
   }
-
 
   if (success) {
     toast.success('Successfully updated the profile')
@@ -58,7 +94,10 @@ const Profile = () => {
   }
   useEffect(() => {
     // dispatch(userUpdateReset())
+    // dispatch(myOrdersReset())
+    dispatch(orderRemoveReset())
     dispatch(userUpdateReset())
+
     if (!userInfo) {
       navigate('/login')
     } else {
@@ -66,11 +105,94 @@ const Profile = () => {
         dispatch(getUserDetails('profile'))
         dispatch(myOrderList())
       } else {
+        dispatch(myOrderList())
         setName(user.name)
         setEmail(user.email)
       }
     }
-  }, [dispatch, navigate, userInfo, user, success])
+  }, [
+    dispatch, navigate, userInfo, user, success ,removeSuccess
+  ])
+
+  let columns = ''
+
+  if (window.screen.width > 400) {
+    columns = [
+      { field: 'id', headerName: 'ID',width: 270 },
+
+      { field: 'TOTAL',headerName: 'Date', width: 120 },
+   
+      {
+        field: 'STATUS',
+        headerName: 'Status',
+        width: 150,
+        renderCell: (params) =>
+          params.value === 'completed' ? (
+            <span className="badge rounded-pill bg-success ">Completed</span>
+          ) : params.value === 'pending' ? (
+            <span className="badge rounded-pill bg-danger ">Pending</span>
+          ) : params.value === 'processing' ?(
+            <span className="badge rounded-pill bg-warning text-dark ">processing</span>
+          ) : (
+            <span className="badge rounded-pill bg-info text-dark ">Dispatched</span>
+          ), // renderCell will render the component
+      },
+
+      { field: 'CREATEDDATE', headerName: 'DATE ORDERED', width: 150 },
+      { field: 'CREATEDTIME', headerName: 'TIME ORDERED', width: 150 },
+      { field: 'DELIVEREDDATE', headerName: 'DATE DELIVERED', width: 150 },
+      { field: 'DELIVEREDTIME', headerName: 'TIME DELIVERED', width: 150 },
+      { field: 'PAYMENT', headerName: 'Payment Status', width: 120,
+      renderCell: (params) =>
+      params.value === true ? (
+        <span className="badge rounded-pill bg-success ">Completed</span>
+      ) :  (
+        <span className="badge rounded-pill bg-danger ">Pending</span>
+      )
+     },
+   
+    ]
+  } else {
+    columns = [
+      { field: 'id', width: 150 },
+
+      { field: 'TOTAL', width: 90 },
+      {
+        field: 'STATUS',
+       
+        width: 100,
+        renderCell: (params) =>
+          params.value === 'completed' ? (
+            <span className="badge rounded-pill bg-success ">Completed</span>
+          ) : params.value === 'pending' ? (
+            <span className="badge rounded-pill bg-danger ">Pending</span>
+          ) : params.value === 'processing' ?(
+            <span className="badge rounded-pill bg-warning text-dark ">processing</span>
+          ) : (
+            <span className="badge rounded-pill bg-info text-dark ">Dispatched</span>
+          ), // renderCell will render the component
+      },
+    ]
+  }
+
+
+
+console.log(orders)
+  let rows
+  if (myOrderSuccess) {
+    rows = orders?.map((order) => ({
+   
+      id: order._id,
+      USER: order.user && order.user.name,
+      STATUS: order.orderStatus,
+      TOTAL: `Rs ${order.totalPrice}`,
+      CREATEDDATE:  new Date(order.createdAt).toString().slice(0,16),
+      CREATEDTIME:new Date(order.createdAt).toString().slice(16, 21),
+      DELIVEREDDATE: (order.deliveredAt && new Date(order.deliveredAt).toString().slice(0,16)),
+      DELIVEREDTIME: new Date(order.deliveredAt).toString().slice(16,21),
+      PAYMENT: order.isPaid,
+    }))
+  }
 
   const onLogout = () => {
     dispatch(logout())
@@ -86,10 +208,16 @@ const Profile = () => {
   }
 
   const onEdit = (listingId) => navigate(`/editlisting/${listingId}`)
+  console.log(window.screen.width)
+
+  if (loadingOrders) {
+    return <Loader />
+  }
 
   return (
     <>
       <main>
+      {myOrderSuccess && (
         <Container className='mt-2' style={{ height: '100vh' }}>
           <header className='profileHeader'>
             <p className='pageHeader'>My Profile</p>
@@ -106,7 +234,6 @@ const Profile = () => {
                   setPasswordField(!passwordField)
                   changeDetails && onSubmit()
                   setChangeDetails(!changeDetails)
-                
                 }}
               >
                 {changeDetails ? 'done' : 'change'}
@@ -169,60 +296,53 @@ const Profile = () => {
               </form>
             </div>
             <h2>My orders</h2>
-            {loadingOrders ? (
-              <Loader />
-            ) : errorOrders ? (
-              <Message varient='danger'>{errorOrders}</Message>
-            ) : (
-              <Table striped bordered hover responsive className='table-sm'>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>DATE</th>
-                    <th>TOTAL</th>
-                    <th>PAID</th>
-                    <th>DELIVERED</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => (
-                    <tr key={order._id}>
-                      <td>{order._id}</td>
-                      <td>{order.createdAt.slice(0, 10)}</td>
-                      <td>{order.totalPrice}</td>
-                      <td>
-                        {order.isPaid ? (
-                          order.paidAt.slice(0, 10)
-                        ) : (
-                          <i
-                            className='fas fa-times'
-                            style={{ color: 'red' }}
-                          ></i>
-                        )}
-                      </td>
-                      <td>
-                        {order.isDelivered ? (
-                          order.deliveredAt.slice(0, 10)
-                        ) : (
-                          <i
-                            className='fas fa-times'
-                            style={{ color: 'red' }}
-                          ></i>
-                        )}
-                      </td>
-                      <td>
-                        <LinkContainer to={`/order/${order._id}`}>
-                          <Button variant='light' className='btn-sm'>
-                            Details
-                          </Button>
-                        </LinkContainer>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+
+            {selectedRows.length === 1 && (
+              <Link to={`/order/${selectedRows[0].id}`}>
+                <CustomButton type='submit' color='#00cc66' className='col-12'>
+                  View Order
+                </CustomButton>
+              </Link>
             )}
+
+            {(selectedRows.length === 1 && selectedRows[0].STATUS=== 'pending') && (
+              <CustomButton
+                type='submit'
+                onClick={() => deleteHandler(selectedRows[0].id)}
+                color='#e94a65'
+                className='col-12'
+              >
+                Delete Order
+              </CustomButton>
+            )}
+
+            {myOrderSuccess && (
+              <div style={{ height: 528, width: '100%' }}>
+                <DataGrid
+                  sx={{
+                    border: 1,
+                    borderColor: '#00cc66',
+                    backgroundColor: 'white',
+                    '& .MuiDataGrid-cell:hover': {
+                      color: 'primary.main',
+                    },
+                  }}
+                  rows={rows}
+                  columns={columns}
+                  pageSize={8}
+                  onSelectionModelChange={(ids) => {
+                    const selectedIDs = new Set(ids)
+                    const selectedRows = rows.filter((row) =>
+                      selectedIDs.has(row.id)
+                    )
+                    setSelectedRows(selectedRows)
+                  }}
+
+                  
+                />
+              </div>
+            )}
+
             {/* <Link to='/createlisting' className='createListing'>
             <img src={homeIcon} alt='home' />
             <p>Sell or rent your home</p>
@@ -230,7 +350,10 @@ const Profile = () => {
           </Link> */}
           </div>
         </Container>
-        <br/> <br/> <br/> <br/> <br/><br/> <br/>
+      )}
+        
+        <br /> <br /> <br /> <br /> <br />
+        <br /> <br />
       </main>
     </>
   )

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const initialState = {
-    
+    order : {}
 }
 
 const orderPaySlice = createSlice({
@@ -25,7 +25,7 @@ const orderPaySlice = createSlice({
     },
     orderPayReset: (state, action) => {
         state.loading = false
-        state = {}
+        state.order = {}
       },
   },
 })
