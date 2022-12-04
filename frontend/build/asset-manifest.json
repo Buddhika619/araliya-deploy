@@ -1,23 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.56bd41cd.css",
-    "main.js": "/static/js/main.cb24c419.js",
+    "main.css": "/static/css/main.de4042b2.css",
+    "main.js": "/static/js/main.4abce5d6.js",
     "static/js/787.cda612ba.chunk.js": "/static/js/787.cda612ba.chunk.js",
     "static/media/cart-svgrepo-com.svg": "/static/media/cart-svgrepo-com.da34efe8bdc7a4bd2a3512589960dbf9.svg",
     "index.html": "/index.html",
+    "static/media/bathtubIcon.svg": "/static/media/bathtubIcon.b95c8ddb4dae960083f7c6ba713cbb50.svg",
     "static/media/badgeIcon.svg": "/static/media/badgeIcon.6a60b5bc1167fef5e6d0.svg",
+    "static/media/bedIcon.svg": "/static/media/bedIcon.eefa75b10479ecc5ec087e92666866eb.svg",
     "static/media/exploreIcon.svg": "/static/media/exploreIcon.46f5bb6905dae22016100504332a86a9.svg",
     "static/media/lockIcon.svg": "/static/media/lockIcon.a38a1b56168bd1199de4.svg",
     "static/media/visibilityIcon.svg": "/static/media/visibilityIcon.d42e2dff8b09be94d6d209f0e86cf2d3.svg",
     "static/media/personOutlineIcon.svg": "/static/media/personOutlineIcon.f67a0190b977d851bec55fc9c520365a.svg",
+    "static/media/editIcon.svg": "/static/media/editIcon.9b527df04c00d16681c2b5da9c778dfc.svg",
     "static/media/personIcon.svg": "/static/media/personIcon.60c17ce32265f6273287.svg",
+    "static/media/deleteIcon.svg": "/static/media/deleteIcon.a53e22036f5f02bda3f291072d6c5f80.svg",
     "static/media/keyboardArrowRightIcon.svg": "/static/media/keyboardArrowRightIcon.8cee54bec29003f4c3faa8f2acfa6de8.svg",
-    "main.56bd41cd.css.map": "/static/css/main.56bd41cd.css.map",
-    "main.cb24c419.js.map": "/static/js/main.cb24c419.js.map",
+    "main.de4042b2.css.map": "/static/css/main.de4042b2.css.map",
+    "main.4abce5d6.js.map": "/static/js/main.4abce5d6.js.map",
     "787.cda612ba.chunk.js.map": "/static/js/787.cda612ba.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.56bd41cd.css",
-    "static/js/main.cb24c419.js"
+    "static/css/main.de4042b2.css",
+    "static/js/main.4abce5d6.js"
   ]
 }
