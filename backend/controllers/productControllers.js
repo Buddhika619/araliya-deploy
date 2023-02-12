@@ -22,117 +22,32 @@ const getProducts = asyncHandler(async (req, res) => {
   let products = ''
   let resultCount = ''
 
-  const filter = req.query.filter
+  const filter = req.query.filter || 'createdAt'
+  let sort = { createdAt: -1 }
   switch (filter) {
     case 'asc':
-      if (req.query.category) {
-        if (req.query.category === 'All Products') {
-          products = await Product.find({ ...keyword, active: true })
-            .sort({ price: 1 })
-            .limit(pageSize)
-            .skip(pageSize * (page - 1))
-        } else {
-          products = await Product.find({
-            category: req.query.category,
-            active: true,
-          })
-            .sort({ price: 1 })
-            .limit(pageSize)
-            .skip(pageSize * (page - 1))
-        }
-      } else {
-        products = await Product.find({ ...keyword, active: true })
-          .sort({ price: 1 })
-          .limit(pageSize)
-          .skip(pageSize * (page - 1))
-      }
+      sort = { price: 1 }
       break
-
     case 'dsc':
-      if (req.query.category) {
-        if (req.query.category === 'All Products') {
-          products = await Product.find({ ...keyword, active: true })
-            .sort({ price: -1 })
-            .limit(pageSize)
-            .skip(pageSize * (page - 1))
-        } else {
-          products = await Product.find({
-            category: req.query.category,
-            active: true,
-          })
-            .sort({ price: -1 })
-            .limit(pageSize)
-            .skip(pageSize * (page - 1))
-        }
-      } else {
-        products = await Product.find({ ...keyword, active: true })
-          .sort({ price: -1 })
-          .limit(pageSize)
-          .skip(pageSize * (page - 1))
-      }
+      sort = { price: -1 }
       break
-
     case 'top':
-      if (req.query.category) {
-        if (req.query.category === 'All Products') {
-          products = await Product.find({ ...keyword, active: true })
-            .sort({ rating: -1 })
-            .limit(pageSize)
-            .skip(pageSize * (page - 1))
-        } else {
-          products = await Product.find({
-            category: req.query.category,
-            active: true,
-          })
-            .sort({ rating: -1 })
-            .limit(pageSize)
-            .skip(pageSize * (page - 1))
-        }
-      } else {
-        products = await Product.find({ ...keyword, active: true })
-          .sort({ rating: -1 })
-          .limit(pageSize)
-          .skip(pageSize * (page - 1))
-      }
+      sort = { rating: -1 }
       break
-
-    default:
-      if (req.query.category) {
-        if (req.query.category === 'All Products') {
-          products = await Product.find({ ...keyword, active: true })
-            .sort({ createdAt: -1 })
-            .limit(pageSize)
-            .skip(pageSize * (page - 1))
-        } else {
-          products = await Product.find({
-            category: req.query.category,
-            active: true,
-          })
-            .sort({ createdAt: -1 })
-            .limit(pageSize)
-            .skip(pageSize * (page - 1))
-        }
-      } else {
-        products = await Product.find({ ...keyword, active: true })
-          .sort({ createdAt: -1 })
-          .limit(pageSize)
-          .skip(pageSize * (page - 1))
-      }
   }
 
+  let categoryFilter = req.query.category
+    ? req.query.category === 'All Products'
+      ? {}
+      : { category: req.query.category }
+    : {}
 
-  if (req.query.category) {
-    if (req.query.category === 'All Products') {
-      resultCount = await Product.countDocuments({ ...keyword, active: true })
-    } else {
-      resultCount = await Product.countDocuments({
-        category: req.query.category,
-        active: true,
-      })
-    }
-  } else {
-    resultCount = await Product.countDocuments({ ...keyword, active: true })
-  }
+  products = await Product.find({ ...keyword, ...categoryFilter, active: true })
+    .sort(sort)
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+
+  resultCount = await Product.countDocuments({ ...keyword, ...categoryFilter, active: true })
 
   let categories = await Product.distinct('category')
   console.log(categories)
