@@ -11,9 +11,14 @@ import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 import configRoutes from './routes/configRoutes.js'
+import meterialRoutes from './routes/materialRoutes.js'
+import batchRoutes from './routes/batchRoutes.js'
+
+
 import fetch from 'node-fetch';
 
 import cors from 'cors'
+import Material from './models/rawMaterialModel.js'
 
 
 
@@ -37,6 +42,8 @@ app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/config', configRoutes)
+app.use('/api/materials', meterialRoutes)
+app.use('/api/batchRoutes', meterialRoutes)
 
 //paypal config
 app.get('/api/config/paypal', (req, res) =>

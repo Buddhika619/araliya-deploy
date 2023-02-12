@@ -23,11 +23,8 @@ import userListReducer from './reducers/userListSlice'
 import adminProductListReducer from './reducers/adminProductList'
 import orderRemoveReducer from './reducers/orderRemoveSlice'
 import configReducer from './reducers/configSlice'
-// export default configureStore({
-//     reducer: {
-//       cart: cartReducer,
-//     },
-//   });
+import materialReducer from './reducers/matrialSlice'
+
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -47,11 +44,12 @@ const reducer = combineReducers({
   productReview: productReviewReducer, 
   orderList:orderListReducer,
   orderRemove:orderRemoveReducer,
-  configUpdate :configReducer
+  configUpdate :configReducer,
+  matrialDetails: materialReducer
   
 })
 
-const middleware = []
+// const middleware = []
 
 const store = configureStore(
   { reducer: reducer,

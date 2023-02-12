@@ -97,8 +97,8 @@ const Dashboard = () => {
           <Sidebar view={view} />
         </Col>
 
-        <Col sm={9}>
-          <main className='py-3 px-6'>
+        <Col sm={8} >
+          <main className='py-3'>
           <Box
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"

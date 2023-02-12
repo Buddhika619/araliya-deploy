@@ -2,9 +2,14 @@ import mongoose from "mongoose";
 
 const batchSchema = mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
+    materialId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Material',
+    },
+
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
     },
     qty: {
       type: Number,
@@ -24,6 +29,6 @@ const batchSchema = mongoose.Schema(
   }
 );
 
-const Material = mongoose.model("Batch", batchSchema);
+const Batch = mongoose.model("Batch", batchSchema);
 
 export default Batch;

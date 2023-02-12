@@ -13,6 +13,15 @@ const rawMaterialSchema = mongoose.Schema({
         type: Number,
         required: true,
     },
+
+    dailyCap: {
+        type: Number,
+        required: true
+    },
+    measurement: {
+        type: String,
+        required: true
+    }
     
 
 },{

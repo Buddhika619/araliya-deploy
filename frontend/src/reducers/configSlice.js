@@ -30,6 +30,8 @@ const configSlice = createSlice({
       state.loading = false
       state.error =false
     },
+
+    
     viewConfigRequest: (state) => {
       state.success = false
       state.loading = true

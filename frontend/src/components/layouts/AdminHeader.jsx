@@ -110,7 +110,7 @@ const AdminHeader = () => {
         }
 
         const { data } = await axios.get(
-          `http://localhost:8080/api/orders/count`,
+          `http://localhost:5000/api/orders/count`,
           config
         )
 

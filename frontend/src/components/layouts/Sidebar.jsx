@@ -303,10 +303,10 @@ const Sidebar = ({ view, success }) => {
                     Users
                   </SidebarListItem>
                 </Link>
-                <Link to='/products'>
+                <Link to='/admin/materials'>
                   <SidebarListItem>
                     <Storefront />
-                    Products
+                    Row Materials
                   </SidebarListItem>
                 </Link>
                 <SidebarListItem>
