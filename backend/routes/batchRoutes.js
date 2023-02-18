@@ -5,7 +5,8 @@ import {
     createBatch,
     updateBatch,
     getBatchbyID,
-    getBatches
+    getBatches, 
+    testfunc
 } from '../controllers/batchController.js'
 
 
@@ -13,8 +14,10 @@ const router = express.Router()
 
 router
   .route('/')
-  .get(protect, admin,createBatch)
-  .post(protect, admin, getBatches)
+  .get(protect, admin,getBatches)
+  .post(protect, admin, createBatch)
+
+router.get('/test', testfunc)
 
 router
   .route('/:id')

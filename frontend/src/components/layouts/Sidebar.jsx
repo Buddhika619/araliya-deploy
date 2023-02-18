@@ -309,10 +309,12 @@ const Sidebar = ({ view, success }) => {
                     Row Materials
                   </SidebarListItem>
                 </Link>
-                <SidebarListItem>
-                  <AttachMoney />
-                  Transactions
-                </SidebarListItem>
+                <Link to='/admin/batches'>
+                  <SidebarListItem>
+                    <Storefront />
+                   GRN and Batches
+                  </SidebarListItem>
+                </Link>
                 <SidebarListItem>
                   <BarChart />
                   Reports

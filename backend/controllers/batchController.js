@@ -1,5 +1,64 @@
 import Batch from "../models/batchModel.js";
 import asyncHandler from "express-async-handler";
+import Material from "../models/rawMaterialModel.js";
+
+const testfunc = asyncHandler(async(req,res) => {
+//  const x = await Batch.aggregate([
+//   {
+//     $lookup: {
+//       from: "materials",
+//       localField: "materialId",
+//       foreignField: "_id",
+//       as: "material"
+//     }
+//   },
+//   {
+//     $unwind: "$material"
+//   },
+//   {
+//     $group: {
+//       _id: "$material._id",
+//       name: { $first: "$material.name" },
+//       reOrderLevel: { $first: "$material.reOrderLevel" },
+//       dailyCap: { $first: "$material.dailyCap" },
+//       measurement: { $first: "$material.measurement" },
+//       batches: {
+//         $push: {
+//           qty: "$qty",
+//           cost: "$cost",
+//           salesPrice: "$salesPrice"
+//         }
+//       }
+//     }
+//   }
+// ])
+
+const x = await Batch.aggregate([
+  {
+    $lookup: {
+      from: "materials",
+      localField: "materialId",
+      foreignField: "_id",
+      as: "material"
+    }
+  },
+  {
+    $unwind: "$material"
+  },
+  {
+    $group: {
+      _id: "$material._id",
+      name: { $first: "$material.name" },
+      reOrderLevel: { $first: "$material.reOrderLevel" },
+      dailyCap: { $first: "$material.dailyCap" },
+      measurement: { $first: "$material.measurement" },
+      totalQty: { $sum: "$qty" }
+    }
+  }
+])
+
+res.json(x)
+})
 
 // @des  create a Batch
 // @route POST /api/batch/
@@ -9,7 +68,6 @@ const createBatch = asyncHandler(async (req, res) => {
     materialId: req.body.materialId,
     qty: req.body.qty,
     cost: req.body.cost,
-    salesPrice: req.body.salesPrice,
   });
 
   const result = await batch.save();
@@ -25,10 +83,10 @@ const updateBatch = asyncHandler(async (req, res) => {
   const batch = await Batch.findById(req.params.id);
 
   if (batch) {
-    (batch.materialId = materialId),
-      (batch.qty = qty),
-      (batch.cost = cost),
-      (batch.salesPrice = salesPrice);
+    batch.materialId = materialId
+    batch.qty = qty
+    batch.cost = cost
+    
     const update = await batch.save();
     res.json(update);
   } else {
@@ -57,9 +115,15 @@ const updateBatch = asyncHandler(async (req, res) => {
 // @access Public
 const getBatchbyID = asyncHandler(async (req, res) => {
   const batch = await Batch.findById(req.params.id).populate("materialId");
+  const response = {
+    materialId: batch.materialId._id,
+    _id: batch._id,
+    qty: batch.qty,
+    cost: batch.cost,
+  };
 
   if (batch) {
-    res.json(batch);
+    res.json(response);
   } else {
     res.status(404);
     throw new Error("Material not found!");
@@ -71,13 +135,8 @@ const getBatchbyID = asyncHandler(async (req, res) => {
 // @access Private/Admin
 
 const getBatches = asyncHandler(async (req, res) => {
-  const batch = await Batch.find().populate('materialId');
+  const batch = await Batch.find().populate("materialId");
   res.json(batch);
 });
 
-export {
-    createBatch,
-    updateBatch,
-    getBatchbyID,
-    getBatches
-};
+export { createBatch, updateBatch, getBatchbyID, getBatches ,testfunc};

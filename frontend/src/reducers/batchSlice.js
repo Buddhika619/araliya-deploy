@@ -1,103 +1,103 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  matrials: [],
-  matrial: {}
+  batches: [],
+  batch: {}
 };
 
-const orderDetailsSlice = createSlice({
-  name: "matrialsDetails",
+const batchDetailsSlice = createSlice({
+  name: "batchDetails",
   initialState,
   reducers: {
-    viewMatrialsRequest: (state) => {
+    viewBatchesRequest: (state) => {
       state.success = false;
       state.loading = true;
       state.error = false;
     },
-    viewMatrialsSuccess: (state, action) => {
+    viewBatchesSuccess: (state, action) => {
       state.loading = false;
       state.success = true;
-      state.matrials = action.payload;
+      state.batches = action.payload;
     },
-    viewMatrialsFail: (state, action) => {
+    viewBatchesFail: (state, action) => {
       state.success = false;
       state.loading = false;
       state.error = action.payload;
     },
 
-    viewMatrialsReset: (state) => {
+    viewBatchesReset: (state) => {
       state.success = false;
       state.loading = false;
-      state.matrials = [];
+      state.batches = [];
     },
 
-    addMatrialsRequest: (state) => {
+    addBatchesRequest: (state) => {
       state.success = false;
       state.loading = true;
       state.error = false;
     },
-    addMatrialsSuccess: (state) => {
+    addBatchesSuccess: (state) => {
       state.loading = false;
       state.success = true;
     },
-    addMatrialsFail: (state, action) => {
+    addBatchesFail: (state, action) => {
       state.success = false;
       state.loading = false;
       state.error = action.payload;
     },
 
-    deleteMatrialsRequest: (state) => {
+    deleteBatchesRequest: (state) => {
       state.rSuccess = false;
       state.loading = true;
       state.error = false;
     },
-    deleteMatrialsSuccess: (state, action) => {
+    deleteBatchesSuccess: (state, action) => {
       state.loading = false;
       state.rSuccess = true;
-      state.matrials = state.matrials.filter(
+      state.batches = state.batches.filter(
         (item) => item._id !== action.payload
       );
     },
-    deleteMatrialsFail: (state, action) => {
+    deleteBatchesFail: (state, action) => {
       state.rSuccess = false;
       state.loading = false;
       state.error = action.payload;
     },
 
-    deleteMatrialsReset: (state) => {
+    deleteBatchesReset: (state) => {
       state.rSuccess = false;
       state.sloading = false;
       state.config = {};
     },
 
-    viewSingleMatrialsRequest: (state) => {
+    viewSingleBatchesRequest: (state) => {
       state.ssuccess = false;
       state.sloading = true;
       state.serror = false;
     },
-    viewSingleMatrialsSuccess: (state, action) => {
+    viewSingleBatchesSuccess: (state, action) => {
       state.sloading = false;
       state.ssuccess = true;
-      state.matrial = action.payload;
+      state.batch = action.payload;
     },
-    viewSingleMatrialsFail: (state, action) => {
+    viewSingleBatchesFail: (state, action) => {
       state.ssuccess = false;
       state.sloading = false;
       state.serror = action.payload;
     },
 
 
-    updateMatrialsRequest: (state) => {
+    updateBatchesRequest: (state) => {
       state.ssuccess = false;
       state.sloading = true;
       state.serror = false;
     },
-    updateMatrialsSuccess: (state, action) => {
+    updateBatchesSuccess: (state, action) => {
       state.sloading = false;
       state.ssuccess = true;
-      state.matrial = action.payload;
+      state.batch = action.payload;
     },
-    updateMatrialsFail: (state, action) => {
+    updateBatchesFail: (state, action) => {
       state.ssuccess = false;
       state.sloading = false;
       state.serror = action.payload;
@@ -106,28 +106,28 @@ const orderDetailsSlice = createSlice({
 });
 
 export const {
-  viewMatrialsRequest,
-  viewMatrialsSuccess,
-  viewMatrialsFail,
-  viewMatrialsReset,
+  viewBatchesRequest,
+  viewBatchesSuccess,
+  viewBatchesFail,
+  viewBatchesReset,
 
-  addMatrialsRequest,
-  addMatrialsSuccess,
-  addMatrialsFail,
+  addBatchesRequest,
+  addBatchesSuccess,
+  addBatchesFail,
 
-  deleteMatrialsRequest,
-  deleteMatrialsSuccess,
-  deleteMatrialsFail,
-  deleteMatrialsReset,
+  deleteBatchesRequest,
+  deleteBatchesSuccess,
+  deleteBatchesFail,
+  deleteBatchesReset,
 
-  viewSingleMatrialsRequest,
-  viewSingleMatrialsSuccess,
-  viewSingleMatrialsFail,
+  viewSingleBatchesRequest,
+  viewSingleBatchesSuccess,
+  viewSingleBatchesFail,
 
-  updateMatrialsRequest,
-  updateMatrialsSuccess,
-updateMatrialsFail
+  updateBatchesRequest,
+  updateBatchesSuccess,
+  updateBatchesFail
 
 
-} = orderDetailsSlice.actions;
-export default orderDetailsSlice.reducer;
+} = batchDetailsSlice.actions;
+export default batchDetailsSlice.reducer;

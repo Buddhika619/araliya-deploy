@@ -24,7 +24,7 @@ import adminProductListReducer from './reducers/adminProductList'
 import orderRemoveReducer from './reducers/orderRemoveSlice'
 import configReducer from './reducers/configSlice'
 import materialReducer from './reducers/matrialSlice'
-
+import batchRedcuer from './reducers/batchSlice'
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -45,8 +45,8 @@ const reducer = combineReducers({
   orderList:orderListReducer,
   orderRemove:orderRemoveReducer,
   configUpdate :configReducer,
-  matrialDetails: materialReducer
-  
+  matrialDetails: materialReducer,
+  batchDetails: batchRedcuer
 })
 
 // const middleware = []

@@ -43,7 +43,7 @@ app.use('/api/orders', orderRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/config', configRoutes)
 app.use('/api/materials', meterialRoutes)
-app.use('/api/batchRoutes', meterialRoutes)
+app.use('/api/batches', batchRoutes)
 
 //paypal config
 app.get('/api/config/paypal', (req, res) =>

@@ -11,10 +11,10 @@ import { productUpdateReset } from '../../reducers/singleProductSlice'
 
 import Spinner from '../../components/Spinner'
 import { toast } from 'react-toastify'
-import { createMaterial } from '../../actions/materialActions'
+import { createMaterial, updateMaterials, viewSingleMaterial } from '../../actions/materialActions'
 import { viewMatrialsReset } from '../../reducers/matrialSlice'
 
-const CreateListing = () => {
+const MaterialEditScren = () => {
   const { id } = useParams()
  
 
@@ -38,8 +38,12 @@ const CreateListing = () => {
   const location = useLocation()
 
 
+  const materialDetail = useSelector((state) => state.matrialDetails)
+  const { sloading, serror,matrial, ssuccess } = materialDetail
 
-  const addMaterial = useSelector((state) => state.matrialDetails)
+  console.log(ssuccess)
+
+  const materialUpdate = useSelector((state) => state.matrialDetails)
 
 
   const {
@@ -47,31 +51,38 @@ const CreateListing = () => {
     error,
   
     success,
-  } = addMaterial
+  } = materialUpdate
 
-  console.log(success)
+ 
   useEffect(() => {
-    dispatch(viewMatrialsReset())
-    if (success) {
+   
+    if (ssuccess) {
       
-      toast.success('Success')
-
-      setTimeout(function(){ navigate('/admin/materials')   }, 1000);
-    } 
-  }, [id, dispatch, success])
+      // toast.success('Success')
+    
+       setFormData(matrial)
+      // setTimeout(function(){ navigate('/admin/materials')   }, 1000);
+    } else{
+      dispatch(viewSingleMaterial(id))  
+    }
+  }, [id, ssuccess])
 
   const onSubmit = async (e) => {
     e.preventDefault()
     dispatch(
-      createMaterial({
+      updateMaterials({
+        _id: id,
         name,
         reOrderLevel,
         dailyCap,
         measurement,
       })
+      
     )
    
-   
+    toast.success('Success')
+    setTimeout(function(){ navigate('/admin/materials')   }, 1000);
+ 
   }
 
   const onMutate = (e) => {
@@ -191,4 +202,4 @@ const CreateListing = () => {
   )
 }
 
-export default CreateListing
+export default MaterialEditScren

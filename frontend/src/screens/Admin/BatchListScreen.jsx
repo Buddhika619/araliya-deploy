@@ -2,7 +2,7 @@ import { DataGrid } from '@mui/x-data-grid'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Row, Col } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+import { batch, useDispatch, useSelector } from 'react-redux'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 
@@ -25,6 +25,7 @@ import {
 import styled from 'styled-components'
 import { listMaterials, removeMaterial } from '../../actions/materialActions'
 import { viewMatrialsReset } from '../../reducers/matrialSlice'
+import { listBatches } from '../../actions/batchActions'
 
 const ToggleWrapper = styled('div')`
   position: relative;
@@ -37,14 +38,15 @@ const ToggleWrapper = styled('div')`
   }
 `
 
-const MaterialListScreen = () => {
+const BatchListScreen = () => {
   //redux dispatch hook
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
-  const materialList = useSelector((state) => state.matrialDetails)
+  const materialList = useSelector((state) => state.batchDetails)
   const { loading, error, success } = materialList
+  console.log(materialList)
 
   const deleteMaterial = useSelector((state) => state.matrialDetails)
   const { rSuccess: removeSuccess, error: removeError } = deleteMaterial
@@ -65,7 +67,7 @@ const MaterialListScreen = () => {
   useEffect(() => {
    
     if (user && user.isAdmin) {
-      dispatch(listMaterials())
+      dispatch(listBatches())
     } else {
       navigate('/login')
     }
@@ -84,7 +86,7 @@ const MaterialListScreen = () => {
   const updateHandler = (id) => {
     dispatch(viewMatrialsReset())
     if (selectionModel.length > 0) {
-      navigate(`/admin/materials/${id}/edit`)
+      navigate(`/admin/batches/${id}/edit`)
     }
   }
 
@@ -98,16 +100,16 @@ const MaterialListScreen = () => {
  const createProductHandler = () => {
   dispatch(viewMatrialsReset())
    
-  navigate(`/admin/materials/add`)
+  navigate(`/admin/batches/add`)
 }
 
   //data grid columns
   const columns = [
     { field: 'id', width: 220 },
-    { field: 'name', width: 250 },
-    { field: 'reOrderLevel', width: 100 },
-    { field: 'dailyCap', width: 100 },
-    { field: 'measurement', width: 100 },
+    { field: 'materialId', width: 250 },
+    { field: 'qty', width: 100 },
+    { field: 'cost', width: 100 },
+
 
 
    
@@ -116,13 +118,13 @@ const MaterialListScreen = () => {
   //showing rows if product list is laoded
   let rows
   if (success) {
-    console.log(success)
-    rows = materialList?.matrials.map((row) => ({
+  
+    rows = materialList?.batches.map((row) => ({
       id: row._id,
-      name: row.name,
-      reOrderLevel: row.reOrderLevel,
-      dailyCap: row.dailyCap,
-      measurement: row.measurement,
+      materialId: row.materialId._id,
+      qty: row.qty,
+      cost: row.cost,
+    
     }))
   }
 
@@ -146,11 +148,9 @@ const MaterialListScreen = () => {
             style={{ color: '#4cbb17' }}
           />
           <span className='px-2' style={{ color: '#4cbb17' }}>
-            Add Material
+            Create A GRN
           </span>
         </Button>
-
-
 
 
         {selectionModel.length === 1 && (
@@ -166,7 +166,7 @@ const MaterialListScreen = () => {
           </Button>
         )}
 
-        {selectionModel.length > 0 && (
+        {/* {selectionModel.length > 0 && (
           <Button
             className='p-0 pe-2'
             variant='contained'
@@ -181,7 +181,7 @@ const MaterialListScreen = () => {
               Delete
             </span>
           </Button>
-        )}
+        )} */}
       </GridToolbarContainer>
     )
   }
@@ -202,7 +202,7 @@ const MaterialListScreen = () => {
             {error && <Message varient='danger'>{error}</Message>}
             {removeError && <Message varient='danger'>{removeError}</Message>}
 
-            <h1>Materials</h1>
+            <h1>Batches</h1>
             {success && (
               <div style={{ height: 700, width: '100%' }}>
                 <DataGrid
@@ -228,4 +228,4 @@ const MaterialListScreen = () => {
   )
 }
 
-export default MaterialListScreen
+export default BatchListScreen

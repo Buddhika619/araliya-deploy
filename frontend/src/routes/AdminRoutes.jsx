@@ -15,6 +15,12 @@ import OfferConfig from "../screens/Admin/OfferConfig";
 
 import Matrials from '../screens/Admin/MatrialsListScreen'
 import MaterialAdd from '../screens/Admin/MaterialAddScreen'
+import MaterialEditScren from "../screens/Admin/MaterialUpdateScreen";
+import BatchListScreen from "../screens/Admin/BatchListScreen";
+import GrnScreen from "../screens/Admin/GrnScreen";
+import GrnUpdateScreen from "../screens/Admin/GrnUpdateScreen";
+
+
 
 const AdminRoutes = () => {
   return (
@@ -53,7 +59,12 @@ const AdminRoutes = () => {
 
           <Route path="/materials" element={<Matrials />} />
           <Route path="/materials/add" element={<MaterialAdd />} />
-          
+          <Route path="/materials/:id/edit" element={<MaterialEditScren  />} />
+
+
+          <Route path="/batches" element={<BatchListScreen />} />
+          <Route path="/batches/add" element={<GrnScreen />} />
+          <Route path="/batches/:id/edit" element={<GrnUpdateScreen />} />
 
           <Route path="/*" element={<NotFound />} />
 
