@@ -243,7 +243,6 @@ const HomeScreen = () => {
                   <div className='b'>
                     <span> Sort By:</span>
                     <Form.Select
-                      aria-label='Default select example'
                       className='select'
                       onChange={handleChange}
                     >
@@ -279,6 +278,7 @@ const HomeScreen = () => {
                   page={page}
                   keyword={keyword ? keyword : ''}
                   category = {category ? category : ''}
+                  filter = {filter ? filter: ''}
                 />
               </>
             )}

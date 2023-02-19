@@ -1,3 +1,4 @@
+import Batch from '../models/batchModel.js'
 import Order from '../models/orderModel.js'
 import Product from '../models/productModel.js'
 import asyncHandler from 'express-async-handler'
@@ -20,7 +21,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     distance,
   } = req.body
 
-  console.log(location)
+
 
   if (orderItems && orderItems.length === 0) {
     res.status(400)
@@ -29,20 +30,38 @@ const addOrderItems = asyncHandler(async (req, res) => {
     let checkArr = []
     for (let i = 0; i < orderItems.length; i++) {
       const product = await Product.findById(orderItems[i].product)
+     if(product.type === true){
       if (product.countInStock >= orderItems[i].qty) {
         checkArr.push(0)
       } else {
         checkArr.push(1)
       }
+     }else{
+      const batch = await Batch.findById(orderItems[i].batchId)
+     
+      if (batch.qty >= orderItems[i].qty) {
+        checkArr.push(0)
+      } else {
+        checkArr.push(1)
+      }
+     }
     }
 
     let checkSum = checkArr.reduce((acc, cv) => acc + cv, 0)
+    console.log(checkSum)
 
     if (checkSum < 1) {
       for (let i = 0; i < orderItems.length; i++) {
         const product = await Product.findById(orderItems[i].product)
-        product.countInStock -= orderItems[i].qty
-        await product.save()
+        if(product.type === true){
+          product.countInStock -= orderItems[i].qty
+          await product.save()
+        }else{
+          const batch = await Batch.findById(orderItems[i].batchId)
+          batch.qty -= orderItems[i].qty
+          await batch.save()
+        }
+       
       }
 
       const order = new Order({

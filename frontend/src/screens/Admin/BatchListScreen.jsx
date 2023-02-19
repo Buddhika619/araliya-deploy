@@ -26,6 +26,7 @@ import styled from 'styled-components'
 import { listMaterials, removeMaterial } from '../../actions/materialActions'
 import { viewMatrialsReset } from '../../reducers/matrialSlice'
 import { listBatches } from '../../actions/batchActions'
+import { viewBatchesReset } from '../../reducers/batchSlice'
 
 const ToggleWrapper = styled('div')`
   position: relative;
@@ -84,7 +85,7 @@ const BatchListScreen = () => {
 
   //update
   const updateHandler = (id) => {
-    dispatch(viewMatrialsReset())
+    dispatch(viewBatchesReset())
     if (selectionModel.length > 0) {
       navigate(`/admin/batches/${id}/edit`)
     }
@@ -98,7 +99,7 @@ const BatchListScreen = () => {
 
  //create
  const createProductHandler = () => {
-  dispatch(viewMatrialsReset())
+  dispatch(viewBatchesReset())
    
   navigate(`/admin/batches/add`)
 }
@@ -107,12 +108,9 @@ const BatchListScreen = () => {
   const columns = [
     { field: 'id', width: 220 },
     { field: 'materialId', width: 250 },
+    { field: 'productId', width: 250 },
     { field: 'qty', width: 100 },
     { field: 'cost', width: 100 },
-
-
-
-   
   ]
 
   //showing rows if product list is laoded
@@ -121,7 +119,8 @@ const BatchListScreen = () => {
   
     rows = materialList?.batches.map((row) => ({
       id: row._id,
-      materialId: row.materialId._id,
+      materialId: row.materialId && row.materialId._id,
+      productId: row.productId && row.productId._id,
       qty: row.qty,
       cost: row.cost,
     

@@ -122,7 +122,7 @@ const Sidebar = ({ view, success }) => {
                 {/* products links */}
                 <SidebarListItem onClick={() => setProductSub(!productSub)}>
                   <Storefront />
-                  Products
+                  Custom Products 
                 </SidebarListItem>
                 {productSub ? (
                   <SubSidebarList>
@@ -188,10 +188,85 @@ const Sidebar = ({ view, success }) => {
                   console.log(123)
                 )}
 
+
+
+
+                 {/* products links */}
+                 <SidebarListItem onClick={() => setProductSub(!productSub)}>
+                  <Storefront />
+                  Other Produts 
+                </SidebarListItem>
+                {productSub ? (
+                  <SubSidebarList>
+                    <Link to='/admin/productsout/active'>
+                      <SidebarListItem>
+                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        Active
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/products/outofstock'>
+                      <SidebarListItem>
+                        <i className='fa-regular fa-circle-check'></i>
+                        Out Of Stock
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/products/deactivated'>
+                      <SidebarListItem>
+                        <i class='fa-solid fa-user-secret'></i>
+                        Deactivated
+                      </SidebarListItem>
+                    </Link>
+                  </SubSidebarList>
+                ) : path === 'productsout' ? (
+                  <SubSidebarList>
+                    <Link to='/admin/productsout/active'>
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute('/admin/productsout/active')
+                            ? 'navbarListINameActive'
+                            : 'navbarListIName'
+                        }
+                      >
+                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        Active
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/products/outofstock'>
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute('/admin/products/outofstock')
+                            ? 'navbarListINameActive'
+                            : 'navbarListIName'
+                        }
+                      >
+                        <i className='fa-regular fa-circle-check'></i>
+                        Out Of Stock
+                      </SidebarListItem>
+                    </Link>
+                    <Link to='/admin/products/deactivated'>
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute('/admin/products/deactivated')
+                            ? 'navbarListINameActive'
+                            : 'navbarListIName'
+                        }
+                      >
+                        <i class='fa-solid fa-user-secret'></i>
+                        Deactivated
+                      </SidebarListItem>
+                    </Link>
+                  </SubSidebarList>
+                ) : (
+                  console.log(123)
+                )}
+
+          
+
                 <SidebarListItem onClick={() => setOrderSub(!orderSub)}>
                   <LocalShippingOutlined />
                   Orders
                 </SidebarListItem>
+                
 
                 {/* order links */}
                 {orderSub ? (

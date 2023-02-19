@@ -67,7 +67,7 @@ export const listProducts =
     }
   }
 
-  export const listProductsAdmin =
+  export const listProductsAdminIn =
   (path='') =>
   async (dispatch,getState) => {
     try {
@@ -86,7 +86,42 @@ export const listProducts =
 
 
       const { data } = await axios.get(
-        `/api/products/admin/productList?path=${path}`, config
+        `/api/products/admin/productList/in?path=${path}`, config
+      )
+
+      dispatch(adminProductListSuccess(data))
+    } catch (error) {
+      dispatch(
+        adminProductListFail(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      )
+    }
+  }
+
+
+  export const listProductsAdminOut =
+  (path='') =>
+  async (dispatch,getState) => {
+    try {
+      dispatch(adminProductListRequest())
+
+
+      const {
+      userLogin: { userInfo },
+    } = getState()
+
+      const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+
+      const { data } = await axios.get(
+        `/api/products/admin/productList/out?path=${path}`, config
       )
 
       dispatch(adminProductListSuccess(data))

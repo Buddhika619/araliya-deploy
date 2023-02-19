@@ -4,7 +4,8 @@ import { protect, admin } from '../middleware/authMiddleware.js'
 import {
   getProductById,
   getProducts,
-  getProductListAdmin,
+  getProductListInAdmin,
+  getProductListOutAdmin,
   deleteProduct,
   createProduct,
   updateProduct,
@@ -27,7 +28,8 @@ router
   .delete(protect, admin, deleteProduct)
   .put(protect, admin, updateProduct)
 
-router.get('/admin/productList',protect, admin, getProductListAdmin)
+router.get('/admin/productList/in',protect, admin, getProductListInAdmin)
+router.get('/admin/productList/out',protect, admin, getProductListOutAdmin)
 
 //testing mail
 router.post('/email', email)

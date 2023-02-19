@@ -23,11 +23,12 @@ const CreateListing = () => {
 
   const [formData, setFormData] = useState({
     materialId: "",
-    qty: "",
-    cost: "",
+    qty: 0,
+    cost: 0,
+    salesPrice: ""
   });
 
-  const { materialId, qty, cost } = formData;
+  const { materialId, qty, cost,salesPrice } = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ const CreateListing = () => {
         materialId,
         qty,
         cost,
+        salesPrice
       })
     );
   };
@@ -93,6 +95,11 @@ const CreateListing = () => {
     dispatch(productUpdateReset());
     navigate(`/admin/materials`);
   };
+
+console.log(error)
+  if(error){
+    toast.error(error)
+  }
 
   return (
     <div className="profile">
@@ -141,6 +148,19 @@ const CreateListing = () => {
               // maxLength='32'
               // minLength='10'
               required
+            />
+
+<label className="formLabel">Sales Price</label>
+            <input
+              className="formInputName"
+              type="number"
+              min="0"
+              id="salesPrice"
+              value={salesPrice}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+             
             />
 
             <button type="submit" className="primaryButton createListingButton">

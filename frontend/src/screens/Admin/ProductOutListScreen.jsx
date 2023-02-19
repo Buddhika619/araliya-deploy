@@ -9,7 +9,7 @@ import {
   removeProduct,
   createProduct,
   listProductsAdmin,
-  listProductsAdminIn,
+  listProductsAdminOut,
 } from '../../actions/productActions'
 
 import { productRemoveReset } from '../../reducers/singleProductSlice'
@@ -42,7 +42,7 @@ const ToggleWrapper = styled('div')`
   }
 `
 
-const ProductListScreen = () => {
+const ProductOutListScreen = () => {
   //redux dispatch hook
   const dispatch = useDispatch()
 
@@ -63,6 +63,7 @@ const ProductListScreen = () => {
     product: createdProduct,
   } = productCreate
 
+  console.log(products)
   //get user
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -81,7 +82,7 @@ const ProductListScreen = () => {
     dispatch(productCreateReset())
 
     if (user && user.isAdmin) {
-      dispatch(listProductsAdminIn(path))
+      dispatch(listProductsAdminOut(path))
     } else {
       navigate('/login')
     }
@@ -334,4 +335,4 @@ const ProductListScreen = () => {
   )
 }
 
-export default ProductListScreen
+export default ProductOutListScreen

@@ -3,7 +3,7 @@ import UserListScreen from "../screens/Admin/UserListScreen";
 import Dashboard from "../screens/Admin/Dashboard";
 import UserEditScreen from "../screens/UserEditScreen";
 import ProductlistScreen from "../screens/Admin/ProductListScreen";
-import ProductEditScreen from "../screens/ProductEditScreen";
+import ProductEditScreen from "../screens/Admin/ProductEditScreen";
 import OrderListScreen from "../screens/Admin/OrderListScreen";
 import Header from "../components/layouts/Header";
 import { Container } from "react-bootstrap";
@@ -19,6 +19,7 @@ import MaterialEditScren from "../screens/Admin/MaterialUpdateScreen";
 import BatchListScreen from "../screens/Admin/BatchListScreen";
 import GrnScreen from "../screens/Admin/GrnScreen";
 import GrnUpdateScreen from "../screens/Admin/GrnUpdateScreen";
+import ProductOutListScreen from "../screens/Admin/ProductOutListScreen";
 
 
 
@@ -44,6 +45,7 @@ const AdminRoutes = () => {
           <Route path="/config/carousel" element={<CarouselConfig />} />
           <Route path="/config/offers" element={<OfferConfig />} />
 
+{/* custom produts */}
           <Route path="/products/active" element={<ProductlistScreen />} />
           <Route path="/products/outofstock" element={<ProductlistScreen />} />
           <Route path="/products/deactivated" element={<ProductlistScreen />} />
@@ -51,6 +53,8 @@ const AdminRoutes = () => {
             path="/products/:path/:id/edit"
             element={<ProductEditScreen />}
           />
+{/* off the shelf produts */}
+<Route path="/productsout/active" element={<ProductOutListScreen />} />
 
           <Route path="/orders/neworders" element={<OrderListScreen />} />
           <Route path="/orders/processing" element={<OrderListScreen />} />

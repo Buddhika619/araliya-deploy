@@ -27,11 +27,12 @@ const GrnUpdateScreen = () => {
 
   const [formData, setFormData] = useState({
     materialId: "",
-    qty: "",
-    cost: "",
+    qty: 0,
+    cost: 0,
+    salesPrice: "",
   });
 
-  const { materialId, qty, cost } = formData;
+  const { materialId, qty, cost, salesPrice } = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const GrnUpdateScreen = () => {
   const materialDetail = useSelector((state) => state.batchDetails);
   const { sloading, serror, batch, ssuccess } = materialDetail;
 
-  console.log(batch);
+
 
   const materialUpdate = useSelector((state) => state.batchDetails);
 
@@ -52,6 +53,7 @@ const GrnUpdateScreen = () => {
   } = materialUpdate;
 
   useEffect(() => {
+    
     if (ssuccess) {
       // toast.success('Success')
 
@@ -59,18 +61,24 @@ const GrnUpdateScreen = () => {
       // setTimeout(function(){ navigate('/admin/materials')   }, 1000);
     } else {
       dispatch(viewSingleBatch(id));
+     
     }
   }, [id, ssuccess]);
 
+//  if(batch){
+//   setTimeout(window.location.reload(), 1000)
+//  }
+console.log(batch)
   const onSubmit = async (e) => {
     e.preventDefault();
     dispatch(
-        updateBatches({
+      updateBatches({
         _id: id,
 
         materialId,
         qty,
         cost,
+        salesPrice
       })
     );
 
@@ -111,13 +119,15 @@ const GrnUpdateScreen = () => {
     return <Spinner />;
   }
 
-  console.log(location.pathname.split("/")[3]);
+  if (serror) {
+    toast.error(serror);
+  }
 
   const path = location.pathname.split("/")[3];
 
   const back = () => {
     dispatch(productUpdateReset());
-    navigate(`/admin/materials`);
+    navigate(`/admin/batches`);
   };
 
   return (
@@ -132,7 +142,7 @@ const GrnUpdateScreen = () => {
               <p className="pageHeader"> Update Batch</p>
             </header>
 
-            <label className="formLabel">Name</label>
+            <label className="formLabel">Material ID</label>
             <input
               className="formInputName"
               type="text"
@@ -143,7 +153,7 @@ const GrnUpdateScreen = () => {
               // minLength='10'
               required
             />
-            <label className="formLabel">Re Order Lvel</label>
+            <label className="formLabel">Quantity</label>
             <input
               className="formInputName"
               type="number"
@@ -156,7 +166,7 @@ const GrnUpdateScreen = () => {
               required
             />
 
-            <label className="formLabel">Daily Capacity</label>
+            <label className="formLabel">Cost</label>
             <input
               className="formInputName"
               type="number"
@@ -169,6 +179,17 @@ const GrnUpdateScreen = () => {
               required
             />
 
+            <label className="formLabel">Sales Price</label>
+            <input
+              className="formInputName"
+              type="number"
+              min="0"
+              id="salesPrice"
+              value={salesPrice}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+            />
             <button type="submit" className="primaryButton createListingButton">
               Update
             </button>

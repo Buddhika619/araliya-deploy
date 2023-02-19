@@ -132,6 +132,7 @@ export const viewSingleBatch= (id) => async (dispatch, getState) => {
     }
 
     const { data } = await axios.get(`/api/batches/${id}`, config)
+    console.log(data)
 
     await dispatch(viewSingleBatchesSuccess(data))
   } catch (error) {

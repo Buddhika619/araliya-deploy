@@ -140,7 +140,7 @@ const UserEditScreen = () => {
               </select>
             </Form.Group>
 
-            <label className='formLabel'>Role</label>
+            <label className='formLabel'>Has admin privileges?</label>
             <div className='formButtons'>
               <button
                 className={isAdmin ? 'formButtonActive' : 'formButton'}
