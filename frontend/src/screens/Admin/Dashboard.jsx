@@ -153,7 +153,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="32,441"
-            subtitle="New Clients"
+            subtitle="New Users"
             progress="0.30"
             increase="+5%"
             icon={
@@ -172,7 +172,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="1,325,134"
-            subtitle="Traffic Received"
+            subtitle="Total Orders"
             progress="0.80"
             increase="+43%"
             icon={
@@ -209,7 +209,7 @@ const Dashboard = () => {
                 fontWeight="bold"
                 color="#4cceac"
               >
-                $59,342.32
+                LKR59,342.32
               </Typography>
             </Box>
             <Box>
@@ -269,7 +269,7 @@ const Dashboard = () => {
                 p="5px 10px"
                 borderRadius="4px"
               >
-                ${transaction.cost}
+                LKR {transaction.cost}
               </Box>
             </Box>
           ))}

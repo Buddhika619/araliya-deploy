@@ -70,6 +70,8 @@ const OrderListScreen = () => {
   const orderList = useSelector((state) => state.orderList)
   const { loading, error, orders, success } = orderList
 
+  console.log(orders)
+
   const orderRemove = useSelector((state) => state.orderRemove)
   const { error: removeError, success: removeSuccess } = orderRemove
 

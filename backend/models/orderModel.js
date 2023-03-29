@@ -18,6 +18,10 @@ const orderSchema = mongoose.Schema(
           required: true,
           ref: 'Product',
         },
+        batchId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Batch',
+        }
       },
     ],
     shippingAddress: {

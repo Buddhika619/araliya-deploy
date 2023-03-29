@@ -109,6 +109,7 @@ const BatchListScreen = () => {
     { field: 'id', width: 220 },
     { field: 'materialId', width: 250 },
     { field: 'productId', width: 250 },
+    { field: 'originalQty', width: 100 },
     { field: 'qty', width: 100 },
     { field: 'cost', width: 100 },
   ]
@@ -123,6 +124,7 @@ const BatchListScreen = () => {
       productId: row.productId && row.productId._id,
       qty: row.qty,
       cost: row.cost,
+      originalQty: row.originalQty
     
     }))
   }

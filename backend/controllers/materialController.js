@@ -1,7 +1,6 @@
 import Material from "../models/rawMaterialModel.js";
 import asyncHandler from "express-async-handler";
 
-
 // @des  create a Material
 // @route POST /api/materials/
 // @access Private/Admin
@@ -21,18 +20,18 @@ const createMaterial = asyncHandler(async (req, res) => {
 // @route PUT /api/materials/:id
 // @access Private/Admin
 const updateMaterial = asyncHandler(async (req, res) => {
-  console.log(req.body);
+
   const { name, reOrderLevel, dailyCap, measurement } = req.body;
 
   const material = await Material.findById(req.params.id);
 
   if (material) {
-    (material.name = name),
-      (material.reOrderLevel = reOrderLevel),
-      (material.dailyCap = dailyCap),
-      (material.measurement = measurement);
-    const update = await material.save();
-    res.json(update);
+    material.name = name;
+    material.reOrderLevel = reOrderLevel;
+    material.dailyCap = dailyCap;
+    material.measurement = measurement;
+    const updatedMaterial = await material.save();
+    res.json(updatedMaterial);
   } else {
     res.status(404);
     throw new Error("Material not found");

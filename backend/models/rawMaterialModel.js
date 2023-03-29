@@ -21,9 +21,8 @@ const rawMaterialSchema = mongoose.Schema({
     measurement: {
         type: String,
         required: true
-    }
-    
-
+    },
+ 
 },{
     timestamps:true
 })

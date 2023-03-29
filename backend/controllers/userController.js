@@ -14,6 +14,7 @@ const authUser = asyncHandler( async (req, res) => {
     const user = await User.findOne({email})
 
     if(user && (await user.matchPassword(password))) {
+        // If the user is found and the password matches, return a JSON object with the user's ID, name, email, role, isAdmin status, and a new token generated using the user's ID
         res.json({
             _id: user._id,
             name: user.name,
@@ -51,7 +52,9 @@ const registerUser = asyncHandler( async (req, res) => {
         password
     })
 
+
     if(user) {
+        // If the user is successfully created, return a 201 status code and a JSON object with the user's ID, name, email, role, isAdmin status, and a new token generated using the user's ID
         res.status(201).json({
             _id: user._id,
             name: user.name,
@@ -100,9 +103,7 @@ const updateUserProfile = asyncHandler( async (req, res) => {
     if(user) {
         user.name = req.body.name || user.name
         user.email = req.body.email || user.email
-        if(req.body.password) {
-           user.password = req.body.password
-        }
+        user.email = req.body.passWord || user.passWord
 
     const updatedUser = await user.save()
 
@@ -140,9 +141,8 @@ const getUsers = asyncHandler( async (req, res) => {
 
 const deleteUsers = asyncHandler( async (req, res) => {
     const ids = req.headers.data.split(',')
-    console.log(ids)
+   
   
-    console.log(ids)
     if (ids.length > 0) {
       console.log(ids)
       await User.deleteMany({
@@ -187,12 +187,11 @@ const getUserById = asyncHandler( async (req, res) => {
 // @route PUT /api/users/:id
 // @access Private/Admin
 
+//function to update user role
 const updateUser = asyncHandler( async (req, res) => {
     const user = await User.findById(req.params.id)
 
     if(user) {
-        // user.name = req.body.name || user.name
-        // user.email = req.body.email || user.email
         user.role = req.body.role || user.role
         user.isAdmin = req.body.isAdmin 
 
