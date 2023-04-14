@@ -12,12 +12,12 @@ import {
   WorkOutline,
   Report,
   LocalShippingOutlined,
-} from '@material-ui/icons'
-import { Link, useLocation } from 'react-router-dom'
-import styled from 'styled-components'
-import Dropdown from 'react-bootstrap/Dropdown'
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import { useEffect, useState } from 'react'
+} from "@material-ui/icons";
+import { Link, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import { useEffect, useState } from "react";
 
 const SidebarContainer = styled.div`
   z-index: 999;
@@ -32,25 +32,25 @@ const SidebarContainer = styled.div`
     position: absolute;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   }
-`
+`;
 
 const SidebarWrappper = styled.div`
   padding: 20px;
   color: #555;
-`
+`;
 
 const SidebarMenu = styled.div`
   margin-bottom: 10px;
-`
+`;
 const SidebarTitle = styled.h3`
   margin-bottom: 10px;
-`
+`;
 
 const SidebarList = styled.ul`
   list-style: none;
   padding: 5px;
-`
-const SubSidebarList = styled.ul``
+`;
+const SubSidebarList = styled.ul``;
 
 const SidebarListItem = styled.li`
   margin-bottom: 10px;
@@ -74,36 +74,26 @@ const SidebarListItem = styled.li`
       animation-iteration-count: 2;
     }
   }
-`
+`;
 
 const Sidebar = ({ view, success }) => {
-  const location = useLocation()
+  const location = useLocation();
 
-  const path = location.pathname.split('/')[2]
+  const path = location.pathname.split("/")[2];
+  console.log(path);
 
-  const [productSub, setProductSub] = useState(false)
-  const [orderSub, setOrderSub] = useState(false)
-  const [configSub, setConfigSub] = useState(false)
+  const [productSub, setProductSub] = useState(false);
+  const [oproductSub, setoProductSub] = useState(false);
+  const [orderSub, setOrderSub] = useState(false);
+  const [configSub, setConfigSub] = useState(false);
 
   const pathMatchRoute = (route) => {
     if (route == location.pathname) {
-      return true
+      return true;
     }
-  }
+  };
 
-  // useEffect(() => {
-  //   const buttonList = document.querySelectorAll('.button')
 
-  //   const arr = Array.from(buttonList)
-
-  //   let filter = arr?.filter(
-  //     (x) => x.classList[x.classList.length - 2] === path
-  //   )
-
-  //   if (filter[0]) {
-  //     filter[0].classList.add('sidebarActive')
-  //   }
-  // }, [])
 
   return (
     <>
@@ -112,9 +102,9 @@ const Sidebar = ({ view, success }) => {
           <SidebarWrappper>
             <SidebarMenu>
               <SidebarList>
-                <Link to='/admin/dashboard'>
-                  <SidebarListItem className='dashboard button'>
-                    <i className='fa-solid fa-gauge'></i>
+                <Link to="/admin/dashboard">
+                  <SidebarListItem className="dashboard button">
+                    <i className="fa-solid fa-gauge"></i>
                     Dashboard
                   </SidebarListItem>
                 </Link>
@@ -122,64 +112,64 @@ const Sidebar = ({ view, success }) => {
                 {/* products links */}
                 <SidebarListItem onClick={() => setProductSub(!productSub)}>
                   <Storefront />
-                  Custom Products 
+                  Custom Products
                 </SidebarListItem>
                 {productSub ? (
                   <SubSidebarList>
-                    <Link to='/admin/products/active'>
+                    <Link to="/admin/products/active">
                       <SidebarListItem>
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         Active
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/products/outofstock'>
+                    <Link to="/admin/products/outofstock">
                       <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
+                        <i className="fa-regular fa-circle-check"></i>
                         Out Of Stock
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/products/deactivated'>
+                    <Link to="/admin/products/deactivated">
                       <SidebarListItem>
-                        <i class='fa-solid fa-user-secret'></i>
+                        <i class="fa-solid fa-user-secret"></i>
                         Deactivated
                       </SidebarListItem>
                     </Link>
                   </SubSidebarList>
-                ) : path === 'products' ? (
+                ) : path === "products" ? (
                   <SubSidebarList>
-                    <Link to='/admin/products/active'>
+                    <Link to="/admin/products/active">
                       <SidebarListItem
                         className={
-                          pathMatchRoute('/admin/products/active')
-                            ? 'navbarListINameActive'
-                            : 'navbarListIName'
+                          pathMatchRoute("/admin/products/active")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
                         }
                       >
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         Active
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/products/outofstock'>
+                    <Link to="/admin/products/outofstock">
                       <SidebarListItem
                         className={
-                          pathMatchRoute('/admin/products/outofstock')
-                            ? 'navbarListINameActive'
-                            : 'navbarListIName'
+                          pathMatchRoute("/admin/products/outofstock")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
                         }
                       >
-                        <i className='fa-regular fa-circle-check'></i>
+                        <i className="fa-regular fa-circle-check"></i>
                         Out Of Stock
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/products/deactivated'>
+                    <Link to="/admin/products/deactivated">
                       <SidebarListItem
                         className={
-                          pathMatchRoute('/admin/products/deactivated')
-                            ? 'navbarListINameActive'
-                            : 'navbarListIName'
+                          pathMatchRoute("/admin/products/deactivated")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
                         }
                       >
-                        <i class='fa-solid fa-user-secret'></i>
+                        <i class="fa-solid fa-user-secret"></i>
                         Deactivated
                       </SidebarListItem>
                     </Link>
@@ -188,70 +178,67 @@ const Sidebar = ({ view, success }) => {
                   console.log(123)
                 )}
 
-
-
-
-                 {/* products links */}
-                 <SidebarListItem onClick={() => setProductSub(!productSub)}>
+                {/* products links */}
+                <SidebarListItem onClick={() => setoProductSub(!oproductSub)}>
                   <Storefront />
-                  Other Produts 
+                  Other Produts
                 </SidebarListItem>
-                {productSub ? (
+                {oproductSub ? (
                   <SubSidebarList>
-                    <Link to='/admin/productsout/active'>
+                    <Link to="/admin/productsout/active">
                       <SidebarListItem>
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         Active
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/products/outofstock'>
+                    <Link to="/admin/productsout/inStock">
                       <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
-                        Out Of Stock
+                        <i className="fa-regular fa-circle-check"></i>
+                        Stock
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/products/deactivated'>
+                    <Link to="/admin/productsout/deactivated">
                       <SidebarListItem>
-                        <i class='fa-solid fa-user-secret'></i>
+                        <i class="fa-solid fa-user-secret"></i>
                         Deactivated
                       </SidebarListItem>
                     </Link>
                   </SubSidebarList>
-                ) : path === 'productsout' ? (
+                ) : path === "productsout" ? (
                   <SubSidebarList>
-                    <Link to='/admin/productsout/active'>
+                    <Link to="/admin/productsout/active">
                       <SidebarListItem
                         className={
-                          pathMatchRoute('/admin/productsout/active')
-                            ? 'navbarListINameActive'
-                            : 'navbarListIName'
+                          pathMatchRoute("/admin/productsout/active")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
                         }
                       >
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         Active
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/products/outofstock'>
+                    <Link to="/admin/productsout/inStock">
                       <SidebarListItem
                         className={
-                          pathMatchRoute('/admin/products/outofstock')
-                            ? 'navbarListINameActive'
-                            : 'navbarListIName'
+                          pathMatchRoute("/admin/productsout/inStock")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
                         }
                       >
-                        <i className='fa-regular fa-circle-check'></i>
-                        Out Of Stock
+                        <i className="fa-regular fa-circle-check"></i>
+                        Stock
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/products/deactivated'>
+                    <Link to="/admin/productsout/deactivated">
                       <SidebarListItem
                         className={
-                          pathMatchRoute('/admin/products/deactivated')
-                            ? 'navbarListINameActive'
-                            : 'navbarListIName'
+                          pathMatchRoute("/admin/productsout/deactivated")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
                         }
                       >
-                        <i class='fa-solid fa-user-secret'></i>
+                        <i class="fa-solid fa-user-secret"></i>
                         Deactivated
                       </SidebarListItem>
                     </Link>
@@ -259,66 +246,87 @@ const Sidebar = ({ view, success }) => {
                 ) : (
                   console.log(123)
                 )}
-
-          
 
                 <SidebarListItem onClick={() => setOrderSub(!orderSub)}>
                   <LocalShippingOutlined />
                   Orders
                 </SidebarListItem>
-                
 
                 {/* order links */}
                 {orderSub ? (
                   <SubSidebarList>
-                    <Link to='/admin/orders/neworders'>
-                      <SidebarListItem className='orders button'>
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                    <Link to="/admin/orders/neworders">
+                      <SidebarListItem className="orders button">
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         New Orders
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/orders/processing'>
+                    <Link to="/admin/orders/processing">
                       <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
+                        <i className="fa-regular fa-circle-check"></i>
                         Processing Orders
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/orders/dispatched'>
+                    <Link to="/admin/orders/dispatched">
                       <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
+                        <i className="fa-regular fa-circle-check"></i>
                         Dipatched Orders
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/orders/completed'>
+                    <Link to="/admin/orders/completed">
                       <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
+                        <i className="fa-regular fa-circle-check"></i>
                         Completed Orders
                       </SidebarListItem>
                     </Link>
                   </SubSidebarList>
-                ) : path === 'orders' ? (
+                ) : path === "orders" ? (
                   <SubSidebarList>
-                    <Link to='/admin/orders/neworders'>
-                      <SidebarListItem className='orders button'>
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                    <Link to="/admin/orders/neworders">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/orders/neworders")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         New Orders
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/orders/processing'>
-                      <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
+                    <Link to="/admin/orders/processing">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/orders/processing")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <i className="fa-regular fa-circle-check"></i>
                         Processing Orders
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/orders/dispatched'>
-                      <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
+                    <Link to="/admin/orders/dispatched">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/orders/dispatched")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <i className="fa-regular fa-circle-check"></i>
                         Dipatched Orders
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/orders/completed'>
-                      <SidebarListItem>
-                        <i className='fa-regular fa-circle-check'></i>
+                    <Link to="/admin/orders/completed">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/orders/completed")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <i className="fa-regular fa-circle-check"></i>
                         Completed Orders
                       </SidebarListItem>
                     </Link>
@@ -335,30 +343,42 @@ const Sidebar = ({ view, success }) => {
                 {/* Config links */}
                 {configSub ? (
                   <SubSidebarList>
-                    <Link to='/admin/config/offers'>
-                      <SidebarListItem className='orders button'>
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                    <Link to="/admin/config/offers">
+                      <SidebarListItem className="orders button">
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         Offers
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/config/carousel'>
-                      <SidebarListItem className='orders button'>
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                    <Link to="/admin/config/carousel">
+                      <SidebarListItem className="orders button">
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         carousel
                       </SidebarListItem>
                     </Link>
                   </SubSidebarList>
-                ) : path === 'config' ? (
+                ) : path === "config" ? (
                   <SubSidebarList>
-                    <Link to='/admin/config/offers'>
-                      <SidebarListItem className='orders button'>
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                    <Link to="/admin/config/offers">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/config/offers")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         Offers
                       </SidebarListItem>
                     </Link>
-                    <Link to='/admin/config/carousel'>
-                      <SidebarListItem className='orders button'>
-                        <i className='fa-sharp fa-solid fa-spinner'></i>
+                    <Link to="/admin/config/carousel">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/config/carousel")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
                         carousel
                       </SidebarListItem>
                     </Link>
@@ -372,22 +392,34 @@ const Sidebar = ({ view, success }) => {
             <SidebarMenu>
               <SidebarTitle>Quick Menu</SidebarTitle>
               <SidebarList>
-                <Link to='/admin/users'>
-                  <SidebarListItem className='users button'>
+                <Link to="/admin/users">
+                  <SidebarListItem
+                    className={
+                      (path == "users")
+                        ? "navbarListINameActive"
+                        : "navbarListIName"
+                    }
+                  >
                     <PermIdentity />
                     Users
                   </SidebarListItem>
                 </Link>
-                <Link to='/admin/materials'>
+                <Link to="/admin/materials">
                   <SidebarListItem>
                     <Storefront />
                     Row Materials
                   </SidebarListItem>
                 </Link>
-                <Link to='/admin/batches'>
+                <Link to="/admin/batches">
                   <SidebarListItem>
                     <Storefront />
-                   GRN and Batches
+                    GRN and Batches
+                  </SidebarListItem>
+                </Link>
+                <Link to="/admin/kitchen">
+                  <SidebarListItem>
+                    <Storefront />
+                    Kitchen Reservations
                   </SidebarListItem>
                 </Link>
                 <SidebarListItem>
@@ -434,7 +466,7 @@ const Sidebar = ({ view, success }) => {
         </SidebarContainer>
       )}
     </>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

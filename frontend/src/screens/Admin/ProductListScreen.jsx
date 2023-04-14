@@ -86,9 +86,6 @@ const ProductListScreen = () => {
       navigate('/login')
     }
 
-    if (successCreate) {
-      navigate(`/admin/products/${path}/${createdProduct._id}/edit`)
-    }
   }, [dispatch, navigate, removeSuccess, successCreate, createProduct])
 
   const [selectionModel, setSelectionModel] = useState([])
@@ -110,7 +107,7 @@ const ProductListScreen = () => {
 
   //create
   const createProductHandler = () => {
-    dispatch(createProduct())
+    navigate(`/admin/products/add`)
   }
 
   //side bar handling

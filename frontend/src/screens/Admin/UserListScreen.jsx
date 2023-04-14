@@ -93,13 +93,13 @@ const UserListScreen = () => {
 
   //data grid columns
   const columns = [
-    { field: 'id', width: 220 },
-    { field: 'NAME', width: 250 },
-    { field: 'EMAIL', width: 100 },
-
+    { field: 'id', flex:1},
+    { field: 'NAME', flex:1 },
+    { field: 'EMAIL',  flex:1 },
+    { field: 'ROLE',  flex:1 },
     {
       field: 'ADMIN',
-      width: 150,
+      flex:1,
       renderCell: (params) =>
         params.value === true ? (
           <i className='fa-solid fa-check' style={{ color: 'green' }}></i>
@@ -117,6 +117,7 @@ const UserListScreen = () => {
       NAME: row.name,
       EMAIL: row.email,
       ADMIN: row.isAdmin,
+      ROLE: row.role
     }))
   }
 
@@ -182,6 +183,15 @@ const UserListScreen = () => {
             {success && (
               <div style={{ height: 700, width: '100%' }}>
                 <DataGrid
+                 sx={{
+                  boxShadow: 3,
+                  border: 1,
+                  borderColor: "#00cc66",
+                  backgroundColor: "white",
+                  "& .MuiDataGrid-cell:hover": {
+                    color: "primary.main",
+                  },
+                }}
                   rows={rows}
                   columns={columns}
                   pageSize={10}

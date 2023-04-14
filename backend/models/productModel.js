@@ -61,7 +61,6 @@ const productSchema = mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true,
         default: 0,
     },
     countInStock: {
@@ -76,7 +75,7 @@ const productSchema = mongoose.Schema({
     },
     dailyCapacity: {
         type: Number,
-        required: true,
+       
         default: 0,
     },
     active: {

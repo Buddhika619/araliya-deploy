@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from 'react-bootstrap/Button'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const Wrapper = styled.div`
   background-color: #f5f5f5;
@@ -43,24 +44,30 @@ const Wrapper = styled.div`
   }
 `
 
-const PromotionsCard = ({ props }) => {
+const PromotionsCard = ({ data }) => {
   const [view, setView] = useState(true)
 
+ const date =  new Date(data.exDate).toString().slice(0,10)
+ const link = `/product/${data.productId}`
   return (
     <>
+    
       {view && (
         <Wrapper>
           <div className='div1'>
-            <p>Till 10 Dec,2022</p>
-            <h1>25% Special off Today Only for Whoppers</h1>
+            <p>Till {date}</p>
+            <h1>{data.text}</h1>
             <Button variant='outline-danger' className='button'>
+              <Link to={link}>
               Shop Now
+              </Link>
+              
             </Button>
           </div>
           <div className='div2'>
             <img
-              src='https://cdn.sanity.io/images/czqk28jt/prod_bk_us/f3d7588c1f46ad6a1afaa3404cec65ed6053879f-1333x1333.png?w=320&q=40&fit=max&auto=format'
-              alt=''
+              src={data.image}
+              alt='offer image'
             />
           </div>
         </Wrapper>

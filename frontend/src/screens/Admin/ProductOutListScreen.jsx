@@ -77,7 +77,7 @@ const ProductOutListScreen = () => {
   const path = location.pathname.split('/')[3]
   useEffect(() => {
     //resting state
-
+    
     dispatch(productRemoveReset())
     dispatch(productCreateReset())
 
@@ -87,9 +87,6 @@ const ProductOutListScreen = () => {
       navigate('/login')
     }
 
-    if (successCreate) {
-      navigate(`/admin/products/${path}/${createdProduct._id}/edit`)
-    }
   }, [dispatch, navigate, removeSuccess, successCreate, createProduct])
 
   const [selectionModel, setSelectionModel] = useState([])
@@ -111,7 +108,7 @@ const ProductOutListScreen = () => {
 
   //create
   const createProductHandler = () => {
-    dispatch(createProduct())
+    navigate(`/admin/products/addReady`)
   }
 
   //side bar handling
@@ -131,14 +128,13 @@ const ProductOutListScreen = () => {
         <img src={params.value} style={{ width: '50px' }} />
       ), // renderCell will render the component
     },
-    { field: 'NAME',headerName: 'Name',  width: 250 },
-    { field: 'CATEGORY',headerName: 'Category', width: 100 },
-    { field: 'PRICE', headerName: 'Price',width: 100 },
-    { field: 'BRAND', headerName: 'Brand',width: 100 },
-    { field: 'COUNTINSTOCK',headerName: 'Count In Stock', width: 120 },
-    { field: 'DAILYCAPACITY',headerName: 'Daily Capacity', width: 120 },
-    { field: 'RATING', headerName: 'Rating',width: 100 },
-    { field: 'REVIEWNUMBER', headerName: 'No of Reviews', width: 120 },
+    { field: 'NAME',headerName: 'Name',  flex: 1 },
+    { field: 'CATEGORY',headerName: 'Category', flex: 1 },
+  
+    { field: 'BRAND', headerName: 'Brand',flex: 1 },
+  
+    { field: 'RATING', headerName: 'Rating',flex: 1 },
+    { field: 'REVIEWNUMBER', headerName: 'No of Reviews', flex: 1 },
    
 
     // {
@@ -184,10 +180,7 @@ const ProductOutListScreen = () => {
       BRAND : row.brand,
       RATING: row.rating,
       REVIEWNUMBER: row.numReviews,
-      COUNTINSTOCK : row.countInStock,
       REORDERLEVEL: row.reOrderLevel,
-      DAILYCAPACITY: row.dailyCapacity,
-      PRICE: `Rs ${row.price}`,
       CREATEDAT: row.createdAt.slice(0, 16),
     }))
   }

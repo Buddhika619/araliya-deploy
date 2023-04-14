@@ -2,14 +2,15 @@ import { Box, Typography, useTheme } from "@mui/material";
 
 import ProgressCircle from "./ProgressCircle";
 
-const StatBox = ({ title, subtitle, icon, progress, increase }) => {
-  
+const StatBox = ({ title, subtitle, icon, increase,  }) => {
+
+  const month = new Date().toLocaleString('default', { month: 'long' });
  
   return (
     <Box width="100%" m="0 30px">
       <Box display="flex" justifyContent="space-between">
         <Box>
-          {icon}
+          {icon} <span style={{color:  "#4cceac" }}>  {month}</span>
           <Typography
             variant="h4"
             fontWeight="bold"
@@ -18,17 +19,15 @@ const StatBox = ({ title, subtitle, icon, progress, increase }) => {
             {title}
           </Typography>
         </Box>
-        <Box>
-          <ProgressCircle progress={progress} />
-        </Box>
+
       </Box>
 
       <Box display="flex" justifyContent="space-between" mt="2px">
-        <Typography variant="h5" sx={{ color:  "#4cceac" }}>
+        <Typography variant="p" sx={{ color:  "#4cceac" }}>
           {subtitle}
         </Typography>
         <Typography
-          variant="h5"
+          variant="p"
           fontStyle="italic"
           sx={{ color:"#3da58a"}}
         >

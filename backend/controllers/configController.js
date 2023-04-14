@@ -1,7 +1,7 @@
 import Config from "../models/configModel.js";
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
-import { text } from "express";
+import Product from '../models/productModel.js'
 
 //@des config settings
 //@route PUT  /api/config
@@ -9,7 +9,8 @@ import { text } from "express";
 
 const updateConfig = asyncHandler(async (req, res) => {
   const { formData, offer } = req.body;
-
+  const product = await Product.findById(offer.productId)
+  const {name, image, description, price} = product
   // Create an array containing the carousel images and offers
   let carouselArr = [formData.image];
   let offersArr = Object.values(offer);
@@ -68,7 +69,7 @@ const updateConfig = asyncHandler(async (req, res) => {
     // If there are no existing configurations, create a new one with the uploaded offers
     if (configs.length < 1) {
       const config = new Config({
-        offers: offer,
+        offers: {...offer,name, image, description, price},
       });
       const data = await config.save();
       res.status(201).send(data);
@@ -79,7 +80,7 @@ const updateConfig = asyncHandler(async (req, res) => {
 
       if (config) {
         // Add the uploaded offers to the configuration
-        config.offers.push(offer);
+        config.offers.push({...offer,name, image, description, price});
 
         // Save the updated configuration
         const updatedConfig = await config.save();

@@ -29,7 +29,8 @@
     "node-cron": "^3.0.2",
     "node-fetch": "^3.3.0",
     "nodemailer": "^6.8.0",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "concurrently": "^7.4.0",

@@ -13,15 +13,17 @@ import AdminHeader from "../components/layouts/AdminHeader";
 import CarouselConfig from "../screens/Admin/CarouselConfig";
 import OfferConfig from "../screens/Admin/OfferConfig";
 
-import Matrials from '../screens/Admin/MatrialsListScreen'
-import MaterialAdd from '../screens/Admin/MaterialAddScreen'
+import Matrials from "../screens/Admin/MatrialsListScreen";
+import MaterialAdd from "../screens/Admin/MaterialAddScreen";
 import MaterialEditScren from "../screens/Admin/MaterialUpdateScreen";
 import BatchListScreen from "../screens/Admin/BatchListScreen";
 import GrnScreen from "../screens/Admin/GrnScreen";
 import GrnUpdateScreen from "../screens/Admin/GrnUpdateScreen";
 import ProductOutListScreen from "../screens/Admin/ProductOutListScreen";
-
-
+import KitchenReservations from "../screens/Admin/KitchenReservations";
+import AddCustomeProduct from "../screens/Admin/AddCustomeProduct";
+import AddReadyProduct from "../screens/Admin/AddReadyProduct";
+import ProudctOutStockListScreen from "../screens/Admin/ProudctOutStockListScreen";
 
 const AdminRoutes = () => {
   return (
@@ -45,16 +47,32 @@ const AdminRoutes = () => {
           <Route path="/config/carousel" element={<CarouselConfig />} />
           <Route path="/config/offers" element={<OfferConfig />} />
 
-{/* custom produts */}
+          {/* custom produts */}
           <Route path="/products/active" element={<ProductlistScreen />} />
           <Route path="/products/outofstock" element={<ProductlistScreen />} />
           <Route path="/products/deactivated" element={<ProductlistScreen />} />
+          <Route path="/products/add" element={<AddCustomeProduct />} />
+          <Route path="/products/addReady" element={<AddReadyProduct />} />
+
           <Route
             path="/products/:path/:id/edit"
             element={<ProductEditScreen />}
           />
-{/* off the shelf produts */}
-<Route path="/productsout/active" element={<ProductOutListScreen />} />
+          {/* off the shelf produts */}
+          <Route
+            path="/productsout/active"
+            element={<ProductOutListScreen />}
+          />
+          <Route
+            path="/productsout/deactivated"
+            element={<ProductOutListScreen />}
+          />
+
+          <Route
+            path="/productsout/inStock"
+            element={<ProudctOutStockListScreen />}
+          />
+
 
           <Route path="/orders/neworders" element={<OrderListScreen />} />
           <Route path="/orders/processing" element={<OrderListScreen />} />
@@ -63,12 +81,14 @@ const AdminRoutes = () => {
 
           <Route path="/materials" element={<Matrials />} />
           <Route path="/materials/add" element={<MaterialAdd />} />
-          <Route path="/materials/:id/edit" element={<MaterialEditScren  />} />
-
+          <Route path="/materials/:id/edit" element={<MaterialEditScren />} />
 
           <Route path="/batches" element={<BatchListScreen />} />
           <Route path="/batches/add" element={<GrnScreen />} />
+          <Route path="/batches/add/:id" element={<GrnScreen />} />
           <Route path="/batches/:id/edit" element={<GrnUpdateScreen />} />
+
+          <Route path="/kitchen" element={<KitchenReservations />} />
 
           <Route path="/*" element={<NotFound />} />
 

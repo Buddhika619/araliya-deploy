@@ -4,6 +4,7 @@ import sendEmail from '../Utils/sendEmail.js'
 import cron from 'node-cron'
 import Batch from '../models/batchModel.js'
 
+
 // @des  Fetch active products
 // @route GET /api/products
 // @access Public
@@ -172,7 +173,34 @@ const getProductListInAdmin = asyncHandler(async (req, res) => {
 
 /**this function for get all off the shelf  products*/
 const getProductListOutAdmin = asyncHandler(async (req, res) => {
+
+
+  const stock = await Batch.aggregate([
+    // Match products with a productRating field
+    { $match: { productId: { $exists: true } } },
+    
+    // Group products by productId and calculate the total qty
+    { $group: {
+        _id: "$productId",
+        totalQty: { $sum: "$qty" },
+      } },
+  
+    // Lookup data from the Product collection using productId
+    { $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "_id",
+        as: "product"
+      } },
+  
+    // Unwind the product array to get a single document per batch item
+    { $unwind: "$product" }
+  ]);
+
+
+
   const path = req.query.path
+  console.log(path)
   let products = ''
 // use a switch statement to determine which set of products to fetch based on the value of the "path" parameter
   switch (path) {
@@ -180,9 +208,9 @@ const getProductListOutAdmin = asyncHandler(async (req, res) => {
       products = await Product.find({ active: true, type: false }).sort({createdAt:-1})
       break
 
-    case 'outofstock':
+    case 'inStock':
       // products = await Product.find({active: true, $expr:{$gt:["$reOrderLevel", "$countInStock"]}}) //out of stock if reorder level is used---dont delete this line needed for future reference
-      products = await Product.find({ active: true,  type: false, countInStock: 0 })
+      products = stock
       break
 
     case 'deactivated':
@@ -293,20 +321,21 @@ const deleteManyProducts = asyncHandler(async (req, res) => {
 // @route POST /api/products/
 // @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
+
   const product = new Product({
-    name: 'Sample name',
-    price: 0,
+    name: req.body.name,
+    price: req.body.price,
     user: req.user._id,
-    image: '/image/sample.jpg',
-    brand: 'test',
-    category: 'Sample Category',
-    reOrderLevel: 0,
-    countInStock: 0,
-    dailyCapacity: 0,
+    image:  req.body.image,
+    brand: req.body.brand ?? 'Araliya',
+    category: req.body.category,
+    reOrderLevel: (req.body.reOrderLevel === '') && 0,
+    countInStock: (req.body.countInStock === '')  && 0,
+    dailyCapacity: req.body.dailyCapacity,
     numReviews: 0,
-    description: 'sample',
-    active: true,
-    type: false,
+    description: req.body.description,
+    active: req.body.active,
+    type: req.body.type,
   })
 
   const createProduct = await product.save()
@@ -317,7 +346,7 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route PUT /api/products/:id
 // @access Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  console.log(req.body)
+
   const {
     name,
     price,
@@ -332,7 +361,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     type
   } = req.body
 
-  console.log(req.body)
+
   const product = await Product.findById(req.params.id)
 
   if (product) {

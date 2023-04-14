@@ -13,6 +13,7 @@ import uploadRoutes from './routes/uploadRoutes.js'
 import configRoutes from './routes/configRoutes.js'
 import meterialRoutes from './routes/materialRoutes.js'
 import batchRoutes from './routes/batchRoutes.js'
+import statsRoutes from './routes/statsRoutes.js'
 
 
 import fetch from 'node-fetch';
@@ -44,6 +45,7 @@ app.use('/api/upload', uploadRoutes)
 app.use('/api/config', configRoutes)
 app.use('/api/materials', meterialRoutes)
 app.use('/api/batches', batchRoutes)
+app.use('/api/stats', statsRoutes)
 
 //paypal config
 app.get('/api/config/paypal', (req, res) =>
@@ -53,7 +55,6 @@ app.get('/api/config/paypal', (req, res) =>
 //getting distance
 app.get('/api/distance', async(req, res) => {
 
-  console.log(req.query)
   const url = `https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${req.query.lat}, ${req.query.lng}&=&origins=7.297516055555007, 80.73621449338462&key=${process.env.GOOGLE_API_KEY}`
   // fetch(url)
   // .then((response) => response.json())

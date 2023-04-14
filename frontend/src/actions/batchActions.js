@@ -3,30 +3,26 @@ import {
   viewBatchesRequest,
   viewBatchesSuccess,
   viewBatchesFail,
-  viewBatchesReset,
-
   addBatchesRequest,
   addBatchesSuccess,
   addBatchesFail,
-
-  deleteBatchesRequest,
-  deleteBatchesSuccess,
-  deleteBatchesFail,
-  deleteBatchesReset,
-
   viewSingleBatchesRequest,
   viewSingleBatchesSuccess,
   viewSingleBatchesFail,
-
   updateBatchesRequest,
   updateBatchesSuccess,
-  updateBatchesFail
+  updateBatchesFail,
+
 } from "../reducers/batchSlice";
 
 
+import {
+  viewKitchenRequest,
+  viewKitchenSuccess,
+  viewKitchenFail,
+} from "../reducers/kitchenSlice"
 
 export const listBatches = () => async (dispatch, getState) => {
-
   try {
     dispatch(viewBatchesRequest());
 
@@ -40,14 +36,12 @@ export const listBatches = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/batches`,config );
+    const { data } = await axios.get(`/api/batches`, config);
 
-
- 
     dispatch(viewBatchesSuccess(data));
   } catch (error) {
     dispatch(
-        viewBatchesFail(
+      viewBatchesFail(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
@@ -56,37 +50,63 @@ export const listBatches = () => async (dispatch, getState) => {
   }
 };
 
-
-
-export const createBatches = (payload) => async (dispatch, getState) => {
-  console.log('payload')
+export const listKitchenReservations = () => async (dispatch, getState) => {
   try {
-    dispatch(addBatchesRequest())
+    dispatch(viewKitchenRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
-    const { data } = await axios.post(`/api/batches`, payload, config)
+    console.log(userInfo.token)
+    const { data } = await axios.get(`/api/batches/kitchen`, config);
 
-    dispatch(addBatchesSuccess(data))
-
+    dispatch(viewKitchenSuccess(data));
   } catch (error) {
     dispatch(
-        addBatchesFail(
+      viewKitchenFail(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};
+
+export const createBatches = (payload) => async (dispatch, getState) => {
+  console.log("payload");
+  try {
+    dispatch(addBatchesRequest());
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/batches`, payload, config);
+
+    dispatch(addBatchesSuccess(data));
+  } catch (error) {
+    dispatch(
+      addBatchesFail(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
+};
 
 // export const removeBatches = (id) => async (dispatch, getState) => {
 //   try {
@@ -116,68 +136,64 @@ export const createBatches = (payload) => async (dispatch, getState) => {
 //   }
 // }
 
-
-export const viewSingleBatch= (id) => async (dispatch, getState) => {
+export const viewSingleBatch = (id) => async (dispatch, getState) => {
   try {
-    dispatch(viewSingleBatchesRequest())
+    dispatch(viewSingleBatchesRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
-    const { data } = await axios.get(`/api/batches/${id}`, config)
-    console.log(data)
+    const { data } = await axios.get(`/api/batches/${id}`, config);
+    console.log(data);
 
-    await dispatch(viewSingleBatchesSuccess(data))
+    await dispatch(viewSingleBatchesSuccess(data));
   } catch (error) {
     dispatch(
-        viewSingleBatchesFail(
+      viewSingleBatchesFail(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
-
-
+};
 
 export const updateBatches = (material) => async (dispatch, getState) => {
   try {
-    dispatch(updateBatchesRequest())
-
+    dispatch(updateBatchesRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
     const { data } = await axios.put(
       `/api/batches/${material._id}`,
       material,
       config
-    )
+    );
 
-    dispatch(updateBatchesSuccess(data))
+    dispatch(updateBatchesSuccess(data));
   } catch (error) {
     dispatch(
-        updateBatchesFail(
+      updateBatchesFail(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};

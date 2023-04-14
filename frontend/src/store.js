@@ -25,6 +25,9 @@ import orderRemoveReducer from './reducers/orderRemoveSlice'
 import configReducer from './reducers/configSlice'
 import materialReducer from './reducers/matrialSlice'
 import batchRedcuer from './reducers/batchSlice'
+import kitchenReducer from './reducers/kitchenSlice'
+import statsReducer from './reducers/statsSlice'
+import stockProductReducer from './reducers/stockProductSlice'
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -46,7 +49,11 @@ const reducer = combineReducers({
   orderRemove:orderRemoveReducer,
   configUpdate :configReducer,
   matrialDetails: materialReducer,
-  batchDetails: batchRedcuer
+  batchDetails: batchRedcuer,
+  kitchenDetails:kitchenReducer,
+  stats: statsReducer,
+  stockProuct: stockProductReducer
+
 })
 
 // const middleware = []

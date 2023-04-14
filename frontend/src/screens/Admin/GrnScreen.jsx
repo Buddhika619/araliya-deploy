@@ -17,14 +17,16 @@ import { toast } from "react-toastify";
 import { createMaterial } from "../../actions/materialActions";
 import { viewMatrialsReset } from "../../reducers/matrialSlice";
 import { createBatches } from "../../actions/batchActions";
+import { viewBatchesReset } from "../../reducers/batchSlice";
 
 const CreateListing = () => {
   const { id } = useParams();
 
+  console.log(id)
   const [formData, setFormData] = useState({
-    materialId: "",
-    qty: 0,
-    cost: 0,
+    materialId: id ? id : '',
+    qty: '',
+    cost: '',
     salesPrice: ""
   });
 
@@ -45,8 +47,9 @@ const CreateListing = () => {
   } = addBatch;
 
   console.log(success);
+
   useEffect(() => {
-    dispatch(viewMatrialsReset());
+    dispatch(viewBatchesReset());
     if (success) {
       toast.success("Success");
 
@@ -54,7 +57,7 @@ const CreateListing = () => {
         navigate("/admin/batches");
       }, 1000);
     }
-  }, [id, dispatch, success]);
+  }, [id, dispatch, success, error]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -98,7 +101,7 @@ const CreateListing = () => {
 
 console.log(error)
   if(error){
-    toast.error(error)
+    <Message>{error}</Message>
   }
 
   return (
@@ -107,13 +110,15 @@ console.log(error)
         <Button className="btn btn-light my-3" onClick={back}>
           Go Back
         </Button>
+        
         <FormContainer>
+        {error && <Message varient="danger">{error}</Message>}
           <form onSubmit={onSubmit}>
             <header>
               <p className="pageHeader"> Create a GRN</p>
             </header>
 
-            <label className="formLabel">Material ID</label>
+            <label className="formLabel">Material/Product ID</label>
             <input
               className="formInputName"
               type="text"
