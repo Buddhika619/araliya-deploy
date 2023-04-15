@@ -14,79 +14,57 @@ import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
-import {
-  createMaterial,
-  updateMaterials,
-  viewSingleMaterial,
-} from "../../actions/materialActions";
+import { createMaterial } from "../../actions/materialActions";
 import { viewMatrialsReset } from "../../reducers/matrialSlice";
-import { updateBatches, viewSingleBatch } from "../../actions/batchActions";
+import { viewSupplierReset } from "../../reducers/supplierSlice";
+import { createSupplier } from "../../actions/supplierActions";
 
-const GrnUpdateScreen = () => {
+const SupplierAddScreen = () => {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    materialId: "",
-    qty: 0,
-    cost: 0,
-    salesPrice: "",
-    supplierId: "",
+    name: "",
+    email: "",
+    address: "",
+    contactNo: "",
   });
 
-  const { materialId, qty, cost,supplierId, salesPrice } = formData;
+  const { name, email, address, contactNo } = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const materialDetail = useSelector((state) => state.batchDetails);
-  const { sloading, serror, batch, ssuccess } = materialDetail;
-
-
-
-  const materialUpdate = useSelector((state) => state.batchDetails);
+  const addSupplier = useSelector((state) => state.supplierDetails);
 
   const {
     loading,
     error,
 
     success,
-  } = materialUpdate;
-
+  } = addSupplier;
+console.log(addSupplier)
   useEffect(() => {
-    
-    if (ssuccess) {
-      // toast.success('Success')
+    dispatch(viewSupplierReset());
+    if (success) {
+      toast.success("Success");
 
-      setFormData(batch);
-      // setTimeout(function(){ navigate('/admin/materials')   }, 1000);
-    } else {
-      dispatch(viewSingleBatch(id));
-     
+      setTimeout(function () {
+        navigate("/admin/supplier");
+      }, 1000);
     }
-  }, [id, ssuccess]);
+  }, [id, dispatch, success]);
 
-//  if(batch){
-//   setTimeout(window.location.reload(), 1000)
-//  }
-console.log(batch)
   const onSubmit = async (e) => {
     e.preventDefault();
     dispatch(
-      updateBatches({
-        _id: id,
-supplierId,
-        materialId,
-        qty,
-        cost,
-        salesPrice
+      createSupplier({
+        name,
+        email,
+        address,
+        contactNo,
       })
     );
-
-    toast.success("Success");
-    setTimeout(function () {
-      navigate("/admin/batches");
-    }, 1000);
   };
 
   const onMutate = (e) => {
@@ -120,15 +98,13 @@ supplierId,
     return <Spinner />;
   }
 
-  if (serror) {
-    toast.error(serror);
-  }
+  console.log(location.pathname.split("/")[3]);
 
   const path = location.pathname.split("/")[3];
 
   const back = () => {
     dispatch(productUpdateReset());
-    navigate(`/admin/batches`);
+    navigate(`/admin/materials`);
   };
 
   return (
@@ -140,70 +116,58 @@ supplierId,
         <FormContainer>
           <form onSubmit={onSubmit}>
             <header>
-              <p className="pageHeader"> Update Batch</p>
+              <p className="pageHeader"> Add A Supplier</p>
             </header>
 
-            <label className="formLabel">Material /Product ID</label>
+            <label className="formLabel">Name*</label>
             <input
               className="formInputName"
               type="text"
-              id="materialId"
-              value={materialId}
+              id="name"
+              value={name}
               onChange={onMutate}
               // maxLength='32'
               // minLength='10'
               required
             />
 
-            <label className="formLabel">Supplier ID</label>
+            <label className="formLabel">address*</label>
             <input
               className="formInputName"
-              type="text"
-              id="supplierId"
-              value={supplierId}
+              type="address"
+              id="address"
+              value={address}
               onChange={onMutate}
               // maxLength='32'
               // minLength='10'
               required
             />
 
-            <label className="formLabel">Quantity</label>
-            <input
-              className="formInputName"
-              type="number"
-              id="qty"
-              min="0"
-              value={qty}
-              onChange={onMutate}
-              // maxLength='32'
-              // minLength='10'
-              required
-            />
-
-            <label className="formLabel">Cost</label>
+            <label className="formLabel">contactNo*</label>
             <input
               className="formInputName"
               type="number"
-              min="0"
-              id="cost"
-              value={cost}
+              id="contactNo"
+              value={contactNo}
               onChange={onMutate}
               // maxLength='32'
               // minLength='10'
               required
             />
 
-            <label className="formLabel">Sales Price</label>
+            <label className="formLabel">email</label>
             <input
               className="formInputName"
-              type="number"
+              type="email"
+              id="email"
               min="0"
-              id="salesPrice"
-              value={salesPrice}
+              value={email}
               onChange={onMutate}
               // maxLength='32'
               // minLength='10'
+              
             />
+
             <button type="submit" className="primaryButton createListingButton">
               Update
             </button>
@@ -216,4 +180,4 @@ supplierId,
   );
 };
 
-export default GrnUpdateScreen;
+export default SupplierAddScreen;

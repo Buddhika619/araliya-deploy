@@ -25,6 +25,8 @@ import {
 import styled from 'styled-components'
 import { listMaterials, removeMaterial } from '../../actions/materialActions'
 import { viewMatrialsReset } from '../../reducers/matrialSlice'
+import { listSuppliers, removeSupplier } from '../../actions/supplierActions'
+import { viewSingleSupplierReset, viewSupplierReset } from '../../reducers/supplierSlice'
 
 const ToggleWrapper = styled('div')`
   position: relative;
@@ -37,19 +39,19 @@ const ToggleWrapper = styled('div')`
   }
 `
 
-const MaterialListScreen = () => {
+const SuppplierListScreen = () => {
   //redux dispatch hook
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
-  const materialList = useSelector((state) => state.matrialDetails)
-  const { loading, error, success } = materialList
+  const supplierList = useSelector((state) => state.supplierDetails)
+  const { loading, error, success } = supplierList
 
-  const deleteMaterial = useSelector((state) => state.matrialDetails)
-  const { rSuccess: removeSuccess, error: removeError } = deleteMaterial
+  const deleteSupplier = useSelector((state) => state.supplierDetails)
+  const { rSuccess: removeSuccess, error: removeError } = deleteSupplier
   
-
+ console.log(supplierList)
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
@@ -63,9 +65,10 @@ const MaterialListScreen = () => {
   //   }
 
   useEffect(() => {
-   
+    dispatch(viewSupplierReset())
+    dispatch(viewSingleSupplierReset());
     if (user && user.isAdmin) {
-      dispatch(listMaterials())
+      dispatch(listSuppliers())
     } else {
       navigate('/login')
     }
@@ -76,15 +79,16 @@ const MaterialListScreen = () => {
   //remove
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
-      dispatch(removeMaterial(id))
+      dispatch(removeSupplier(id))
     }
   }
 
   //update
   const updateHandler = (id) => {
-    dispatch(viewMatrialsReset())
+    dispatch(viewSupplierReset())
+    dispatch(viewSingleSupplierReset());
     if (selectionModel.length > 0) {
-      navigate(`/admin/materials/${id}/edit`)
+      navigate(`/admin/supplier/${id}/edit`)
     }
   }
 
@@ -96,18 +100,18 @@ const MaterialListScreen = () => {
 
  //create
  const createProductHandler = () => {
-  dispatch(viewMatrialsReset())
+  dispatch(viewSupplierReset())
    
-  navigate(`/admin/materials/add`)
+  navigate(`/admin/supplier/add`)
 }
 
   //data grid columns
   const columns = [
     { field: 'id', flex: 1 },
-    { field: 'name',flex: 1 },
-    { field: 'reOrderLevel', flex: 1 },
-    { field: 'dailyCap', flex: 1 },
-    { field: 'measurement', flex: 1 },
+    { field: 'name', flex: 1},
+    { field: 'email', flex: 1 },
+    { field: 'address', flex: 1 },
+    { field: 'contactNo', flex: 1 },
 
 
    
@@ -117,12 +121,12 @@ const MaterialListScreen = () => {
   let rows
   if (success) {
     console.log(success)
-    rows = materialList?.matrials.map((row) => ({
+    rows = supplierList?.suppliers.map((row) => ({
       id: row._id,
       name: row.name,
-      reOrderLevel: row.reOrderLevel,
-      dailyCap: row.dailyCap,
-      measurement: row.measurement,
+      email: row.email,
+      address: row.address,
+      contactNo: row.contactNo,
     }))
   }
 
@@ -202,19 +206,19 @@ const MaterialListScreen = () => {
             {error && <Message varient='danger'>{error}</Message>}
             {removeError && <Message varient='danger'>{removeError}</Message>}
 
-            <h1>Materials</h1>
+            <h1>Suppliers</h1>
             {success && (
               <div style={{ height: 700, width: '90%' }}>
                 <DataGrid
                  sx={{
-                  boxShadow: 3,
-                  border: 1,
-                  borderColor: '#00cc66',
-                  backgroundColor: 'white',
-                  '& .MuiDataGrid-cell:hover': {
-                    color: 'primary.main',
-                  },
-                }}
+                    boxShadow: 3,
+                    border: 1,
+                    borderColor: "#00cc66",
+                    backgroundColor: "white",
+                    "& .MuiDataGrid-cell:hover": {
+                      color: "primary.main",
+                    },
+                  }}
                   rows={rows}
                   columns={columns}
                   pageSize={10}
@@ -237,4 +241,4 @@ const MaterialListScreen = () => {
   )
 }
 
-export default MaterialListScreen
+export default SuppplierListScreen

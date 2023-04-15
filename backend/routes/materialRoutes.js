@@ -7,6 +7,7 @@ import {
     deleteMaterial,
     getMaterialById,
     getMaterials,
+    getMaterialStock
 } from '../controllers/materialController.js'
 
 
@@ -16,6 +17,8 @@ router
   .route('/')
   .get(protect, admin,getMaterials)
   .post(protect, admin, createMaterial)
+
+router.get('/stock', protect, admin,getMaterialStock)
 
 router
   .route('/:id')

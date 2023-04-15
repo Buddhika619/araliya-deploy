@@ -24,6 +24,10 @@ import KitchenReservations from "../screens/Admin/KitchenReservations";
 import AddCustomeProduct from "../screens/Admin/AddCustomeProduct";
 import AddReadyProduct from "../screens/Admin/AddReadyProduct";
 import ProudctOutStockListScreen from "../screens/Admin/ProudctOutStockListScreen";
+import SuppplierListScreen from "../screens/Admin/SupplierListScreen";
+import SupplierAddScreen from "../screens/Admin/supplierAddScreen";
+import SupplierEditScreen from "../screens/Admin/SupplierUpdateScreen";
+import MaterialStockScreen from "../screens/Admin/MaterialStockScreen";
 
 const AdminRoutes = () => {
   return (
@@ -79,7 +83,8 @@ const AdminRoutes = () => {
           <Route path="/orders/dispatched" element={<OrderListScreen />} />
           <Route path="/orders/completed" element={<OrderListScreen />} />
 
-          <Route path="/materials" element={<Matrials />} />
+          <Route path="/materials/all" element={<Matrials />} />
+          <Route path="/materials/stock" element={<MaterialStockScreen />} />
           <Route path="/materials/add" element={<MaterialAdd />} />
           <Route path="/materials/:id/edit" element={<MaterialEditScren />} />
 
@@ -87,6 +92,11 @@ const AdminRoutes = () => {
           <Route path="/batches/add" element={<GrnScreen />} />
           <Route path="/batches/add/:id" element={<GrnScreen />} />
           <Route path="/batches/:id/edit" element={<GrnUpdateScreen />} />
+
+
+          <Route path="/supplier" element={<SuppplierListScreen />} />
+          <Route path="/supplier/add" element={<SupplierAddScreen />} />
+          <Route path="/supplier/:id/edit" element={<SupplierEditScreen />} />
 
           <Route path="/kitchen" element={<KitchenReservations />} />
 

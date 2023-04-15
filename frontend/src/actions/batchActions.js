@@ -22,6 +22,17 @@ import {
   viewKitchenFail,
 } from "../reducers/kitchenSlice"
 
+
+import {
+  dailyAssingRequest,
+  dailyAssingSuccess,
+  dailyAssingFail,
+
+  manualAssingRequest,
+  manualAssingSuccess,
+  manualAssingFail,
+} from '../reducers/materialStockSlice'
+
 export const listBatches = () => async (dispatch, getState) => {
   try {
     dispatch(viewBatchesRequest());
@@ -49,6 +60,66 @@ export const listBatches = () => async (dispatch, getState) => {
     );
   }
 };
+
+
+export const allocateBulkKitchn = () => async (dispatch, getState) => {
+  try {
+    dispatch(dailyAssingRequest());
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/batches/bulk`, config);
+
+    dispatch(dailyAssingSuccess(data));
+  } catch (error) {
+    dispatch(
+      dailyAssingFail(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
+};
+
+
+export const allocateManualKitchen = (payload) => async (dispatch, getState) => {
+  console.log("payload");
+  try {
+    dispatch(manualAssingRequest());
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/batches/one`, payload, config);
+
+    dispatch(manualAssingSuccess(data));
+  } catch (error) {
+    dispatch(
+      manualAssingFail(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
+};
+
 
 export const listKitchenReservations = () => async (dispatch, getState) => {
   try {

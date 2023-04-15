@@ -86,14 +86,13 @@ const Sidebar = ({ view, success }) => {
   const [oproductSub, setoProductSub] = useState(false);
   const [orderSub, setOrderSub] = useState(false);
   const [configSub, setConfigSub] = useState(false);
+  const [matSub, setMatSub] = useState(false);
 
   const pathMatchRoute = (route) => {
     if (route == location.pathname) {
       return true;
     }
   };
-
-
 
   return (
     <>
@@ -386,6 +385,58 @@ const Sidebar = ({ view, success }) => {
                 ) : (
                   console.log(123)
                 )}
+
+                <SidebarListItem onClick={() => setMatSub(!matSub)}>
+                  <LocalShippingOutlined />
+                  Materials
+                </SidebarListItem>
+
+                {/* material links */}
+                {matSub ? (
+                  <SubSidebarList>
+                    <Link to="/admin/materials/all">
+                      <SidebarListItem className="orders button">
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                        Materials
+                      </SidebarListItem>
+                    </Link>
+                    <Link to="/admin/materials/stock">
+                      <SidebarListItem className="orders button">
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                        Stock
+                      </SidebarListItem>
+                    </Link>
+                  </SubSidebarList>
+                ) : path === "materials" ? (
+                  <SubSidebarList>
+                    <Link to="/admin/materials/all">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/materials/all")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                        Materials
+                      </SidebarListItem>
+                    </Link>
+                    <Link to="/admin/materials/stock">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/materials/stock")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                        Stock
+                      </SidebarListItem>
+                    </Link>
+                  </SubSidebarList>
+                ) : (
+                  console.log(123)
+                )}
               </SidebarList>
             </SidebarMenu>
 
@@ -395,7 +446,7 @@ const Sidebar = ({ view, success }) => {
                 <Link to="/admin/users">
                   <SidebarListItem
                     className={
-                      (path == "users")
+                      path == "users"
                         ? "navbarListINameActive"
                         : "navbarListIName"
                     }
@@ -404,20 +455,35 @@ const Sidebar = ({ view, success }) => {
                     Users
                   </SidebarListItem>
                 </Link>
-                <Link to="/admin/materials">
-                  <SidebarListItem>
+                <Link to="/admin/supplier">
+                  <SidebarListItem
+                   className={
+                    path == "supplier"
+                      ? "navbarListINameActive"
+                      : "navbarListIName"
+                  }>
                     <Storefront />
-                    Row Materials
+                   Suppliers
                   </SidebarListItem>
                 </Link>
                 <Link to="/admin/batches">
-                  <SidebarListItem>
+                <SidebarListItem
+                   className={
+                    path == "batches"
+                      ? "navbarListINameActive"
+                      : "navbarListIName"
+                  }>
                     <Storefront />
                     GRN and Batches
                   </SidebarListItem>
                 </Link>
                 <Link to="/admin/kitchen">
-                  <SidebarListItem>
+                <SidebarListItem
+                   className={
+                    path == "kitchen"
+                      ? "navbarListINameActive"
+                      : "navbarListIName"
+                  }>
                     <Storefront />
                     Kitchen Reservations
                   </SidebarListItem>

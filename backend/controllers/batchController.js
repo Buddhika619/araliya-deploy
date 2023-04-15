@@ -6,6 +6,7 @@ import Reservation from "../models/reservationModel.js";
 import { v4 as uuidv4 } from "uuid";
 
 const assignBulk = asyncHandler(async (req, res) => {
+  console.log("thats a hit");
   const batchSummary = await Batch.aggregate([
     // Look up material information using materialId
     {
@@ -35,19 +36,20 @@ const assignBulk = asyncHandler(async (req, res) => {
 
   let materialCount = 0; // Count of materials with enough inventory
   let requestID = uuidv4(); // Unique ID for the request
-  
+
   // Loop through each material in batchSummary
   for (let j = 0; j < batchSummary.length; j++) {
+    console.log(batchSummary);
     // Check if totalQty is greater than or equal to dailyCap
     if (batchSummary[j].totalQty >= batchSummary[j].dailyCap) {
       materialCount++; // Increment materialCount
-  
+
       // Find all batches with materialId and non-zero qty
       const batches = await Batch.find({
         materialId: batchSummary[j]._id,
         qty: { $gt: 0 },
       });
-  
+
       let reservedCount = 0; // Count of reserved inventory for current material
       // Loop through each batch
       for (let i = 0; i < batches.length; i++) {
@@ -57,14 +59,14 @@ const assignBulk = asyncHandler(async (req, res) => {
           if (batches[i].qty < batchSummary[j].dailyCap) {
             let requiredQty = batchSummary[j].dailyCap - reservedCount; // Calculate remaining required quantity
             let requiredPer = 0; // Required quantity for current batch
-  
+
             // Check if requiredQty is less than qty of batch
             if (requiredQty < batches[i].qty) {
               requiredPer = requiredQty; // Set requiredPer to remaining required quantity
             } else {
               requiredPer = batches[i].qty; // Set requiredPer to qty of batch
             }
-  
+
             // Create new reservation and save it to database
             const reservation = new Reservation({
               materialId: batches[i].materialId,
@@ -73,18 +75,18 @@ const assignBulk = asyncHandler(async (req, res) => {
               requestId: requestID,
             });
             await reservation.save();
-  
+
             // Update qty of batch and save it to database
             batches[i].qty = batches[i].qty - requiredPer;
             await batches[i].save();
-  
+
             reservedCount = reservedCount + requiredPer; // Increment reservedCount by requiredPer
           }
-  
+
           // Check if qty of batch is greater than or equal to dailyCap
           if (batches[i].qty >= batchSummary[j].dailyCap) {
             reservedCount = batchSummary[j].dailyCap; // Set reservedCount to dailyCap
-  
+
             // Create new reservation and save it to database
             const reservation = new Reservation({
               materialId: batches[i].materialId,
@@ -93,7 +95,7 @@ const assignBulk = asyncHandler(async (req, res) => {
               requestId: requestID,
             });
             await reservation.save();
-  
+
             // Update qty of batch and save it to database
             batches[i].qty = batches[i].qty - batchSummary[j].dailyCap;
             await batches[i].save();
@@ -111,11 +113,105 @@ const assignBulk = asyncHandler(async (req, res) => {
   });
 });
 
+const assignOne = asyncHandler(async (req, res) => {
+  let requestID = uuidv4(); // Unique ID for the request
+  let requestedQty = Number(req.body.qty);
+  console.log("thats a hit");
+  const mat = await Material.findById(req.body.id);
+
+  if (isNaN(requestedQty)) {
+    res.status(400);
+    throw new Error(`Invalid Input`);
+  }
+
+  const total = await Batch.aggregate([
+    // Group by materialId and calculate the total quantity of material for each materialId
+
+    { $match: { materialId: mat._id } },
+
+    {
+      $group: {
+        _id: "$materialId",
+        totalQty: { $sum: "$qty" },
+      },
+    },
+  ]);
+
+  const batches = await Batch.find({
+    materialId: mat._id,
+    qty: { $gt: 0 },
+  });
+
+  let reservedCount = 0; // Count of reserved inventory for current material
+
+  if (total[0].totalQty < requestedQty) {
+    console.log(total.totalQty);
+    res.status(400);
+    throw new Error(`Quantity should be less than ${total[0].totalQty}`);
+  }
+
+  // Loop through each batch
+  for (let i = 0; i < batches.length; i++) {
+    // Check if reservedCount is less than dailyCap
+    if (reservedCount < requestedQty) {
+      // Check if qty of batch is less than dailyCap
+      if (batches[i].qty < requestedQty) {
+        let requiredQty = requestedQty - reservedCount; // Calculate remaining required quantity
+        let requiredPer = 0; // Required quantity for current batch
+
+        // Check if requiredQty is less than qty of batch
+        if (requiredQty < batches[i].qty) {
+          requiredPer = requiredQty; // Set requiredPer to remaining required quantity
+        } else {
+          requiredPer = batches[i].qty; // Set requiredPer to qty of batch
+        }
+
+        // Create new reservation and save it to database
+        const reservation = new Reservation({
+          materialId: batches[i].materialId,
+          batchId: batches[i]._id,
+          qty: requiredPer,
+          requestId: requestID,
+        });
+        await reservation.save();
+
+        // Update qty of batch and save it to database
+        batches[i].qty = batches[i].qty - requiredPer;
+        await batches[i].save();
+
+        reservedCount = reservedCount + requiredPer; // Increment reservedCount by requiredPer
+      }
+
+      // Check if qty of batch is greater than or equal to dailyCap
+      if (batches[i].qty >= requestedQty) {
+        reservedCount = requestedQty; // Set reservedCount to dailyCap
+
+        // Create new reservation and save it to database
+        const reservation = new Reservation({
+          materialId: batches[i].materialId,
+          batchId: batches[i]._id,
+          qty: requestedQty,
+          requestId: requestID,
+        });
+        await reservation.save();
+
+        // Update qty of batch and save it to database
+        batches[i].qty = batches[i].qty - requestedQty;
+        await batches[i].save();
+      }
+    } else {
+      break; // Exit loop if reservedCount is greater than or equal to dailyCap
+    }
+  }
+
+  res.json({ total, mat });
+});
+
 // @des  create a Batch
 // @route POST /api/batch/
 // @access Private/Admin
 const createBatch = asyncHandler(async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   // Find the material or  product with the given ID in the request body
   const material = await Material.findById(req.body.materialId);
   const product = await Product.findById(req.body.materialId);
@@ -125,6 +221,7 @@ const createBatch = asyncHandler(async (req, res) => {
     const batch = new Batch({
       materialId: req.body.materialId,
       originalQty: req.body.qty,
+      supplierId: req.body.supplierId,
       qty: req.body.qty,
       cost: req.body.cost,
     });
@@ -169,7 +266,7 @@ const createBatch = asyncHandler(async (req, res) => {
 // @route PUT /api/batch/:id
 // @access Private/Admin
 const updateBatch = asyncHandler(async (req, res) => {
-  const { materialId, qty, cost, salesPrice, originalQty } = req.body;
+  const { materialId, qty, cost, salesPrice, supplierId } = req.body;
 
   const batch = await Batch.findById(req.params.id);
 
@@ -189,6 +286,7 @@ const updateBatch = asyncHandler(async (req, res) => {
     batch.qty = qty;
     batch.originalQty = qty;
     batch.cost = cost;
+    batch.supplierId = supplierId;
 
     const update = await batch.save();
     res.status(201).json(update);
@@ -224,6 +322,7 @@ const getBatchbyID = asyncHandler(async (req, res) => {
     materialId: batch.materialId ? batch.materialId : batch.productId,
     _id: batch._id,
     originalQty: batch.originalQty,
+    supplierId: batch.supplierId,
     qty: batch.qty,
     cost: batch.cost,
     salesPrice: batch.salesPrice && batch.salesPrice,
@@ -263,18 +362,24 @@ const getBatches = asyncHandler(async (req, res) => {
   res.status(201).json(returnArr);
 });
 
-
 // @desc  Get all kitchenRecerved
 // @route GET /api/materials/kitchen
 // @access Private/Admin
 
 const getKitchenDetails = asyncHandler(async (req, res) => {
-  
   // get all batches and sort by createdAt in descending order
-  const reservations = await Reservation.find().sort({ createdAt: -1 }).populate("materialId");
-
-
+  const reservations = await Reservation.find()
+    .sort({ createdAt: -1 })
+    .populate("materialId");
 
   res.status(201).json(reservations);
 });
-export { createBatch, updateBatch, getBatchbyID, getBatches, assignBulk,getKitchenDetails };
+export {
+  createBatch,
+  updateBatch,
+  getBatchbyID,
+  getBatches,
+  assignBulk,
+  getKitchenDetails,
+  assignOne,
+};

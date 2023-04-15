@@ -1,3 +1,4 @@
+import Batch from "../models/batchModel.js";
 import Material from "../models/rawMaterialModel.js";
 import asyncHandler from "express-async-handler";
 
@@ -42,6 +43,7 @@ const updateMaterial = asyncHandler(async (req, res) => {
 // @route DELETE /api/materials/:id
 // @access Private/Admin
 const deleteMaterial = asyncHandler(async (req, res) => {
+  console.log('hti')
   const material = await Material.findById(req.params.id);
 
   if (material) {
@@ -76,10 +78,56 @@ const getMaterials = asyncHandler(async (req, res) => {
   res.json(materials);
 });
 
+
+
+// @des  fetch material stock
+// @route GET /api/materials/stock
+// @access admin
+
+/**this function for get all off the shelf  products*/
+const getMaterialStock = asyncHandler(async (req, res) => {
+
+
+  const stock = await Batch.aggregate([
+    // Match products with a productRating field
+    { $match: { materialId: { $exists: true } } },
+    
+    // Group products by productId and calculate the total qty
+    { $group: {
+        _id: "$materialId",
+        totalQty: { $sum: "$qty" },
+      } },
+  
+    // Lookup data from the Product collection using productId
+    { $lookup: {
+        from: "materials",
+        localField: "_id",
+        foreignField: "_id",
+        as: "material"
+      } },
+  
+    // Unwind the product array to get a single document per batch item
+    { $unwind: "$material" },
+
+    { $sort: { "material.createdAt": 1 } }
+  ]);
+
+console.log(stock)
+
+
+
+  //  products = await Product.find({ active: true })
+
+  res.json({
+    stock,
+  })
+})
+
 export {
   createMaterial,
   updateMaterial,
   deleteMaterial,
   getMaterialById,
   getMaterials,
+  getMaterialStock
 };

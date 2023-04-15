@@ -133,8 +133,18 @@ const BatchListScreen = () => {
 
             <h1>Kitchn Reservations List</h1>
             {success && (
-              <div style={{ height: 700, width: '100%' }}>
+              <div style={{ height: 700, width: '95%' }}>
                 <DataGrid
+                
+                 sx={{
+                  boxShadow: 3,
+                  border: 1,
+                  borderColor: "#00cc66",
+                  backgroundColor: "white",
+                  "& .MuiDataGrid-cell:hover": {
+                    color: "primary.main",
+                  },
+                }}
                   rows={rows}
                   columns={columns}
                   pageSize={10}

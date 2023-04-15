@@ -22,15 +22,16 @@ import { viewBatchesReset } from "../../reducers/batchSlice";
 const CreateListing = () => {
   const { id } = useParams();
 
-  console.log(id)
+  console.log(id);
   const [formData, setFormData] = useState({
-    materialId: id ? id : '',
-    qty: '',
-    cost: '',
-    salesPrice: ""
+    materialId: id ? id : "",
+    supplierId: "",
+    qty: "",
+    cost: "",
+    salesPrice: "",
   });
 
-  const { materialId, qty, cost,salesPrice } = formData;
+  const { materialId, qty, cost, salesPrice, supplierId } = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -66,7 +67,8 @@ const CreateListing = () => {
         materialId,
         qty,
         cost,
-        salesPrice
+        salesPrice,
+        supplierId,
       })
     );
   };
@@ -99,9 +101,9 @@ const CreateListing = () => {
     navigate(`/admin/materials`);
   };
 
-console.log(error)
-  if(error){
-    <Message>{error}</Message>
+  console.log(error);
+  if (error) {
+    <Message>{error}</Message>;
   }
 
   return (
@@ -110,9 +112,8 @@ console.log(error)
         <Button className="btn btn-light my-3" onClick={back}>
           Go Back
         </Button>
-        
         <FormContainer>
-        {error && <Message varient="danger">{error}</Message>}
+          {error && <Message varient="danger">{error}</Message>}
           <form onSubmit={onSubmit}>
             <header>
               <p className="pageHeader"> Create a GRN</p>
@@ -129,6 +130,19 @@ console.log(error)
               // minLength='10'
               required
             />
+
+            <label className="formLabel">Supplier ID</label>
+            <input
+              className="formInputName"
+              type="text"
+              id="supplierId"
+              value={supplierId}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            />
+
             <label className="formLabel">Quantity</label>
             <input
               className="formInputName"
@@ -155,7 +169,7 @@ console.log(error)
               required
             />
 
-<label className="formLabel">Sales Price</label>
+            <label className="formLabel">Sales Price</label>
             <input
               className="formInputName"
               type="number"
@@ -165,7 +179,6 @@ console.log(error)
               onChange={onMutate}
               // maxLength='32'
               // minLength='10'
-             
             />
 
             <button type="submit" className="primaryButton createListingButton">

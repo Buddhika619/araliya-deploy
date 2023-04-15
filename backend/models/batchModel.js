@@ -11,6 +11,11 @@ const batchSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Product',
     },
+
+    supplierId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Supplier',
+    },
     originalQty: {
       type: Number,
       required: true,

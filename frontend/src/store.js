@@ -28,6 +28,9 @@ import batchRedcuer from './reducers/batchSlice'
 import kitchenReducer from './reducers/kitchenSlice'
 import statsReducer from './reducers/statsSlice'
 import stockProductReducer from './reducers/stockProductSlice'
+import supplierReducer from './reducers/supplierSlice'
+import materialStockReducer from './reducers/materialStockSlice'
+
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -52,8 +55,9 @@ const reducer = combineReducers({
   batchDetails: batchRedcuer,
   kitchenDetails:kitchenReducer,
   stats: statsReducer,
-  stockProuct: stockProductReducer
-
+  stockProuct: stockProductReducer,
+  supplierDetails: supplierReducer,
+  materialStockDetails: materialStockReducer
 })
 
 // const middleware = []
