@@ -12,7 +12,7 @@ import {
   orderDeliver,
 } from '../actions/orderActions'
 import { orderPayReset } from '../reducers/orderPaySlice'
-import {  orderDeliverReset } from '../reducers/orderSlice'
+import {  orderCreateReset, orderDeliverReset } from '../reducers/orderSlice'
 
 import QRCode from 'qrcode'
 import { LinkContainer } from 'react-router-bootstrap'
@@ -64,13 +64,9 @@ const OrderScreen = () => {
 
 
   const deliverOrder = useSelector((state) => state.orderCreate)
-  const { loading: loadingDeliver, success: successDeliver } = deliverOrder
+  const { loading: loadingDeliver, dsuccess: successDeliver } = deliverOrder
 
-  if(successDeliver){
-    toast.success("Woohoo order is Completed!", {
-      theme: "colored",
-    })
-  }
+  
 
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -88,6 +84,7 @@ const OrderScreen = () => {
   }
 
   useEffect(() => {
+  dispatch(orderCreateReset())
     const fetchDistance = async (location) => {
       try {
         const { data } = await axios.get(
@@ -128,6 +125,12 @@ const OrderScreen = () => {
       {
         setLong(order.location.long)
       }
+    }
+
+    if(successDeliver){
+      toast.success("Woohoo order is Completed!", {
+        theme: "colored",
+      })
     }
     // dispatch(getOrderDetails(id))
   }, [

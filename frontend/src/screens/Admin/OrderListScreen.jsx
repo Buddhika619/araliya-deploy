@@ -180,7 +180,7 @@ const OrderListScreen = () => {
     rows = orders?.map((order) => ({
       id: order._id,
       USER: order.user && order.user.name,
-      CREATEDDATE: order.createdAt.slice(0, 16),
+      CREATEDDATE: order.createdAt.slice(0, 10),
       TOTAL: `Rs ${order.totalPrice}`,
       PAYMENTMETHOD: order.paymentMethod,
       PAID: order.isPaid,

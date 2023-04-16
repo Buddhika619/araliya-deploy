@@ -75,7 +75,7 @@ const Dashboard = () => {
   const statsdata = useSelector((state) => state.stats);
   const { loading, error,stats, success } = statsdata;
 
-
+ console.log(stats)
   useEffect(() => {
     if (user && user.isAdmin ) {
       if(!stats.currentMonthCount){

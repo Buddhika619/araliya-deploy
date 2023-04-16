@@ -74,6 +74,11 @@ const BatchListScreen = () => {
   const [selectionModel, setSelectionModel] = useState([])
 
   //remove
+
+  const reportHandler = (id) => {
+    window.open(`/reports/kitchenReport/${id}`);
+  
+  }
  
 
   //data grid columns
@@ -110,7 +115,18 @@ const BatchListScreen = () => {
         <GridToolbarDensitySelector />
         <GridToolbarExport />
 
-     
+        {selectionModel.length === 1 && (
+          <Button
+            className="p-0 pe-2"
+            variant="contained"
+            onClick={() => reportHandler(selectionModel[0])}
+          >
+            <EditOutlined style={{ color: "orange" }} fontSize="small" />
+            <span className="px-2" style={{ color: "orange" }}>
+              Generate Allocation Report
+            </span>
+          </Button>
+        )}
       </GridToolbarContainer>
     )
   }

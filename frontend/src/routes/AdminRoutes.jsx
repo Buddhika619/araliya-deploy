@@ -28,6 +28,7 @@ import SuppplierListScreen from "../screens/Admin/SupplierListScreen";
 import SupplierAddScreen from "../screens/Admin/supplierAddScreen";
 import SupplierEditScreen from "../screens/Admin/SupplierUpdateScreen";
 import MaterialStockScreen from "../screens/Admin/MaterialStockScreen";
+import ReportScreen from "../screens/Admin/ReportScreen";
 
 const AdminRoutes = () => {
   return (
@@ -99,6 +100,8 @@ const AdminRoutes = () => {
           <Route path="/supplier/:id/edit" element={<SupplierEditScreen />} />
 
           <Route path="/kitchen" element={<KitchenReservations />} />
+
+          <Route path="/reports" element={<ReportScreen />} />
 
           <Route path="/*" element={<NotFound />} />
 

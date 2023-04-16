@@ -37,6 +37,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
         // if "inhouse"
         // Check if there is enough stock for the requested quantity
         if (product.countInStock >= orderItems[i].qty) {
+          delete orderItems[i].batchId 
           checkArr.push(0); // There is enough stock, push 0 to the check array
         } else {
           checkArr.push(1); // There is not enough stock, push 1 to the check array
@@ -76,6 +77,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
         }
       }
 
+      console.log(orderItems)
       // Create a new order with the extracted fields
       const order = new Order({
         orderItems,
