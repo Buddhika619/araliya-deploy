@@ -92,11 +92,12 @@ const Profile = () => {
   if (error && errorOrders === 'Not Authorized, token failed') {
     dispatch(logout())
   }
+  dispatch(userUpdateReset())
   useEffect(() => {
     // dispatch(userUpdateReset())
     // dispatch(myOrdersReset())
     dispatch(orderRemoveReset())
-    dispatch(userUpdateReset())
+    
 
     if (!userInfo) {
       navigate('/login')
@@ -111,7 +112,7 @@ const Profile = () => {
       }
     }
   }, [
-    dispatch, navigate, userInfo, user, success ,removeSuccess
+    dispatch, navigate, userInfo, user, success ,removeSuccess,updateError
   ])
 
   let columns = ''
@@ -120,7 +121,7 @@ const Profile = () => {
     columns = [
       { field: 'id', headerName: 'ID',width: 270 },
 
-      { field: 'TOTAL',headerName: 'Date', width: 120 },
+      { field: 'TOTAL',headerName: 'AMOUNT(LKR)', width: 120 },
    
       {
         field: 'STATUS',
@@ -185,10 +186,10 @@ console.log(orders)
       id: order._id,
       USER: order.user && order.user.name,
       STATUS: order.orderStatus,
-      TOTAL: `Rs ${order.totalPrice}`,
-      CREATEDDATE:  new Date(order.createdAt).toString().slice(0,16),
+      TOTAL: order.totalPrice,
+      CREATEDDATE:  (order.createdAt).toString().slice(0,10),
       CREATEDTIME:new Date(order.createdAt).toString().slice(16, 21),
-      DELIVEREDDATE: (order.deliveredAt && new Date(order.deliveredAt).toString().slice(0,16)),
+      DELIVEREDDATE: (order.deliveredAt && (order.createdAt).toString().slice(0,10)),
       DELIVEREDTIME: new Date(order.deliveredAt).toString().slice(16,21),
       PAYMENT: order.isPaid,
     }))

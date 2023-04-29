@@ -57,7 +57,7 @@ const Signup = () => {
   let { search } = useLocation()
 
   const redirect = search ? search.split('=')[1] : '/'
-
+  dispatch(resetErrors())
   useEffect(() => {
     dispatch(resetErrors()) // reset error msg
     if (userInfo) {
@@ -99,6 +99,7 @@ const Signup = () => {
             placeholder='name'
             value={name}
             onChange={onChange}
+            required
           />
 
           <input
@@ -108,6 +109,7 @@ const Signup = () => {
             placeholder='Email'
             value={email}
             onChange={onChange}
+            required
           />
 
           <div className='passwordInputDiv'>
@@ -118,6 +120,7 @@ const Signup = () => {
               id='password'
               value={password}
               onChange={onChange}
+              required
             />
             <img
               src={visibilityIcon}
@@ -135,6 +138,7 @@ const Signup = () => {
               id='confrimPassword'
               value={confrimPassword}
               onChange={onChange}
+              required
             />
             <img
               src={visibilityIcon}

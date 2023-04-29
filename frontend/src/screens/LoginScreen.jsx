@@ -101,6 +101,7 @@ const Signin = () => {
             placeholder='Email'
             value={email}
             onChange={onChange}
+            required
           />
 
           <div className='passwordInputDiv'>
@@ -111,6 +112,7 @@ const Signin = () => {
               id='password'
               value={password}
               onChange={onChange}
+              required
             />
             <img
               src={visibilityIcon}

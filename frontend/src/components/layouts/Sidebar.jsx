@@ -488,10 +488,18 @@ const Sidebar = ({ view, success }) => {
                     Kitchen Reservations
                   </SidebarListItem>
                 </Link>
-                <SidebarListItem>
-                  <BarChart />
-                  Reports
-                </SidebarListItem>
+                <Link to="/admin/reports">
+                <SidebarListItem
+                   className={
+                    path == "reports"
+                      ? "navbarListINameActive"
+                      : "navbarListIName"
+                  }>
+                    <BarChart />
+                    Reports
+                  </SidebarListItem>
+                </Link>
+                
               </SidebarList>
             </SidebarMenu>
             <SidebarMenu>
