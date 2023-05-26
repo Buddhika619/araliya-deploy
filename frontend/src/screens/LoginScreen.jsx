@@ -68,6 +68,7 @@ const Signin = () => {
    // reset error msg
     if (userInfo) {
       navigate(redirect)
+      toast.success("Sign-in Success!")
     }
   }, [navigate, userInfo, redirect])
 

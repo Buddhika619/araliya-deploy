@@ -110,7 +110,7 @@ const OrderScreen = () => {
     if (!userInfo) {
       navigate('/login')
     }
-    generateQR(`${window.location.href}}`)
+    generateQR(`${window.location.href}`)
 
     if (!notOrder || successDeliver || order._id !== id) {
       dispatch(orderPayReset())

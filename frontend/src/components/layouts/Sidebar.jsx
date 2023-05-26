@@ -102,7 +102,11 @@ const Sidebar = ({ view, success }) => {
             <SidebarMenu>
               <SidebarList>
                 <Link to="/admin/dashboard">
-                  <SidebarListItem className="dashboard button">
+                  <SidebarListItem  className={
+                    path == "dashboard"
+                      ? "navbarListINameActive"
+                      : "navbarListIName"
+                  }>
                     <i className="fa-solid fa-gauge"></i>
                     Dashboard
                   </SidebarListItem>

@@ -29,6 +29,7 @@ const batchDetailsSlice = createSlice({
       state.success = false;
       state.loading = false;
       state.batches = [];
+      state.batch= {}
     },
 
     addBatchesRequest: (state) => {

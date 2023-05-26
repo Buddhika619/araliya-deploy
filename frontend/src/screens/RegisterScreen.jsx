@@ -62,6 +62,7 @@ const Signup = () => {
     dispatch(resetErrors()) // reset error msg
     if (userInfo) {
       navigate(redirect)
+      toast.success("Sign-up Success!")
     }
   }, [navigate, userInfo, redirect])
 
