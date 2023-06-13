@@ -3,6 +3,8 @@ import Product from '../models/productModel.js'
 import sendEmail from '../Utils/sendEmail.js'
 import cron from 'node-cron'
 import Batch from '../models/batchModel.js'
+import Supplier from '../models/supplierModel.js'
+import Category from '../models/categoryModel.js'
 
 
 // @des  Fetch active products
@@ -240,7 +242,7 @@ const getProductById = asyncHandler(async (req, res) => {
     }else{
       // Find the oldest batch that has a quantity greater than 0 for this product 
       const batch = await Batch.find({ productId: product._id, qty: { $gt: 0 } }).populate("productId").sort({createdAt: 1})
-
+       console.log(product.supplierId)
       if(batch.length > 0) {
           // Create a view object with information from the batch and the product
         const viewObj ={
@@ -248,6 +250,7 @@ const getProductById = asyncHandler(async (req, res) => {
           _id: batch[0].productId._id,
           user:batch[0].productId.user,
           name: batch[0].productId.name,
+          supplierId: batch[0].productId.supplierId,
           image: batch[0].productId.image,
           category:  batch[0].productId.category,
           description: batch[0].productId.description,
@@ -322,6 +325,24 @@ const deleteManyProducts = asyncHandler(async (req, res) => {
 // @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
 
+  if(req.body.type === false && !req.body.supplierId) {
+    res.status(400)
+    throw new Error('Supplier is Required!')
+  }
+
+ const supplier =  await  Supplier.findById(req.body.supplierId)
+ const category = await Category.findOne({category: req.body.category})
+ if(!category){
+  res.status(400)
+    throw new Error('Invalid Category!')
+ }
+
+  if(!supplier) {
+    res.status(400)
+    throw new Error('Invalid Supplier ID!')
+  
+  }
+
   const product = new Product({
     name: req.body.name,
     price: req.body.price,
@@ -336,6 +357,7 @@ const createProduct = asyncHandler(async (req, res) => {
     description: req.body.description,
     active: req.body.active,
     type: req.body.type,
+    supplierId: req.body.supplierId ?? ''
   })
 
   const createProduct = await product.save()
@@ -358,9 +380,25 @@ const updateProduct = asyncHandler(async (req, res) => {
     reOrderLevel,
     dailyCapacity,
     active,
-    type
+    type,
+    supplierId
   } = req.body
 
+
+
+  const supplier =  await  Supplier.findById(req.body.supplierId)
+
+  if(req.body.supplierId && !supplier) {
+    res.status(400)
+    throw new Error('Invalid Supplier ID!')
+  
+  }
+
+  const categoryRes = await Category.findOne({category: req.body.category})
+  if(!categoryRes){
+   res.status(400)
+     throw new Error('Invalid Category!')
+  }
 
   const product = await Product.findById(req.params.id)
 
@@ -376,6 +414,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.dailyCapacity = dailyCapacity
     product.active = active
     product.type = type
+    product.supplierId = supplierId
     const updatedProduct = await product.save()
     res.json(updatedProduct)
   } else {

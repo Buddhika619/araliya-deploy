@@ -133,7 +133,7 @@ const MaterialStockScreen = () => {
 
     { field: "totalQty", headerName: "Total Quantity", flex: 1 },
     { field: "measurement", headerName: "Mesurement", flex: 1 },
-
+    { field: "supplier", headerName: "Supplier ID", flex: 1 },
     {
       width: 180,
       renderCell: (cellValues) => {
@@ -163,7 +163,7 @@ const MaterialStockScreen = () => {
       reOrderLevel: row.material.reOrderLevel,
       totalQty: row.totalQty,
       measurement: row.material.measurement,
-   
+    supplier: row.material.supplierId,
       CREATEDAT: row.material.createdAt.slice(0, 16),
     }));
   }

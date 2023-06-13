@@ -16,7 +16,7 @@ import batchRoutes from './routes/batchRoutes.js'
 import statsRoutes from './routes/statsRoutes.js'
 import supplierRoutes from './routes/supplierRoutes.js'
 import reportsRoutes from './routes/reportsRoutes.js'
-
+import categoryRoutes from './routes/categoryRoutes.js'
 
 import fetch from 'node-fetch';
 
@@ -50,6 +50,7 @@ app.use('/api/batches', batchRoutes)
 app.use('/api/stats', statsRoutes)
 app.use('/api/supplier', supplierRoutes)
 app.use('/api/reports', reportsRoutes)
+app.use('/api/category', categoryRoutes)
 
 //paypal config
 app.get('/api/config/paypal', (req, res) =>

@@ -25,6 +25,10 @@ import {
 import styled from 'styled-components'
 import { listMaterials, removeMaterial } from '../../actions/materialActions'
 import { viewMatrialsReset } from '../../reducers/matrialSlice'
+import { listSuppliers, removeSupplier } from '../../actions/supplierActions'
+import { viewSingleSupplierReset, viewSupplierReset } from '../../reducers/supplierSlice'
+import { viewCategoryReset, viewSingleCategoryReset } from '../../reducers/categorySlice'
+import { listCategories, removeCategory, viewSingleCategory } from '../../actions/categoryActions'
 
 const ToggleWrapper = styled('div')`
   position: relative;
@@ -37,17 +41,17 @@ const ToggleWrapper = styled('div')`
   }
 `
 
-const MaterialListScreen = () => {
+const CategoryListScreen = () => {
   //redux dispatch hook
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
-  const materialList = useSelector((state) => state.matrialDetails)
-  const { loading, error, success } = materialList
+  const categoryList = useSelector((state) => state.categoryDetails)
+  const { loading, error, success } = categoryList
 
-  const deleteMaterial = useSelector((state) => state.matrialDetails)
-  const { rSuccess: removeSuccess, error: removeError } = deleteMaterial
+  const deleteCategory = useSelector((state) => state.categoryDetails)
+  const { rSuccess: removeSuccess, error: removeError } = deleteCategory
   
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -63,9 +67,10 @@ const MaterialListScreen = () => {
   //   }
 
   useEffect(() => {
-   
+    dispatch(viewCategoryReset())
+    dispatch(viewSingleCategoryReset());
     if (user && user.isAdmin) {
-      dispatch(listMaterials())
+      dispatch(listCategories())
     } else {
       navigate('/login')
     }
@@ -76,15 +81,16 @@ const MaterialListScreen = () => {
   //remove
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
-      dispatch(removeMaterial(id))
+      dispatch(removeCategory(id))
     }
   }
 
   //update
   const updateHandler = (id) => {
-    dispatch(viewMatrialsReset())
+    dispatch(viewCategoryReset())
+    dispatch(viewSingleCategoryReset());
     if (selectionModel.length > 0) {
-      navigate(`/admin/materials/${id}/edit`)
+      navigate(`/admin/category/${id}/edit`)
     }
   }
 
@@ -96,19 +102,16 @@ const MaterialListScreen = () => {
 
  //create
  const createProductHandler = () => {
-  dispatch(viewMatrialsReset())
+  dispatch(viewSupplierReset())
    
-  navigate(`/admin/materials/add`)
+  navigate(`/admin/category/add`)
 }
 
   //data grid columns
   const columns = [
     { field: 'id', flex: 1 },
-    { field: 'name',flex: 1 },
-    { field: "supplier", headerName: "Supplier ID",  width: 220, },
-    { field: 'reOrderLevel', flex: 1 },
-    { field: 'dailyCap', flex: 1 },
-    { field: 'measurement', flex: 1 },
+    { field: 'category', flex: 1},
+
 
 
    
@@ -117,14 +120,10 @@ const MaterialListScreen = () => {
   //showing rows if product list is laoded
   let rows
   if (success) {
-    console.log(success)
-    rows = materialList?.matrials.map((row) => ({
+  
+    rows = categoryList?.categories.map((row) => ({
       id: row._id,
-      name: row.name,
-      reOrderLevel: row.reOrderLevel,
-      dailyCap: row.dailyCap,
-      measurement: row.measurement,
-      supplier: row.supplierId
+      category: row.category,
     }))
   }
 
@@ -204,19 +203,19 @@ const MaterialListScreen = () => {
             {error && <Message varient='danger'>{error}</Message>}
             {removeError && <Message varient='danger'>{removeError}</Message>}
 
-            <h1>Materials</h1>
+            <h1>Suppliers</h1>
             {success && (
               <div style={{ height: 700, width: '90%' }}>
                 <DataGrid
                  sx={{
-                  boxShadow: 3,
-                  border: 1,
-                  borderColor: '#00cc66',
-                  backgroundColor: 'white',
-                  '& .MuiDataGrid-cell:hover': {
-                    color: 'primary.main',
-                  },
-                }}
+                    boxShadow: 3,
+                    border: 1,
+                    borderColor: "#00cc66",
+                    backgroundColor: "white",
+                    "& .MuiDataGrid-cell:hover": {
+                      color: "primary.main",
+                    },
+                  }}
                   rows={rows}
                   columns={columns}
                   pageSize={10}
@@ -239,4 +238,4 @@ const MaterialListScreen = () => {
   )
 }
 
-export default MaterialListScreen
+export default CategoryListScreen

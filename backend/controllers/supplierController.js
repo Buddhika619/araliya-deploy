@@ -1,3 +1,4 @@
+import sendEmail from '../Utils/sendEmail.js';
 import Supplier from '../models/supplierModel.js'
 import asyncHandler from "express-async-handler";
 
@@ -76,6 +77,12 @@ const getSuppliers = asyncHandler(async (req, res) => {
   const supplier = await Supplier.find();
   res.json(supplier);
 });
+
+const sendSupplierMail = asyncHandler(async (req, res) => {
+  sendEmail('buddhikagamage619@gmail.com', '')
+  console.log('mail sent')
+});
+
 
 export {
   createSupplier,

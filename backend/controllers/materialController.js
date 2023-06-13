@@ -11,6 +11,7 @@ const createMaterial = asyncHandler(async (req, res) => {
     reOrderLevel: req.body.reOrderLevel,
     dailyCap: req.body.dailyCap,
     measurement: req.body.measurement,
+    supplier: req.body.supplierId
   });
 
   const createdMaterial = await material.save();
@@ -22,7 +23,8 @@ const createMaterial = asyncHandler(async (req, res) => {
 // @access Private/Admin
 const updateMaterial = asyncHandler(async (req, res) => {
 
-  const { name, reOrderLevel, dailyCap, measurement } = req.body;
+  const { name, reOrderLevel, dailyCap, measurement,supplierId } = req.body;
+  console.log(supplierId)
 
   const material = await Material.findById(req.params.id);
 
@@ -31,6 +33,7 @@ const updateMaterial = asyncHandler(async (req, res) => {
     material.reOrderLevel = reOrderLevel;
     material.dailyCap = dailyCap;
     material.measurement = measurement;
+    material.supplierId = supplierId
     const updatedMaterial = await material.save();
     res.json(updatedMaterial);
   } else {

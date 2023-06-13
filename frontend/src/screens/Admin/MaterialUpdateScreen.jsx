@@ -29,9 +29,10 @@ const MaterialEditScren = () => {
     reOrderLevel: "",
     dailyCap: "",
     measurement: "",
+    supplierId: "",
   });
 
-  const { name, reOrderLevel, dailyCap, measurement } = formData;
+  const { name, reOrderLevel, dailyCap, measurement, supplierId } = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -71,6 +72,7 @@ const MaterialEditScren = () => {
         reOrderLevel,
         dailyCap,
         measurement,
+        supplierId,
       })
     );
 
@@ -163,6 +165,18 @@ const MaterialEditScren = () => {
               min="0"
               id="dailyCap"
               value={dailyCap}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            />
+
+            <label className="formLabel">Supplier Id</label>
+            <input
+              className="formInputName"
+              type="text"
+              id="supplierId"
+              value={supplierId}
               onChange={onMutate}
               // maxLength='32'
               // minLength='10'

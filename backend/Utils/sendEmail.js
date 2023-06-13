@@ -1,35 +1,72 @@
 import nodemailer  from 'nodemailer'
+import PDFDocument  from 'pdfkit'
+import puppeteer from 'puppeteer'
+import dotenv from 'dotenv'
 
-const sendEmail = async () => {
+
+const sendEmail = async (to, id) => {
+
+  dotenv.config()
+
+
+   // Create a new PDF document
+
+   const browser = await puppeteer.launch({
+    args: ['--no-sandbox']
+  });
+
+    const page = await browser.newPage();
+
+    // Set the content of the PDF
+    await page.goto(`https://www.google.com/`);
+
+    //uncomment following line
+  //  await page.waitForSelector('#test')
+  
+
+   console.log('got it')
+    // Generate the PDF
+    const pdf = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+    });
+
+    // Close the browser
+    await browser.close();
+
+
+
   // Create Email Transporter
   const transporter = nodemailer.createTransport({
-    // host: process.env.EMAIL_HOST,
-    // port: 587,
-    // auth: {
-    //   user: process.env.EMAIL_USER,
-    //   pass: process.env.EMAIL_PASS,
-    // },
-    // tls: {
-    //   rejectUnauthorized: false,
-    // },
+
+
 
     service: 'gmail',
     auth: {
-        user:process.env.USER_EMAIL,
-        pass: process.env.EMAIL_PASS
+        
+        user:process.env.EMAIL_SRC,
+        pass:process.env.EMAIL_SECRET
     }
   });
 
   // Option for sending email 
   const options = {
-    from:process.env.USER_EMAIL,
-    to: 'buddhikagamage619@gmail.com',
-    subject: 'testing',
-    text: 'hola mi amigo'
+    from:  process.env.EMAIL_SRC,
+    to: to,
+    subject: 'Invoice',
+    text: 'Thank You for doing business with us!',
+    attachments: [
+      {
+        filename: 'document.pdf',
+        content: pdf,
+        contentType: 'application/pdf',
+      },
+    ],
   };
+  
 
   // send email
-  transporter.sendMail(options, function (err, info) {
+ await transporter.sendMail(options, function (err, info) {
     if (err) {
       console.log(err);
     } else {

@@ -34,7 +34,8 @@ const AddReadyProduct = () => {
     active: true,
     type: false,
     discountedPrice: "",
-    brand:""
+    brand: "",
+    supplierId: "",
   });
 
   const {
@@ -47,7 +48,8 @@ const AddReadyProduct = () => {
     description,
     active,
     type,
-    brand
+    brand,
+    supplierId,
   } = formData;
 
   const dispatch = useDispatch();
@@ -56,36 +58,37 @@ const AddReadyProduct = () => {
 
   // const productUpdate = useSelector((state) => state.productDetails);
   // const { loading, error, product, success } = productUpdate;
-
   
-  const productCreate = useSelector((state) => state.createProduct)
-  const {
-    error,
-    success,
-    loading,
-  } = productCreate
+  const categoryList = useSelector((state) => state.categoryDetails);
+  const { categories,loading: catloading } = categoryList;
+
+  const productCreate = useSelector((state) => state.createProduct);
+  const { error, success, loading } = productCreate;
 
   useEffect(() => {
     if (success) {
       toast.success("Success");
-        navigate('/admin/productsout/active')
-
+      navigate("/admin/productsout/active");
     }
   }, [id, dispatch, success]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name ||!category||!description || !image ||!brand ||!reOrderLevel) {
+    if (
+      !name ||
+      !category ||
+      !description ||
+      !image ||
+      !brand ||
+      !reOrderLevel ||
+      !supplierId
+    ) {
       setFormError(true);
-    }else{
-      console.log(formData)
-      dispatch(
-        createProduct({...formData,image})
-      );
+    } else {
+      console.log(formData);
+      dispatch(createProduct({ ...formData, image }));
     }
-
-   
   };
 
   const onMutate = (e) => {
@@ -117,9 +120,9 @@ const AddReadyProduct = () => {
   };
 
   const imageTextHandler = (e) => {
-    setFormError(false)
-    setImage(e.target.value)
-  }
+    setFormError(false);
+    setImage(e.target.value);
+  };
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
@@ -138,26 +141,19 @@ const AddReadyProduct = () => {
 
       setImage(data);
       setUploading(false);
-      
     } catch (error) {
       toast.error("Image upload Failed");
       setUploading(false);
     }
   };
-  if (loading) {
+  if (loading || catloading) {
     return <Spinner />;
   }
-
-
-
 
   const back = () => {
     dispatch(productUpdateReset());
     navigate(`/admin/products/active`);
   };
-
-
-
 
   return (
     <div className="profile">
@@ -165,7 +161,7 @@ const AddReadyProduct = () => {
         <Button className="btn btn-light my-3" onClick={back}>
           Go Back
         </Button>
-        {error && <Message varient='danger'>{error}</Message>}
+        {error && <Message varient="danger">{error}</Message>}
         <FormContainer>
           <form onSubmit={onSubmit}>
             <header>
@@ -182,7 +178,7 @@ const AddReadyProduct = () => {
               placeholder="Chicken Burger"
               //   required
             />
-            {formError && (
+            {(formError && !name) && (
               <p
                 style={{
                   color: "red",
@@ -206,8 +202,9 @@ const AddReadyProduct = () => {
                 // required
               >
                 <option value="">None</option>
-                <option value="Drinks">Drinks</option>
-                <option value="Snacks">Snacks</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.category}>{category.category}</option>
+                ))}
               </select>
             </Form.Group>
             {formError && (
@@ -246,8 +243,7 @@ const AddReadyProduct = () => {
               </p>
             )}
 
-            
-{!type && (
+            {!type && (
               <>
                 <label className="formLabel">Brand*</label>
                 <input
@@ -421,7 +417,6 @@ const AddReadyProduct = () => {
                   placeholder="20"
                   //   required
                 />
-                
               </>
             )}
 
@@ -438,6 +433,33 @@ const AddReadyProduct = () => {
                   //   required
                 />
                 {formError && (
+                  <p
+                    style={{
+                      color: "red",
+                      margin: "10px 20px",
+                      fontWeight: "600",
+                      fontSize: "14px",
+                    }}
+                  >
+                    Field can't be Empty
+                  </p>
+                )}
+              </>
+            )}
+
+            {!type && (
+              <>
+                <label className="formLabel">SupplierId</label>
+                <input
+                  className="formInputName"
+                  type="text"
+                  id="supplierId"
+                  value={supplierId}
+                  onChange={onMutate}
+                  placeholder="supplier ID"
+                  //   required
+                />
+                 {formError && (
                   <p
                     style={{
                       color: "red",

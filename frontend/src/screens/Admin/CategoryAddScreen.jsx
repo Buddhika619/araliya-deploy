@@ -16,48 +16,51 @@ import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
 import { createMaterial } from "../../actions/materialActions";
 import { viewMatrialsReset } from "../../reducers/matrialSlice";
+import { viewSupplierReset } from "../../reducers/supplierSlice";
+import { createSupplier } from "../../actions/supplierActions";
+import { viewCategoryReset } from "../../reducers/categorySlice";
+import { createCategory } from "../../actions/categoryActions";
 
-const CreateListing = () => {
+const CategoryAddScreen = () => {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    name: "",
-    reOrderLevel: "",
-    dailyCap: "",
-    measurement: "",
-    supplierId: "",
+    category: "",
+
   });
 
-  const { name, reOrderLevel, dailyCap, measurement, supplierId } = formData;
+  const { category,} = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const addMaterial = useSelector((state) => state.matrialDetails);
+  const addCategory = useSelector((state) => state.categoryDetails);
 
-  const { loading, error, success } = addMaterial;
+  const {
+    loading,
+    error,
+    addCategorySuccess,
+  } = addCategory;
 
-  console.log(success);
+  console.log(addCategorySuccess)
+
   useEffect(() => {
-    dispatch(viewMatrialsReset());
-    if (success) {
+    dispatch(viewCategoryReset());
+    if (addCategorySuccess) {
       toast.success("Success");
 
       setTimeout(function () {
-        navigate("/admin/materials/all");
+        navigate("/admin/category");
       }, 1000);
     }
-  }, [id, dispatch, success]);
+  }, [id, dispatch, addCategorySuccess]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     dispatch(
-      createMaterial({
-        name,
-        reOrderLevel,
-        dailyCap,
-        measurement,
+      createCategory({
+        category
       })
     );
   };
@@ -99,11 +102,12 @@ const CreateListing = () => {
 
   const back = () => {
     dispatch(productUpdateReset());
-    navigate(`/admin/materials/all`);
+    navigate(`/admin/materials`);
   };
 
   return (
     <div className="profile">
+       {error && <Message varient='danger'>{error}</Message>}
       <main className="pb-4">
         <Button className="btn btn-light my-3" onClick={back}>
           Go Back
@@ -111,77 +115,21 @@ const CreateListing = () => {
         <FormContainer>
           <form onSubmit={onSubmit}>
             <header>
-              <p className="pageHeader"> Add Material</p>
+              <p className="pageHeader"> Add A Category</p>
             </header>
 
-            <label className="formLabel">Name</label>
+            <label className="formLabel">Category</label>
             <input
               className="formInputName"
               type="text"
-              id="name"
-              value={name}
-              onChange={onMutate}
-              // maxLength='32'
-              // minLength='10'
-              required
-            />
-            <label className="formLabel">Re Order Lvel</label>
-            <input
-              className="formInputName"
-              type="number"
-              id="reOrderLevel"
+              id="category"
               min="0"
-              value={reOrderLevel}
+              value={category}
               onChange={onMutate}
               // maxLength='32'
               // minLength='10'
-              required
+              
             />
-
-            <label className="formLabel">Daily Capacity</label>
-            <input
-              className="formInputName"
-              type="number"
-              min="0"
-              id="dailyCap"
-              value={dailyCap}
-              onChange={onMutate}
-              // maxLength='32'
-              // minLength='10'
-              required
-            />
-
-            <label className="formLabel">Supplier ID</label>
-            <input
-              className="formInputName"
-              type="text"
-              id="supplierId"
-              value={supplierId}
-              onChange={supplierId}
-              // maxLength='32'
-              // minLength='10'
-              required
-            />
-
-            <Form.Group controlId="measurement">
-              <label className="formLabel">Measurement</label>
-
-              <select
-                className="formInputName"
-                onChange={onMutate}
-                value={measurement}
-                id="measurement"
-                // required
-              >
-                <option value="">None</option>
-                <option value="kg">kilogram(kg)</option>
-                <option value="g">gram(g)</option>
-                <option value="mg">miligram(mg)</option>
-                <option value="ml">milliliter(ml) </option>
-                <option value="L">liter(L)</option>
-                <option value="pcs">pieces</option>
-              </select>
-            </Form.Group>
 
             <button type="submit" className="primaryButton createListingButton">
               Update
@@ -195,4 +143,4 @@ const CreateListing = () => {
   );
 };
 
-export default CreateListing;
+export default CategoryAddScreen;

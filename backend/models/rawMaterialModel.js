@@ -20,6 +20,12 @@ const rawMaterialSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    supplierId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Supplier',
+      required: true,
+  },
+    
   },
   {
     timestamps: true,

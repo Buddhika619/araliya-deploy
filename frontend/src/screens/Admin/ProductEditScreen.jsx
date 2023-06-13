@@ -32,6 +32,7 @@ const CreateListing = () => {
     active: true,
     type: false,
     discountedPrice: 0,
+    supplierId: "",
   });
 
   const {
@@ -45,6 +46,7 @@ const CreateListing = () => {
     description,
     active,
     type,
+    supplierId,
   } = formData;
 
   const dispatch = useDispatch();
@@ -97,6 +99,7 @@ const CreateListing = () => {
         active,
         type,
         reOrderLevel,
+        supplierId
       })
     );
   };
@@ -333,6 +336,21 @@ const CreateListing = () => {
                   type="number"
                   id="reOrderLevel"
                   value={reOrderLevel}
+                  onChange={onMutate}
+                  // maxLength='32'
+                  // minLength='10'
+                  required
+                />
+              </>
+            )}
+              {!type && (
+              <>
+                <label className="formLabel">Supplier ID</label>
+                <input
+                  className="formInputName"
+                  type="text"
+                  id="supplierId"
+                  value={supplierId}
                   onChange={onMutate}
                   // maxLength='32'
                   // minLength='10'

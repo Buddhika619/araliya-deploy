@@ -135,7 +135,7 @@ const ProductOutListScreen = () => {
   
     { field: 'RATING', headerName: 'Rating',flex: 1 },
     { field: 'REVIEWNUMBER', headerName: 'No of Reviews', flex: 1 },
-   
+    { field: "supplier", headerName: "Supplier ID",  width: 220, },
 
     // {
     //   field: 'EDIT ',
@@ -182,6 +182,7 @@ const ProductOutListScreen = () => {
       REVIEWNUMBER: row.numReviews,
       REORDERLEVEL: row.reOrderLevel,
       CREATEDAT: row.createdAt.slice(0, 16),
+      supplier: row.supplierId
     }))
   }
 

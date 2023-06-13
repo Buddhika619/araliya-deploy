@@ -15,6 +15,7 @@ import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
+import { listCategories } from "../../actions/categoryActions";
 
 const AddCustomeProduct = () => {
   const { id } = useParams();
@@ -55,21 +56,20 @@ const AddCustomeProduct = () => {
   // const productUpdate = useSelector((state) => state.productDetails);
   // const { loading, error, product, success } = productUpdate;
 
-  
-  const productCreate = useSelector((state) => state.createProduct)
-  const {
-    error,
-    success,
-    loading,
-  } = productCreate
+  const categoryList = useSelector((state) => state.categoryDetails);
+  const { categories,loading: catloading } = categoryList;
+
+  const productCreate = useSelector((state) => state.createProduct);
+  const { error, success, loading } = productCreate;
 
   useEffect(() => {
+    dispatch(listCategories());
     if (success) {
       toast.success("Success");
-      if(countInStock){
-        navigate('/admin/products/active')
-      }else{
-        navigate('/admin/products/outofstock')
+      if (countInStock) {
+        navigate("/admin/products/active");
+      } else {
+        navigate("/admin/products/outofstock");
       }
     }
   }, [id, dispatch, success]);
@@ -77,16 +77,19 @@ const AddCustomeProduct = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !price ||!category||!dailyCapacity||!description || !image) {
+    if (
+      !name ||
+      !price ||
+      !category ||
+      !dailyCapacity ||
+      !description ||
+      !image
+    ) {
       setFormError(true);
-    }else{
-      console.log(formData)
-      dispatch(
-        createProduct({...formData,image})
-      );
+    } else {
+      console.log(formData);
+      dispatch(createProduct({ ...formData, image }));
     }
-
-   
   };
 
   const onMutate = (e) => {
@@ -118,9 +121,9 @@ const AddCustomeProduct = () => {
   };
 
   const imageTextHandler = (e) => {
-    setFormError(false)
-    setImage(e.target.value)
-  }
+    setFormError(false);
+    setImage(e.target.value);
+  };
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
@@ -139,26 +142,19 @@ const AddCustomeProduct = () => {
 
       setImage(data);
       setUploading(false);
-      
     } catch (error) {
       toast.error("Image upload Failed");
       setUploading(false);
     }
   };
-  if (loading) {
+  if (loading || catloading) {
     return <Spinner />;
   }
-
-
-
 
   const back = () => {
     dispatch(productUpdateReset());
     navigate(`/admin/products/active`);
   };
-
-
-
 
   return (
     <div className="profile">
@@ -166,7 +162,7 @@ const AddCustomeProduct = () => {
         <Button className="btn btn-light my-3" onClick={back}>
           Go Back
         </Button>
-        {error && <Message varient='danger'>{error}</Message>}
+        {error && <Message varient="danger">{error}</Message>}
         <FormContainer>
           <form onSubmit={onSubmit}>
             <header>
@@ -207,14 +203,9 @@ const AddCustomeProduct = () => {
                 // required
               >
                 <option value="">None</option>
-                <option value="Burger">Burger</option>
-                <option value="Curries">Curries</option>
-                <option value="Drinks">Drinks</option>
-                <option value="Kottu">Kottu</option>
-                <option value="Noodles">Noodles</option>
-                <option value="Rice">Rice</option>
-                <option value="Sea Food">Sea Food</option>
-                <option value="Snacks">Snacks</option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.category}>{category.category}</option>
+                ))}
               </select>
             </Form.Group>
             {formError && (
@@ -400,7 +391,6 @@ const AddCustomeProduct = () => {
                   placeholder="20"
                   //   required
                 />
-                
               </>
             )}
 
