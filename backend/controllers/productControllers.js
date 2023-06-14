@@ -369,6 +369,7 @@ const createProduct = asyncHandler(async (req, res) => {
 // @access Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
 
+  
   const {
     name,
     price,

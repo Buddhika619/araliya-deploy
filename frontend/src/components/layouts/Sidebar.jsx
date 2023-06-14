@@ -503,43 +503,25 @@ const Sidebar = ({ view, success }) => {
                     Reports
                   </SidebarListItem>
                 </Link>
+                <Link to="/admin/category">
+                <SidebarListItem
+              
+                   className={
+                    path == "category"
+                      ? "navbarListINameActive"
+                      : "navbarListIName"
+                  }>
+                    <BarChart />
+                    Product Categories
+                  </SidebarListItem>
+                </Link>
                 
               </SidebarList>
+              <div   style={{paddingBottom:'150px'}}>
+
+              </div>
             </SidebarMenu>
-            <SidebarMenu>
-              <SidebarTitle>Notifications</SidebarTitle>
-              <SidebarList>
-                <SidebarListItem>
-                  <MailOutline />
-                  Mail
-                </SidebarListItem>
-                <SidebarListItem>
-                  <DynamicFeed />
-                  Feedback
-                </SidebarListItem>
-                <SidebarListItem>
-                  <ChatBubbleOutline />
-                  Messages
-                </SidebarListItem>
-              </SidebarList>
-            </SidebarMenu>
-            <SidebarMenu>
-              <SidebarTitle>Staff</SidebarTitle>
-              <SidebarList>
-                <SidebarListItem>
-                  <WorkOutline />
-                  Manage
-                </SidebarListItem>
-                <SidebarListItem>
-                  <Timeline />
-                  Analytics
-                </SidebarListItem>
-                <SidebarListItem>
-                  <Report />
-                  Reports
-                </SidebarListItem>
-              </SidebarList>
-            </SidebarMenu>
+          
           </SidebarWrappper>
         </SidebarContainer>
       )}

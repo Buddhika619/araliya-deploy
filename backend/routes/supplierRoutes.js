@@ -7,6 +7,7 @@ import {
     deleteSupplier,
     getSupplierById,
     getSuppliers,
+    sendSupplierMail
 } from '../controllers/supplierController.js'
 
 
@@ -17,6 +18,7 @@ router
   .get(protect, admin,getSuppliers)
   .post(protect, admin, createSupplier)
 
+router.post('/mail',protect, admin, sendSupplierMail) 
 router
   .route('/:id')
   .get(protect, admin, getSupplierById)

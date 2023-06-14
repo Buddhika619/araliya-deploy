@@ -31,7 +31,12 @@ import {
 import styled from "styled-components";
 import { productListReset } from "../../reducers/productsSlice";
 import { listMaterialsStock } from "../../actions/materialActions";
-import { allocateBulkKitchn, allocateManualKitchen } from "../../actions/batchActions";
+import {
+  allocateBulkKitchn,
+  allocateManualKitchen,
+} from "../../actions/batchActions";
+import ReorderModel from "../../components/Modals/ReorderModel";
+import { viewSingleSupplier } from "../../actions/supplierActions";
 
 const ToggleWrapper = styled("div")`
   position: relative;
@@ -45,6 +50,16 @@ const ToggleWrapper = styled("div")`
 `;
 
 const MaterialStockScreen = () => {
+  const [showModal, setShowModal] = useState(false);
+
+  const [rowData, setRowData] = useState({});
+
+  const handleShowModal = (data) => {
+    dispatch(viewSingleSupplier(data.row.supplier));
+    setRowData(data);
+    setShowModal(true);
+  };
+  const handleCloseModal = () => setShowModal(false);
   //redux dispatch hook
   const dispatch = useDispatch();
 
@@ -52,6 +67,10 @@ const MaterialStockScreen = () => {
   const location = useLocation();
 
   //getting product list from redux store
+
+  const supplierDetails = useSelector((state) => state.supplierDetails);
+  const { sloading, serror, suppliers, ssuccess } = supplierDetails;
+
   const materialList = useSelector((state) => state.materialStockDetails);
   const { loading, error, materials, success } = materialList;
 
@@ -61,12 +80,9 @@ const MaterialStockScreen = () => {
   const manualAssign = useSelector((state) => state.materialStockDetails);
   const { mloading, merror, msuccess } = manualAssign;
 
-    if(merror) {
-      toast.error(merror)
-    }
-
-
-
+  if (merror) {
+    toast.error(merror);
+  }
 
   //get user
   const userLogin = useSelector((state) => state.userLogin);
@@ -86,10 +102,10 @@ const MaterialStockScreen = () => {
       navigate("/login");
     }
 
-    if(msuccess) {
-      toast.success("Success!")
+    if (msuccess) {
+      toast.success("Success!");
     }
-  }, [dispatch, navigate,asuccess,msuccess,  createProduct]);
+  }, [dispatch, navigate, asuccess, msuccess, createProduct]);
 
   const [selectionModel, setSelectionModel] = useState([]);
 
@@ -98,25 +114,20 @@ const MaterialStockScreen = () => {
     if (window.confirm("Are you sure?")) {
       dispatch(allocateBulkKitchn(id));
     }
-    toast.success("Bulk assigning executed!")
+    toast.success("Bulk assigning executed!");
   };
 
   //update
 
   const manualAssignHandler = (id) => {
-    
     let feedback = prompt(
-      'Enter Batch quantiy(should be lower than Maximum Products)?',
-      ''
-    )
-  console.log(feedback)
- 
-    dispatch(allocateManualKitchen({qty: feedback, id:id}))
-  
-   
-  };
+      "Enter Batch quantiy(should be lower than Maximum Products)?",
+      ""
+    );
+    console.log(feedback);
 
- 
+    dispatch(allocateManualKitchen({ qty: feedback, id: id }));
+  };
 
   //side bar handling
   const [view, setView] = useState(true);
@@ -141,7 +152,7 @@ const MaterialStockScreen = () => {
         return (
           cellValues.row.totalQty <= cellValues.row.reOrderLevel && (
             <Button
-              onClick={() => navigate(`/admin/batches/add/${cellValues.id}`)}
+              onClick={() => handleShowModal(cellValues)}
               className="btn-danger"
             >
               ReOrder Now
@@ -150,7 +161,6 @@ const MaterialStockScreen = () => {
         );
       },
     },
-
   ];
 
   //showing rows if product list is laoded
@@ -163,12 +173,10 @@ const MaterialStockScreen = () => {
       reOrderLevel: row.material.reOrderLevel,
       totalQty: row.totalQty,
       measurement: row.material.measurement,
-    supplier: row.material.supplierId,
+      supplier: row.material.supplierId,
       CREATEDAT: row.material.createdAt.slice(0, 16),
     }));
   }
-
-
 
   //data grid tool bar
   const CustomToolbar = () => {
@@ -179,11 +187,7 @@ const MaterialStockScreen = () => {
         <GridToolbarDensitySelector />
         <GridToolbarExport printOptions={{ disableToolbarButton: false }} />
 
-       <Button
-          className="p-0"
-          variant="contained"
-          onClick={assignBulkHandler}
-        >
+        <Button className="p-0" variant="contained" onClick={assignBulkHandler}>
           <AddBoxOutlined
             color="primary"
             fontSize="small"
@@ -193,7 +197,6 @@ const MaterialStockScreen = () => {
             Assign Daily Quota(Auto)
           </span>
         </Button>
-         
 
         {selectionModel.length === 1 && (
           <Button
@@ -207,7 +210,7 @@ const MaterialStockScreen = () => {
             </span>
           </Button>
         )}
- {/*
+        {/*
         {selectionModel.length > 0 && (
           <Button
             className="p-0 pe-2"
@@ -228,8 +231,6 @@ const MaterialStockScreen = () => {
     );
   };
 
- 
-
   return (
     <>
       <Row>
@@ -243,7 +244,7 @@ const MaterialStockScreen = () => {
         <Col sm={9} clas>
           <main className="py-3 me-5">
             {loading && <Loader />}
-            {error && <Message varient="danger">{error}</Message>} 
+            {error && <Message varient="danger">{error}</Message>}
 
             <h1>Material Stock</h1>
             {success && (
@@ -265,13 +266,19 @@ const MaterialStockScreen = () => {
                   selectionModel={selectionModel}
                   hideFooterSelectedRowCount
                   onSelectionModelChange={(selection) => {
-            
-
                     setSelectionModel(selection);
                   }}
                   components={{
                     Toolbar: CustomToolbar,
                   }}
+                />
+                <ReorderModel
+                  showModal={showModal}
+                  handleClose={handleCloseModal}
+                  data={suppliers}
+                  token={userInfo.token}
+                  product={rowData.id}
+                  type = 'material'
                 />
               </div>
             )}

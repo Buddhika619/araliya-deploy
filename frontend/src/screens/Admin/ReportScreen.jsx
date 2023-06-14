@@ -25,8 +25,12 @@ const ToggleWrapper = styled("div")`
 
 const ReportScreen = () => {
   const [showModal, setShowModal] = useState(false);
-
-  const handleShowModal = () => setShowModal(true);
+  const [url, setUrl] =useState('')
+ 
+  const handleShowModal = (url) => {
+    setUrl(url)
+    setShowModal(true)
+  };
   const handleCloseModal = () => setShowModal(false);
 
   const navigate = useNavigate();
@@ -113,11 +117,11 @@ const ReportScreen = () => {
                     p="5px 30px"
                     m="0 60px"
                     borderRadius="4px"
-                    onClick={handleShowModal}
+                    onClick={() =>handleShowModal('/reports/salesafter')}
                   >
                     View
                   </Box>
-                  <DateModal showModal={showModal} handleClose={handleCloseModal} url={'/reports/salesafter'}/>
+    
                 </Box>
                 <hr style={{ color: "green" }} />
 
@@ -141,11 +145,11 @@ const ReportScreen = () => {
                     p="5px 30px"
                     m="0 60px"
                     borderRadius="4px"
-                    onClick={handleShowModal}
+                    onClick={() =>handleShowModal('/reports/costafter')}
                   >
                     View
                   </Box>
-                  <DateModal showModal={showModal} handleClose={handleCloseModal} url={'/reports/costafter'}/>
+
                 </Box>
                 <hr style={{ color: "green" }} />
 
@@ -169,11 +173,11 @@ const ReportScreen = () => {
                     p="5px 30px"
                     m="0 60px"
                     borderRadius="4px"
-                    onClick={handleShowModal}
+                    onClick={() =>handleShowModal('/reports/profitafter')}
                   >
                     View
                   </Box>
-                  <DateModal showModal={showModal} handleClose={handleCloseModal} url={'/reports/profitafter'}/>
+                  <DateModal showModal={showModal} handleClose={handleCloseModal} url={url}/>
                 </Box>
                 <hr style={{ color: "green" }} />
 

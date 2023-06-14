@@ -27,6 +27,7 @@ const categoryDetailsSlice = createSlice({
 
     viewCategoryReset: (state) => {
       state.success = false;
+      state.addCategorySuccess = false;
       state.loading = false;
       state.categories = [];
     },
@@ -46,6 +47,7 @@ const categoryDetailsSlice = createSlice({
       state.error = action.payload;
     },
 
+    
     deleteCategoryRequest: (state) => {
       state.rSuccess = false;
       state.loading = true;

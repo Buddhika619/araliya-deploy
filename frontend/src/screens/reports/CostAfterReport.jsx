@@ -81,7 +81,9 @@ const ReservationReport = () => {
   const totalRevenue = adata.reduce((acc, cv) => (acc + cv.stats.totalCost),0)
   const totalQty = adata.reduce((acc, cv) => (acc + cv.stats.totalQty),0)
 
-  const lastYear = new Date(date);
+ 
+  const start = new Date(date.split('x')[0]);
+  const end = new Date(date.split('x')[1]);
   return (
     
     <Container>
@@ -102,7 +104,7 @@ const ReservationReport = () => {
       </Box>
       <Box margin="2% 0 2%">
         <span style={{ fontSize: "15px", fontWeight:'900'}}>
-       Expenses since {lastYear.toString()} 
+       Expenses from {start.toString().slice(0,15)}  to {end.toString().slice(0,15)}
           <br />
         </span>
       </Box>

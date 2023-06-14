@@ -43,6 +43,7 @@ const PlaceOrderScreen = () => {
   const navigate = useNavigate()
 
   const [distance, setDistance] = useState(0)
+  const [diliverCost, setDiliverCost] = useState(0)
   const [distanceLoading, setDistanceLoading] = useState(true)
   const fetchCart = useSelector((state) => state.cart)
   const cart = { ...fetchCart }
@@ -59,7 +60,7 @@ const PlaceOrderScreen = () => {
 
  
 
-  cart.shippingPrice = (Math.ceil(distance) * 22).toFixed(2)
+  cart.shippingPrice = (Math.ceil(distance) * diliverCost).toFixed(2)
   // cart.taxPrice = Number((0.15 *  cart.itemsPrice ).toFixed(2))
 
   cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice)).toFixed(2)
@@ -78,8 +79,10 @@ const PlaceOrderScreen = () => {
         const distance = Number(
           data.rows[0].elements[0].distance.text.split(' ')[0]
         )
+        
         setApi(data.api)
         setDistance(distance)
+        setDiliverCost(data.costPerKm)
         setDistanceLoading(false)
       } catch (error) {
         toast.error('Faild to fetch location')

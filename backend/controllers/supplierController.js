@@ -1,6 +1,8 @@
 import sendEmail from '../Utils/sendEmail.js';
 import Supplier from '../models/supplierModel.js'
 import asyncHandler from "express-async-handler";
+import Product from '../models/productModel.js'
+import Material from '../models/rawMaterialModel.js'
 
 // @des  create a Material
 // @route POST /api/supplier/
@@ -79,10 +81,23 @@ const getSuppliers = asyncHandler(async (req, res) => {
 });
 
 const sendSupplierMail = asyncHandler(async (req, res) => {
-  sendEmail('buddhikagamage619@gmail.com', '')
-  console.log('mail sent')
+  let product = ''
+  let mesurement = ''
+  if(req.body.type === 'product') {
+    product =await Product.findById(req.body.product)
+    mesurement = 'pcs'
+  }else{
+    product =await Material.findById(req.body.product)
+    mesurement = product.measurement
+  }
+
+  console.log('hit')
+  await sendEmail(req.body.email, req.body.quantity, product, mesurement)
+
+  res.status(200).json('Email send')
 });
 
+// sendSupplierMail()
 
 export {
   createSupplier,
@@ -90,4 +105,5 @@ export {
   deleteSupplier,
   getSupplierById,
   getSuppliers,
+  sendSupplierMail
 };

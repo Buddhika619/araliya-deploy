@@ -67,6 +67,7 @@ app.get('/api/distance', async(req, res) => {
   const response= await fetch(url)
   const data = await response.json()
   data.api = process.env.GOOGLE_API_KEY
+  data.costPerKm = process.env.DILIVERY_RATE
   res.json(data)
 
   })

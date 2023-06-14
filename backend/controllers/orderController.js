@@ -2,7 +2,7 @@ import Batch from "../models/batchModel.js";
 import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
-
+import sendStatus from '../Utils/sendStatus.js'
 // @des  Create new order
 // @route POST /api/products
 // @access Private
@@ -209,6 +209,8 @@ const getOrders = asyncHandler(async (req, res) => {
         "user",
         "id name"
       );
+
+      
       break;
 
     case "completed":
@@ -331,10 +333,12 @@ const updateStatus = asyncHandler(async (req, res) => {
         case "pending":
           order.orderStatus = "processing";
           await order.save();
+         
           break;
         case "processing":
           order.orderStatus = "dispatched";
           await order.save();
+          await sendStatus(order, req.user.email)
           break;
       }
     } else {

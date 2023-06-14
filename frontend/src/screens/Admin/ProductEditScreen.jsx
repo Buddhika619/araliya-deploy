@@ -343,6 +343,22 @@ const CreateListing = () => {
                 />
               </>
             )}
+
+{!type && (
+              <>
+                <label className="formLabel">Brand</label>
+                <input
+                  className="formInputName"
+                  type="text"
+                  id="brand"
+                  value={brand}
+                  onChange={onMutate}
+                  // maxLength='32'
+                  // minLength='10'
+                  required
+                />
+              </>
+            )}
               {!type && (
               <>
                 <label className="formLabel">Supplier ID</label>

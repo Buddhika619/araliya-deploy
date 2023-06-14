@@ -96,12 +96,17 @@ const getMonthlySales = asyncHandler(async (req, res) => {
 //@access Public
 
 const getSalesAfter = asyncHandler(async (req, res) => {
-  const currentMonthStart = new Date(req.params.date);
+  const dates = (req.params.date).split('x')
+
+  const startDate = new Date(dates[0]);
+  const endDate = new Date(dates[1]);
 
   const salesItemsArray = await Order.aggregate([
     // Use a $match stage to filter documents with a createdAt date within the current month
     {
-      $match: { createdAt: { $gte: currentMonthStart} },
+      $match: {
+        createdAt: { $gte: startDate, $lte: endDate }
+      },
     },
 
     // Use a $unwind stage to create a separate document for each order item
@@ -285,16 +290,19 @@ const getMonthlyCost = asyncHandler(async (req, res) => {
 //@route GET  /api/status
 //@access Public
 const getCostAfter = asyncHandler(async (req, res) => {
-  const currentMonthStart = new Date(req.params.date);
+  const dates = (req.params.date).split('x')
+  const startDate = new Date(dates[0]);
+  const endDate = new Date(dates[1]);
 
  
 
   const monthlyCost = await Batch.aggregate([
     {
+      
       $match: {
         // Match documents with a createdAt date within the current month, and that have either a materialId or a productId
         createdAt: {
-          $gte: currentMonthStart,
+          $gte: startDate, $lte: endDate
     
         },
         $or: [{ materialId: { $ne: null } }, { productId: { $ne: null } }],
@@ -474,13 +482,15 @@ const getMonthlyProfit = asyncHandler(async (req, res) => {
 //@route GET  /api/status
 //@access Public
 const getProfitafter = asyncHandler(async (req, res) => {
-  const date = new Date(req.params.date)
-  console.log(date)
+  console.log(req.params.date)
+  const dates = (req.params.date).split('x')
+  const startDate = new Date(dates[0]);
+  const endDate = new Date(dates[1]);
   const totalRevenueLastYear = await Order.aggregate([
     {
       $match: {
         createdAt: {
-          $gte: date,
+          $gte: startDate, $lte: endDate
         },
       },
     },
@@ -499,7 +509,7 @@ const getProfitafter = asyncHandler(async (req, res) => {
       $match: {
         // Match documents with a createdAt date within the current month, and that have either a materialId or a productId
         createdAt: {
-          $gte: date,
+          $gte: startDate, $lte: endDate
         },
       },
     },

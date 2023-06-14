@@ -79,8 +79,8 @@ const ReservationReport = () => {
   }
 
 
-  const today = new Date();
-const lastYear = new Date(date);
+  const start = new Date(date.split('x')[0]);
+  const end = new Date(date.split('x')[1]);
   return (
     
     <Container>
@@ -100,7 +100,7 @@ const lastYear = new Date(date);
       </Box>
       <Box margin="2% 0 2%">
         <span style={{ fontSize: "15px", fontWeight:'900'}}>
-       profit since {lastYear.toString()} 
+        Profit from {start.toString().slice(0,15)}  to {end.toString().slice(0,15)}
           <br />
         </span>
       </Box>

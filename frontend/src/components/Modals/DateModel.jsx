@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React, { useState } from "react";
+import { Modal, Button } from "react-bootstrap";
 
-function DateModal({ showModal, handleClose,url }) {
-  const [selectedDate, setSelectedDate] = useState('');
-  console.log(selectedDate)
+function DateModal({ showModal, handleClose, url }) {
+  const [selectedDate, setSelectedDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  console.log(selectedDate);
 
   const handleSaveDate = () => {
-    if(selectedDate){
-       window.open(url+'/'+selectedDate)
+    if (selectedDate && endDate && (selectedDate < endDate)) {
+      window.open(url + "/" + selectedDate + 'x' + endDate);
     }
-    setSelectedDate('')
+    setSelectedDate("");
+    setEndDate("");
     handleClose();
   };
 
@@ -20,16 +22,28 @@ function DateModal({ showModal, handleClose,url }) {
       </Modal.Header>
 
       <Modal.Body>
+        <label className="formLabel">From</label>
         <input
+          style={{ border: "2px solid limegreen" }}
+          className="formInputName"
           type="date"
           value={selectedDate}
-          onChange={(event) => setSelectedDate((event.target.value))}
+          onChange={(event) => setSelectedDate(event.target.value)}
+          required
         />
-       
+
+        <label className="formLabel">To</label>
+        <input
+          style={{ border: "2px solid limegreen" }}
+          className="formInputName"
+          type="date"
+          value={endDate}
+          onChange={(event) => setEndDate(event.target.value)}
+          required
+        />
       </Modal.Body>
 
       <Modal.Footer>
-    
         <Button variant="primary" onClick={handleSaveDate}>
           Generate
         </Button>

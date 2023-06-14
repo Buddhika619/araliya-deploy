@@ -32,6 +32,7 @@ import styled from "styled-components";
 import { productListReset } from "../../reducers/productsSlice";
 import DateModal from "../../components/Modals/DateModel";
 import ReorderModel from "../../components/Modals/ReorderModel";
+import { viewSingleSupplier } from "../../actions/supplierActions";
 
 const ToggleWrapper = styled("div")`
   position: relative;
@@ -47,10 +48,11 @@ const ToggleWrapper = styled("div")`
 const ProudctOutStockListScreen = () => {
   const [showModal, setShowModal] = useState(false);
 
-  const [rowData, setRowData] = useState({})
+  const [rowData, setRowData] = useState({});
   const handleShowModal = (data) => {
-    setRowData(data)
-    setShowModal(true)
+    dispatch(viewSingleSupplier(data.row.supplier));
+    setRowData(data);
+    setShowModal(true);
   };
   const handleCloseModal = () => setShowModal(false);
 
@@ -67,13 +69,15 @@ const ProudctOutStockListScreen = () => {
   const productRemove = useSelector((state) => state.productDetails);
   const { error: removeError, success: removeSuccess } = productRemove;
 
+  const supplierDetails = useSelector((state) => state.supplierDetails);
+  const { sloading, serror, suppliers, ssuccess } = supplierDetails;
+
   const productCreate = useSelector((state) => state.createProduct);
   const {
     error: errorCreate,
     success: successCreate,
     product: createdProduct,
   } = productCreate;
-
 
   //get user
   const userLogin = useSelector((state) => state.userLogin);
@@ -138,21 +142,23 @@ const ProudctOutStockListScreen = () => {
         <img src={params.value} style={{ width: "50px" }} />
       ), // renderCell will render the component
     },
-    { field: "NAME", headerName: "Name",width: 150, },
+    { field: "NAME", headerName: "Name", width: 150 },
     { field: "CATEGORY", headerName: "Category", flex: 1 },
 
     { field: "BRAND", headerName: "Brand", flex: 1 },
     { field: "availableQty", headerName: "Available Qty", flex: 1 },
 
     { field: "REVIEWNUMBER", headerName: "No of Reviews", flex: 1 },
-    { field: "supplier", headerName: "Supplier ID",  width: 220, },
+    { field: "supplier", headerName: "Supplier ID", width: 220 },
     {
       width: 180,
       renderCell: (cellValues) => {
-      
         return (
           cellValues.row.availableQty <= cellValues.row.REORDERLEVEL && (
-            <Button onClick={() =>handleShowModal(cellValues)} className="btn-danger">
+            <Button
+              onClick={() => handleShowModal(cellValues)}
+              className="btn-danger"
+            >
               ReOrder Now
             </Button>
           )
@@ -178,7 +184,7 @@ const ProudctOutStockListScreen = () => {
   //showing rows if product list is laoded
   let rows;
   if (success) {
-console.log(products)
+    console.log(products);
     rows = products.products?.map((row) => ({
       id: row._id,
       IMAGE: row.product.image,
@@ -323,7 +329,14 @@ console.log(products)
                     Toolbar: CustomToolbar,
                   }}
                 />
-                <ReorderModel showModal={showModal} handleClose={handleCloseModal} id={rowData.id} />
+                <ReorderModel
+                  showModal={showModal}
+                  handleClose={handleCloseModal}
+                  data={suppliers}
+                  token={userInfo.token}
+                  product={rowData.id}
+                  type = 'product'
+                />
               </div>
             )}
           </main>
