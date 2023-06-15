@@ -149,9 +149,7 @@ const Signup = () => {
             />
           </div>
 
-          <Link to='/forgotpassword' className='forgotPasswordLink'>
-            Forgot Password
-          </Link>
+         
           <div className='signUpBar'>
             <p className='signUpText'>Sign Up</p>
             <button className='signUpButton'>

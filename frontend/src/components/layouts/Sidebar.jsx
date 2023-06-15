@@ -12,12 +12,36 @@ import {
   WorkOutline,
   Report,
   LocalShippingOutlined,
+  Autorenew,
+  DirectionsBike,
+  Add,
+  ArrowUpward,
+  AccessAlarm,
+  Fastfood,
+  ToggleOn,
+  ToggleOnOutlined,
+  ErrorOutline,
+  ToggleOff,
+  ToggleOffOutlined,
+  NotificationsActive,
+  Category,
+  ExtensionOutlined,
+  NoteAddOutlined,
+  SettingsOutlined,
 } from "@material-ui/icons";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { useEffect, useState } from "react";
+import WarehouseIcon from '@mui/icons-material/Warehouse';
+import SoupKitchenOutlinedIcon from '@mui/icons-material/SoupKitchenOutlined';
+import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
+import TakeoutDiningOutlinedIcon from '@mui/icons-material/TakeoutDiningOutlined';
+import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import DiscountOutlinedIcon from '@mui/icons-material/DiscountOutlined';
+import DisplaySettingsOutlinedIcon from '@mui/icons-material/DisplaySettingsOutlined';
 
 const SidebarContainer = styled.div`
   z-index: 999;
@@ -99,156 +123,19 @@ const Sidebar = ({ view, success }) => {
       {view && (
         <SidebarContainer>
           <SidebarWrappper>
-            <SidebarMenu>
-              <SidebarList>
-                <Link to="/admin/dashboard">
-                  <SidebarListItem  className={
-                    path == "dashboard"
-                      ? "navbarListINameActive"
-                      : "navbarListIName"
-                  }>
+            <SidebarList>
+            <Link to="/admin/dashboard">
+                  <SidebarListItem
+                    className={
+                      path == "dashboard"
+                        ? "navbarListINameActive"
+                        : "navbarListIName"
+                    }
+                  >
                     <i className="fa-solid fa-gauge"></i>
                     Dashboard
                   </SidebarListItem>
                 </Link>
-
-                {/* products links */}
-                <SidebarListItem onClick={() => setProductSub(!productSub)}>
-                  <Storefront />
-                  Custom Products
-                </SidebarListItem>
-                {productSub ? (
-                  <SubSidebarList>
-                    <Link to="/admin/products/active">
-                      <SidebarListItem>
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
-                        Active
-                      </SidebarListItem>
-                    </Link>
-                    <Link to="/admin/products/outofstock">
-                      <SidebarListItem>
-                        <i className="fa-regular fa-circle-check"></i>
-                        Out Of Stock
-                      </SidebarListItem>
-                    </Link>
-                    <Link to="/admin/products/deactivated">
-                      <SidebarListItem>
-                        <i class="fa-solid fa-user-secret"></i>
-                        Deactivated
-                      </SidebarListItem>
-                    </Link>
-                  </SubSidebarList>
-                ) : path === "products" ? (
-                  <SubSidebarList>
-                    <Link to="/admin/products/active">
-                      <SidebarListItem
-                        className={
-                          pathMatchRoute("/admin/products/active")
-                            ? "navbarListINameActive"
-                            : "navbarListIName"
-                        }
-                      >
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
-                        Active
-                      </SidebarListItem>
-                    </Link>
-                    <Link to="/admin/products/outofstock">
-                      <SidebarListItem
-                        className={
-                          pathMatchRoute("/admin/products/outofstock")
-                            ? "navbarListINameActive"
-                            : "navbarListIName"
-                        }
-                      >
-                        <i className="fa-regular fa-circle-check"></i>
-                        Out Of Stock
-                      </SidebarListItem>
-                    </Link>
-                    <Link to="/admin/products/deactivated">
-                      <SidebarListItem
-                        className={
-                          pathMatchRoute("/admin/products/deactivated")
-                            ? "navbarListINameActive"
-                            : "navbarListIName"
-                        }
-                      >
-                        <i class="fa-solid fa-user-secret"></i>
-                        Deactivated
-                      </SidebarListItem>
-                    </Link>
-                  </SubSidebarList>
-                ) : (
-                  console.log(123)
-                )}
-
-                {/* products links */}
-                <SidebarListItem onClick={() => setoProductSub(!oproductSub)}>
-                  <Storefront />
-                  Other Produts
-                </SidebarListItem>
-                {oproductSub ? (
-                  <SubSidebarList>
-                    <Link to="/admin/productsout/active">
-                      <SidebarListItem>
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
-                        Active
-                      </SidebarListItem>
-                    </Link>
-                    <Link to="/admin/productsout/inStock">
-                      <SidebarListItem>
-                        <i className="fa-regular fa-circle-check"></i>
-                        Stock
-                      </SidebarListItem>
-                    </Link>
-                    <Link to="/admin/productsout/deactivated">
-                      <SidebarListItem>
-                        <i class="fa-solid fa-user-secret"></i>
-                        Deactivated
-                      </SidebarListItem>
-                    </Link>
-                  </SubSidebarList>
-                ) : path === "productsout" ? (
-                  <SubSidebarList>
-                    <Link to="/admin/productsout/active">
-                      <SidebarListItem
-                        className={
-                          pathMatchRoute("/admin/productsout/active")
-                            ? "navbarListINameActive"
-                            : "navbarListIName"
-                        }
-                      >
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
-                        Active
-                      </SidebarListItem>
-                    </Link>
-                    <Link to="/admin/productsout/inStock">
-                      <SidebarListItem
-                        className={
-                          pathMatchRoute("/admin/productsout/inStock")
-                            ? "navbarListINameActive"
-                            : "navbarListIName"
-                        }
-                      >
-                        <i className="fa-regular fa-circle-check"></i>
-                        Stock
-                      </SidebarListItem>
-                    </Link>
-                    <Link to="/admin/productsout/deactivated">
-                      <SidebarListItem
-                        className={
-                          pathMatchRoute("/admin/productsout/deactivated")
-                            ? "navbarListINameActive"
-                            : "navbarListIName"
-                        }
-                      >
-                        <i class="fa-solid fa-user-secret"></i>
-                        Deactivated
-                      </SidebarListItem>
-                    </Link>
-                  </SubSidebarList>
-                ) : (
-                  console.log(123)
-                )}
 
                 <SidebarListItem onClick={() => setOrderSub(!orderSub)}>
                   <LocalShippingOutlined />
@@ -260,19 +147,19 @@ const Sidebar = ({ view, success }) => {
                   <SubSidebarList>
                     <Link to="/admin/orders/neworders">
                       <SidebarListItem className="orders button">
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                      <NotificationsActive/>
                         New Orders
                       </SidebarListItem>
                     </Link>
                     <Link to="/admin/orders/processing">
                       <SidebarListItem>
-                        <i className="fa-regular fa-circle-check"></i>
+                      <Autorenew/>
                         Processing Orders
                       </SidebarListItem>
                     </Link>
                     <Link to="/admin/orders/dispatched">
                       <SidebarListItem>
-                        <i className="fa-regular fa-circle-check"></i>
+                      <DirectionsBike/>
                         Dipatched Orders
                       </SidebarListItem>
                     </Link>
@@ -293,7 +180,7 @@ const Sidebar = ({ view, success }) => {
                             : "navbarListIName"
                         }
                       >
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                        <AccessAlarm/>
                         New Orders
                       </SidebarListItem>
                     </Link>
@@ -305,7 +192,7 @@ const Sidebar = ({ view, success }) => {
                             : "navbarListIName"
                         }
                       >
-                        <i className="fa-regular fa-circle-check"></i>
+                        <Autorenew/>
                         Processing Orders
                       </SidebarListItem>
                     </Link>
@@ -317,7 +204,7 @@ const Sidebar = ({ view, success }) => {
                             : "navbarListIName"
                         }
                       >
-                        <i className="fa-regular fa-circle-check"></i>
+                         <DirectionsBike/>
                         Dipatched Orders
                       </SidebarListItem>
                     </Link>
@@ -337,52 +224,73 @@ const Sidebar = ({ view, success }) => {
                 ) : (
                   console.log(123)
                 )}
+            </SidebarList>
+            <SidebarMenu>
+              <SidebarList>
+            
 
-                <SidebarListItem onClick={() => setConfigSub(!configSub)}>
-                  <LocalShippingOutlined />
-                  Configuration
+                {/* products links */}
+                <SidebarListItem onClick={() => setProductSub(!productSub)}>
+                  <Fastfood />
+                  Custom Products
                 </SidebarListItem>
-
-                {/* Config links */}
-                {configSub ? (
+                {productSub ? (
                   <SubSidebarList>
-                    <Link to="/admin/config/offers">
-                      <SidebarListItem className="orders button">
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
-                        Offers
+                    <Link to="/admin/products/active">
+                      <SidebarListItem>
+                        <ToggleOnOutlined/>
+                        Active
                       </SidebarListItem>
                     </Link>
-                    <Link to="/admin/config/carousel">
-                      <SidebarListItem className="orders button">
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
-                        carousel
+                    <Link to="/admin/products/outofstock">
+                      <SidebarListItem>
+                        <ErrorOutline/>
+                        Out Of Stock
+                      </SidebarListItem>
+                    </Link>
+                    <Link to="/admin/products/deactivated">
+                      <SidebarListItem>
+                        <ToggleOffOutlined/>
+                        Deactivated
                       </SidebarListItem>
                     </Link>
                   </SubSidebarList>
-                ) : path === "config" ? (
+                ) : path === "products" ? (
                   <SubSidebarList>
-                    <Link to="/admin/config/offers">
+                    <Link to="/admin/products/active">
                       <SidebarListItem
                         className={
-                          pathMatchRoute("/admin/config/offers")
+                          pathMatchRoute("/admin/products/active")
                             ? "navbarListINameActive"
                             : "navbarListIName"
                         }
                       >
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
-                        Offers
+                         <ToggleOnOutlined/>
+                        Active
                       </SidebarListItem>
                     </Link>
-                    <Link to="/admin/config/carousel">
+                    <Link to="/admin/products/outofstock">
                       <SidebarListItem
                         className={
-                          pathMatchRoute("/admin/config/carousel")
+                          pathMatchRoute("/admin/products/outofstock")
                             ? "navbarListINameActive"
                             : "navbarListIName"
                         }
                       >
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
-                        carousel
+                        <ErrorOutline/>
+                        Out Of Stock
+                      </SidebarListItem>
+                    </Link>
+                    <Link to="/admin/products/deactivated">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/products/deactivated")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <ToggleOffOutlined/>
+                        Deactivated
                       </SidebarListItem>
                     </Link>
                   </SubSidebarList>
@@ -390,8 +298,89 @@ const Sidebar = ({ view, success }) => {
                   console.log(123)
                 )}
 
+                {/* products links */}
+                <SidebarListItem onClick={() => setoProductSub(!oproductSub)}>
+                  <TakeoutDiningOutlinedIcon />
+                  Other Produts
+                </SidebarListItem>
+                {oproductSub ? (
+                  <SubSidebarList>
+                    <Link to="/admin/productsout/active">
+                      <SidebarListItem>
+                      <ToggleOnOutlined/>
+                        Active
+                      </SidebarListItem>
+                    </Link>
+                    <Link to="/admin/productsout/inStock">
+                      <SidebarListItem>
+                        <WarehouseIcon/>
+                        Stock
+                      </SidebarListItem>
+                    </Link>
+                    <Link to="/admin/productsout/deactivated">
+                      <SidebarListItem>
+                      <ToggleOffOutlined/>
+                        Deactivated
+                      </SidebarListItem>
+                    </Link>
+                  </SubSidebarList>
+                ) : path === "productsout" ? (
+                  <SubSidebarList>
+                    <Link to="/admin/productsout/active">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/productsout/active")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                        <ToggleOnOutlined/>
+                        Active
+                      </SidebarListItem>
+                    </Link>
+                    <Link to="/admin/productsout/inStock">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/productsout/inStock")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                         <WarehouseIcon/>
+                        Stock
+                      </SidebarListItem>
+                    </Link>
+                    <Link to="/admin/productsout/deactivated">
+                      <SidebarListItem
+                        className={
+                          pathMatchRoute("/admin/productsout/deactivated")
+                            ? "navbarListINameActive"
+                            : "navbarListIName"
+                        }
+                      >
+                       <ToggleOffOutlined/>
+                        Deactivated
+                      </SidebarListItem>
+                    </Link>
+                  </SubSidebarList>
+                ) : (
+                  console.log(123)
+                )}
+
+                <Link to="/admin/category">
+                  <SidebarListItem
+                    className={
+                      path == "category"
+                        ? "navbarListINameActive"
+                        : "navbarListIName"
+                    }
+                  >
+                    <Category />
+                    Product Categories
+                  </SidebarListItem>
+                </Link>
                 <SidebarListItem onClick={() => setMatSub(!matSub)}>
-                  <LocalShippingOutlined />
+                  <ExtensionOutlined />
                   Materials
                 </SidebarListItem>
 
@@ -400,13 +389,13 @@ const Sidebar = ({ view, success }) => {
                   <SubSidebarList>
                     <Link to="/admin/materials/all">
                       <SidebarListItem className="orders button">
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                      <ExtensionOutlined/>
                         Materials
                       </SidebarListItem>
                     </Link>
                     <Link to="/admin/materials/stock">
                       <SidebarListItem className="orders button">
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                      <WarehouseIcon/>
                         Stock
                       </SidebarListItem>
                     </Link>
@@ -421,7 +410,7 @@ const Sidebar = ({ view, success }) => {
                             : "navbarListIName"
                         }
                       >
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                        <ExtensionOutlined/>
                         Materials
                       </SidebarListItem>
                     </Link>
@@ -433,7 +422,7 @@ const Sidebar = ({ view, success }) => {
                             : "navbarListIName"
                         }
                       >
-                        <i className="fa-sharp fa-solid fa-spinner"></i>
+                        <WarehouseIcon/>
                         Stock
                       </SidebarListItem>
                     </Link>
@@ -445,9 +434,52 @@ const Sidebar = ({ view, success }) => {
             </SidebarMenu>
 
             <SidebarMenu>
-              <SidebarTitle>Quick Menu</SidebarTitle>
+              {/* <SidebarTitle>Inventory</SidebarTitle> */}
               <SidebarList>
-                <Link to="/admin/users">
+                <Link to="/admin/batches">
+                  <SidebarListItem
+                    className={
+                      path == "batches"
+                        ? "navbarListINameActive"
+                        : "navbarListIName"
+                    }
+                  >
+                    <InventoryOutlinedIcon />
+                    GRN and Batches
+                  </SidebarListItem>
+                </Link>
+
+                <Link to="/admin/kitchen">
+                  <SidebarListItem
+                    className={
+                      path == "kitchen"
+                        ? "navbarListINameActive"
+                        : "navbarListIName"
+                    }
+                  >
+                    <SoupKitchenOutlinedIcon />
+                    Kitchen Reservations
+                  </SidebarListItem>
+                </Link>
+              
+                <Link to="/admin/supplier">
+                  <SidebarListItem
+                    className={
+                      path == "supplier"
+                        ? "navbarListINameActive"
+                        : "navbarListIName"
+                    }
+                  >
+                    <HandshakeOutlinedIcon />
+                    Suppliers
+                  </SidebarListItem>
+                </Link>
+
+             
+              </SidebarList>
+
+             
+              <Link to="/admin/users">
                   <SidebarListItem
                     className={
                       path == "users"
@@ -455,73 +487,75 @@ const Sidebar = ({ view, success }) => {
                         : "navbarListIName"
                     }
                   >
-                    <PermIdentity />
+                    <ManageAccountsOutlinedIcon />
                     Users
                   </SidebarListItem>
                 </Link>
-                <Link to="/admin/supplier">
-                  <SidebarListItem
-                   className={
-                    path == "supplier"
-                      ? "navbarListINameActive"
-                      : "navbarListIName"
-                  }>
-                    <Storefront />
-                   Suppliers
-                  </SidebarListItem>
-                </Link>
-                <Link to="/admin/batches">
-                <SidebarListItem
-                   className={
-                    path == "batches"
-                      ? "navbarListINameActive"
-                      : "navbarListIName"
-                  }>
-                    <Storefront />
-                    GRN and Batches
-                  </SidebarListItem>
-                </Link>
-                <Link to="/admin/kitchen">
-                <SidebarListItem
-                   className={
-                    path == "kitchen"
-                      ? "navbarListINameActive"
-                      : "navbarListIName"
-                  }>
-                    <Storefront />
-                    Kitchen Reservations
-                  </SidebarListItem>
-                </Link>
                 <Link to="/admin/reports">
-                <SidebarListItem
-                   className={
-                    path == "reports"
-                      ? "navbarListINameActive"
-                      : "navbarListIName"
-                  }>
+                  <SidebarListItem
+                    className={
+                      path == "reports"
+                        ? "navbarListINameActive"
+                        : "navbarListIName"
+                    }
+                  >
                     <BarChart />
                     Reports
                   </SidebarListItem>
                 </Link>
-                <Link to="/admin/category">
-                <SidebarListItem
-              
-                   className={
-                    path == "category"
-                      ? "navbarListINameActive"
-                      : "navbarListIName"
-                  }>
-                    <BarChart />
-                    Product Categories
-                  </SidebarListItem>
-                </Link>
-                
-              </SidebarList>
-              <div   style={{paddingBottom:'150px'}}>
+              <SidebarListItem onClick={() => setConfigSub(!configSub)}>
+                <SettingsOutlined />
+                Configuration
+              </SidebarListItem>
 
-              </div>
+              {/* Config links */}
+              {configSub ? (
+                <SubSidebarList>
+                  <Link to="/admin/config/offers">
+                    <SidebarListItem className="orders button">
+                      <DiscountOutlinedIcon/>
+                      Offers
+                    </SidebarListItem>
+                  </Link>
+                  <Link to="/admin/config/carousel">
+                    <SidebarListItem className="orders button">
+                      <DisplaySettingsOutlinedIcon/>
+                      carousel
+                    </SidebarListItem>
+                  </Link>
+                </SubSidebarList>
+              ) : path === "config" ? (
+                <SubSidebarList>
+                  <Link to="/admin/config/offers">
+                    <SidebarListItem
+                      className={
+                        pathMatchRoute("/admin/config/offers")
+                          ? "navbarListINameActive"
+                          : "navbarListIName"
+                      }
+                    >
+                       <DiscountOutlinedIcon/>
+                      Offers
+                    </SidebarListItem>
+                  </Link>
+                  <Link to="/admin/config/carousel">
+                    <SidebarListItem
+                      className={
+                        pathMatchRoute("/admin/config/carousel")
+                          ? "navbarListINameActive"
+                          : "navbarListIName"
+                      }
+                    >
+                      <DisplaySettingsOutlinedIcon/>
+                      carousel
+                    </SidebarListItem>
+                  </Link>
+                </SubSidebarList>
+              ) : (
+                console.log(123)
+              )}
+              <div style={{ paddingBottom: "350px" }}></div>
             </SidebarMenu>
-          
           </SidebarWrappper>
         </SidebarContainer>
       )}

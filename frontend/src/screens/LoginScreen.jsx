@@ -122,9 +122,7 @@ const Signin = () => {
               onClick={() => setShowPasssword(!showPassword)}
             />
           </div>
-          <Link to='/forgotpassword' className='forgotPasswordLink'>
-            Forgot Password
-          </Link>
+         
           <div className='signInBar'>
             <p className='signInText'>Sign In</p>
             <button className='signInButton'>
