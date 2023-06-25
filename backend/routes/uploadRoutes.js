@@ -29,12 +29,16 @@ function checkFileType(file, cb) {
 
 const upload = multer({
   storage,
+  
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb)
   },
 })
 
 router.post('/', upload.single('image'), (req, res) => {
+  if (req.file.size > 8 * 1024 * 1024) {
+    return res.status(400).json({ error: 'File size exceeds 8MB' });
+  }
     
   res.send(`/${req.file.path}`)
 })
