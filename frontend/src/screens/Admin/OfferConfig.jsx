@@ -1,25 +1,23 @@
 import { useState, useEffect } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Button, Row, Col, Table } from 'react-bootstrap'
+import { useLocation, useNavigate,  } from 'react-router-dom'
+import {  Row, Col, Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Sidebar from '../../components/layouts/Sidebar'
 import Loader from '../../components/Loader'
 
 import styled from 'styled-components'
 
-import axios from 'axios'
+
 import { toast } from 'react-toastify'
 import FormContainer from '../../components/FormContainer'
 import {
   updateConfig,
   getConfigdata,
-  removeCarousel,
+
   removeOffer,
 } from '../../actions/configAction'
 import { setConfigReset } from '../../reducers/configSlice'
-import TestBuwa from '../TestBuwa'
-import ImageCard from '../../components/ImageCard'
-import { textAlign } from '@mui/system'
+
 
 const ToggleWrapper = styled('div')`
   position: relative;
@@ -143,7 +141,7 @@ const CarouselConfig = () => {
             {/* {loading && <Loader />} */}
 
             <h1>{header}</h1>
-            {configData.offers && (
+            {configData?.offers && (
               <Table striped bordered hover responsive className='table-sm'>
                 <thead>
                   <tr>
@@ -154,7 +152,7 @@ const CarouselConfig = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {configData.offers?.map((item, index) => (
+                  {configData?.offers?.map((item, index) => (
                     <tr key={index}>
                       <td>{item.productId}</td>
                       <td>{item.text}</td>

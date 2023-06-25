@@ -5,16 +5,15 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Button,
-  Typography,
+
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Message from "../../components/Message";
-import { toast } from "react-toastify";
+
 import axios from "axios";
 import Loader from "../../components/Loader";
 import CustomButton from "../../components/microComponents/CustomButton";

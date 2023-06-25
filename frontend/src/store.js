@@ -32,6 +32,8 @@ import supplierReducer from './reducers/supplierSlice'
 import materialStockReducer from './reducers/materialStockSlice'
 import categoryReducer from './reducers/categorySlice'
 import categorySlice from './reducers/categorySlice'
+import batchUpdateSlice from './reducers/updateBatchSlice'
+import materialUpdateSlice from './reducers/updateMaterialsSlice'
 
 
 const reducer = combineReducers({
@@ -60,7 +62,9 @@ const reducer = combineReducers({
   stockProuct: stockProductReducer,
   supplierDetails: supplierReducer,
   materialStockDetails: materialStockReducer,
-  categoryDetails: categorySlice
+  categoryDetails: categorySlice,
+  batchUpdate: batchUpdateSlice,
+  materialUpdate: materialUpdateSlice
 })
 
 // const middleware = []

@@ -9,12 +9,15 @@ import {
   viewSingleBatchesRequest,
   viewSingleBatchesSuccess,
   viewSingleBatchesFail,
-  updateBatchesRequest,
-  updateBatchesSuccess,
-  updateBatchesFail,
+
 
 } from "../reducers/batchSlice";
 
+import {
+  updateBatchesRequest,
+  updateBatchesSuccess,
+  updateBatchesFail,
+} from "../reducers/updateBatchSlice"
 
 import {
   viewKitchenRequest,

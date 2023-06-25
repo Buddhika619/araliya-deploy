@@ -1,20 +1,18 @@
-import axios from 'axios'
+
 import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import {  useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Button,  } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import Message from '../../components/Message'
-import Loader from '../../components/Loader'
+
 import FormContainer from '../../components/FormContainer'
-import { listProductsDetails, updateProduct } from '../../actions/productActions'
+
 import { productUpdateReset } from '../../reducers/singleProductSlice'
 
 import Spinner from '../../components/Spinner'
 import { toast } from 'react-toastify'
-import { createMaterial, updateMaterials, viewSingleMaterial } from '../../actions/materialActions'
-import { viewMatrialsReset } from '../../reducers/matrialSlice'
+
 import { updateSupplier, viewSingleSupplier } from '../../actions/supplierActions'
-import { viewSingleSupplierReset, viewSupplierReset } from '../../reducers/supplierSlice'
+
 
 const SupplierEditScreen = () => {
   const { id } = useParams()
@@ -70,6 +68,10 @@ console.log(usuccess)
 
   const onSubmit = async (e) => {
     e.preventDefault()
+
+    const phoneRegex = /^(?:\+94|0)?(?:7\d{8}|0\d{2}-\d{7}|[1-9](?:\d{8}|\d{2}-\d{7}))$/;
+  const isValid = phoneRegex.test(contactNo);
+  if(isValid){
     dispatch(
       updateSupplier({
         _id: id,
@@ -77,6 +79,11 @@ console.log(usuccess)
       })
       
     )
+  }else{
+    toast.error('Invalid phone Number!')
+  }
+
+  
    
     // toast.success('Success')
     // setTimeout(function(){ navigate('/admin/supplier')   }, 1000);
@@ -163,7 +170,7 @@ console.log(usuccess)
             <label className="formLabel">contactNo*</label>
             <input
               className="formInputName"
-              type="number"
+              type="text"
               id="contactNo"
               value={contactNo}
               onChange={onMutate}

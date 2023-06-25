@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Batch from "./batchModel.js";
 
 const reviewSchema = mongoose.Schema({
     name: {
@@ -101,12 +102,14 @@ const productSchema = mongoose.Schema({
 
 // Add a pre hook to the material schema to prevent deletion if there are referencing documents
 productSchema.pre("remove", async function (next) {
+    console.log('holup')
     try {
       // Retrieve the ID of the material being deleted
       const productId = this._id;
   
       // Count the number of referencing documents
       const batchCount = await Batch.countDocuments({ productId });
+      console.log(batchCount)
   
       // If there are any referencing documents, throw an error
       if (batchCount > 0) {

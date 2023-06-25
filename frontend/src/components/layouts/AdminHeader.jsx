@@ -5,13 +5,13 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import { Badge, NavDropdown } from 'react-bootstrap'
 import { logout } from '../../actions/userActions'
-import SearchBox from '../SearchBox'
+
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { LocalShipping } from '@material-ui/icons'
+import { Dashboard, LocalShipping } from '@material-ui/icons'
 
 const TopNav = styled(Navbar)`
   background-color: #222935;
@@ -88,7 +88,7 @@ const AdminHeader = () => {
   const [newOrders, setNewOrders] = useState(0)
 
   const cart = useSelector((state) => state.cart)
-  const { cartItems } = cart
+ 
 
   const logoutHandler = () => {
     dispatch(logout())
@@ -133,6 +133,9 @@ const AdminHeader = () => {
         <Container>
           <LinkContainer to='/'>
             <Navbar.Brand className='brand ms-5'>ARALIYA</Navbar.Brand>
+          </LinkContainer>
+          <LinkContainer to='/admin/dashboard'>
+            <Dashboard color='primary'/>
           </LinkContainer>
 
           <Navbar.Toggle aria-controls='basic-navbar-nav' />

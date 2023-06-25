@@ -1,20 +1,20 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {  useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+
 import FormContainer from "../../components/FormContainer";
 import {
   createProduct,
-  listProductsDetails,
-  updateProduct,
+
 } from "../../actions/productActions";
 import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
+import { listCategories } from "../../actions/categoryActions";
 
 const AddReadyProduct = () => {
   const { id } = useParams();
@@ -66,6 +66,7 @@ const AddReadyProduct = () => {
   const { error, success, loading } = productCreate;
 
   useEffect(() => {
+    dispatch(listCategories())
     if (success) {
       toast.success("Success");
       navigate("/admin/productsout/active");
@@ -152,7 +153,7 @@ const AddReadyProduct = () => {
 
   const back = () => {
     dispatch(productUpdateReset());
-    navigate(`/admin/products/active`);
+    navigate(`/admin/productsout/active`);
   };
 
   return (

@@ -1,21 +1,17 @@
-import axios from "axios";
+
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import {  useLocation, useNavigate, useParams } from "react-router-dom";
+import { Button, } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+
 import FormContainer from "../../components/FormContainer";
-import {
-  listProductsDetails,
-  updateProduct,
-} from "../../actions/productActions";
+
 import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
-import { createMaterial } from "../../actions/materialActions";
-import { viewMatrialsReset } from "../../reducers/matrialSlice";
+
 import { createBatches } from "../../actions/batchActions";
 import { viewBatchesReset } from "../../reducers/batchSlice";
 
@@ -98,7 +94,7 @@ const CreateListing = () => {
 
   const back = () => {
     dispatch(productUpdateReset());
-    navigate(`/admin/materials`);
+    navigate(`/admin/batches`);
   };
 
   console.log(error);
@@ -130,7 +126,7 @@ const CreateListing = () => {
               // minLength='10'
               required
             />
-
+{/* 
             <label className="formLabel">Supplier ID</label>
             <input
               className="formInputName"
@@ -141,7 +137,7 @@ const CreateListing = () => {
               // maxLength='32'
               // minLength='10'
               required
-            />
+            /> */}
 
             <label className="formLabel">Quantity</label>
             <input

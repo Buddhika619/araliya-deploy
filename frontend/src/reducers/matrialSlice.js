@@ -28,6 +28,10 @@ const orderDetailsSlice = createSlice({
     viewMatrialsReset: (state) => {
       state.success = false;
       state.loading = false;
+      state.error =false;
+      state.ssuccess = false;
+      state.sloading = false;
+      state.serror = false;
       state.matrials = [];
     },
 
@@ -87,21 +91,7 @@ const orderDetailsSlice = createSlice({
     },
 
 
-    updateMatrialsRequest: (state) => {
-      state.ssuccess = false;
-      state.sloading = true;
-      state.serror = false;
-    },
-    updateMatrialsSuccess: (state, action) => {
-      state.sloading = false;
-      state.ssuccess = true;
-      state.matrial = action.payload;
-    },
-    updateMatrialsFail: (state, action) => {
-      state.ssuccess = false;
-      state.sloading = false;
-      state.serror = action.payload;
-    },
+
   },
 });
 
@@ -124,9 +114,7 @@ export const {
   viewSingleMatrialsSuccess,
   viewSingleMatrialsFail,
 
-  updateMatrialsRequest,
-  updateMatrialsSuccess,
-updateMatrialsFail
+
 
 
 } = orderDetailsSlice.actions;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Helmet } from 'react-helmet'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { Col, Form, Row } from 'react-bootstrap'
 import Product from '../components/Product'
@@ -17,16 +17,12 @@ import { Container } from 'react-bootstrap'
 import TopRatedCarousel from '../components/Carousels/TopRatedCarousel'
 import TopRateCarouselMobile from '../components/Carousels/TopRateCarouselMobile'
 import styled from 'styled-components'
-import ProductFilter from '../components/ProductFilter'
+
 import PromotionsCard from '../components/PromotionsCard'
 import MobileNavbar from '../components/layouts/MobileNavBar'
 import { getConfigdata } from '../actions/configAction'
-// import { ToastContainer, toast } from 'react-toastify'
-// import 'react-toastify/dist/ReactToastify.css'
 
-const Wrapper = styled(Row)`
-  overflow-x: hidden;
-`
+
 
 const Title = styled.div`
   text-align: center;
@@ -125,7 +121,7 @@ const HomeScreen = () => {
   // const notify = () => toast('Wow so easy!')
 
 
-  const [view, setView] = useState('')
+
 
   const navigate = useNavigate()
   const { keyword, filter, category } = useParams()
@@ -142,7 +138,7 @@ const HomeScreen = () => {
     productList
 
     const viewConfig = useSelector((state) => state.configUpdate)
-    const { loading: dataLoading, config: configData } = viewConfig
+    const { config: configData } = viewConfig
 
 
   console.log(configData)
@@ -204,7 +200,7 @@ const HomeScreen = () => {
 
               <PromoWrapper>
               
-              {configData.offers?.map((offer,item) => (
+              {configData?.offers?.map((offer,item) => (
                 <Col lg={5} md={12} sm={12}  className='m-4' key={item}>
                 <PromotionsCard data={offer} />
                 </Col>

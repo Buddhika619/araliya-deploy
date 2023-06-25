@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Button, Row, Col, Table } from 'react-bootstrap'
+import { useLocation, useNavigate,  } from 'react-router-dom'
+import {  Row, Col,  } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Sidebar from '../../components/layouts/Sidebar'
 import Loader from '../../components/Loader'
@@ -16,7 +16,7 @@ import {
   removeCarousel,
 } from '../../actions/configAction'
 import { setConfigReset } from '../../reducers/configSlice'
-import TestBuwa from '../TestBuwa'
+
 import ImageCard from '../../components/ImageCard'
 
 const ToggleWrapper = styled('div')`

@@ -19,23 +19,7 @@ const DetailsWrapper = styled(Row)`
     background-color: #f6f9fc;
   }
 
-  /* img {
-    &:hover {
-      scale: 1.3;
-      cursor: zoom-in;
-      display: block;
-      margin: 10%;
-    }
 
-    @media (max-width: 1000px) {
-      &:hover {
-        scale: 1;
-        cursor: zoom-in;
-        display: inline-block;
-        margin: auto;
-      }
-    }
-  } */
 `
 
 const Reviews = styled(ListGroup)`

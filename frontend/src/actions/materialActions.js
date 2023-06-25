@@ -16,10 +16,13 @@ import {
   viewSingleMatrialsSuccess,
   viewSingleMatrialsFail,
 
+} from "../reducers/matrialSlice";
+import {
+  
   updateMatrialsRequest,
   updateMatrialsSuccess,
   updateMatrialsFail
-} from "../reducers/matrialSlice";
+} from "../reducers/updateMaterialsSlice"
 
 import {
   materialStockRequest,

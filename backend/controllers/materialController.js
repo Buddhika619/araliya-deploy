@@ -1,17 +1,26 @@
 import Batch from "../models/batchModel.js";
 import Material from "../models/rawMaterialModel.js";
 import asyncHandler from "express-async-handler";
-
+import Supplier from "../models/supplierModel.js";
 // @des  create a Material
 // @route POST /api/materials/
 // @access Private/Admin
 const createMaterial = asyncHandler(async (req, res) => {
+
+
+  const supplier = await Supplier.findById(req.body.supplierId)
+  console.log(supplier)
+  if(!supplier) {
+    res.status(404);
+    throw new Error("Supplier not found");
+  }
+
   const material = new Material({
     name: req.body.name,
     reOrderLevel: req.body.reOrderLevel,
     dailyCap: req.body.dailyCap,
     measurement: req.body.measurement,
-    supplier: req.body.supplierId
+    supplierId: req.body.supplierId
   });
 
   const createdMaterial = await material.save();
@@ -24,7 +33,14 @@ const createMaterial = asyncHandler(async (req, res) => {
 const updateMaterial = asyncHandler(async (req, res) => {
 
   const { name, reOrderLevel, dailyCap, measurement,supplierId } = req.body;
-  console.log(supplierId)
+
+  const supplier =await Supplier.findById(req.body.supplierId)
+
+  console.log(supplier)
+  if(!supplier) {
+    res.status(404);
+    throw new Error("Supplier not found");
+  }
 
   const material = await Material.findById(req.params.id);
 

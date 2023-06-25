@@ -6,8 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 
-import { listUsers, removeUser } from '../../actions/userActions'
-import { removeUserReset } from '../../reducers/userDetailsSlice'
+
 
 import Sidebar from '../../components/layouts/Sidebar'
 import {
@@ -23,9 +22,7 @@ import {
   EditOutlined,
 } from '@material-ui/icons'
 import styled from 'styled-components'
-import { listMaterials, removeMaterial } from '../../actions/materialActions'
-import { viewMatrialsReset } from '../../reducers/matrialSlice'
-import { listSuppliers, removeSupplier } from '../../actions/supplierActions'
+
 import { viewSingleSupplierReset, viewSupplierReset } from '../../reducers/supplierSlice'
 import { viewCategoryReset, viewSingleCategoryReset } from '../../reducers/categorySlice'
 import { listCategories, removeCategory, viewSingleCategory } from '../../actions/categoryActions'
@@ -147,7 +144,7 @@ const CategoryListScreen = () => {
             style={{ color: '#4cbb17' }}
           />
           <span className='px-2' style={{ color: '#4cbb17' }}>
-            Add Material
+            Add Category
           </span>
         </Button>
 

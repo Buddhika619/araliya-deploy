@@ -1,60 +1,62 @@
-import Carousel from 'react-bootstrap/Carousel'
-import { Button, Card, CardGroup, Col, Container } from 'react-bootstrap'
-import styled from 'styled-components'
+import Carousel from "react-bootstrap/Carousel";
+import { Button, Card, CardGroup, Col, Container } from "react-bootstrap";
+import styled from "styled-components";
 
-import Product from '../Product'
+import Product from "../Product";
 
-import React, { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Image } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import Loader from '../Loader'
-import Message from '../Message'
-import { listTopProducts } from '../../actions/productActions'
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Image } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import Loader from "../Loader";
+import Message from "../Message";
+import { listTopProducts } from "../../actions/productActions";
 
 const HeroCarousel = styled(Carousel)`
   /* margin: 0 100px 0 140px; */
-  
+
   padding-bottom: 20px;
 
   @media (max-width: 480px) {
     display: none;
   }
-`
+`;
 
 const HeroCol = styled(Col)`
   /* margin: 0 100px 0 140px; */
   display: flex;
   justify-content: space-around;
-`
+`;
 
 const TopRatedCarousel = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const productTopRated = useSelector((state) => state.productTopRated)
-  const { loading, success, error, products } = productTopRated
+  const productTopRated = useSelector((state) => state.productTopRated);
+  const {  success, products } = productTopRated;
 
-  const products1 = []
-  const products2 = []
+  const products1 = [];
+  const products2 = [];
 
   if (success) {
     for (let i = 0; i < 3; i++) {
-      products1[i] = products[i]
+      if (products[i]) {
+        products1[i] = products[i];
+      }
     }
 
     for (let i = 3; i < 6; i++) {
-      products2[i] = products[i]
+      if (products[i]) {
+        products2[i] = products[i];
+      }
     }
   }
 
-
-
   useEffect(() => {
-    dispatch(listTopProducts())
-  }, [dispatch])
+    dispatch(listTopProducts());
+  }, [dispatch]);
 
   return (
-    <HeroCarousel variant='dark'>
+    <HeroCarousel variant="dark">
       <Carousel.Item>
         <Container>
           <HeroCol sm={12}>
@@ -80,7 +82,7 @@ const TopRatedCarousel = () => {
         </Container>
       </Carousel.Item>
     </HeroCarousel>
-  )
-}
+  );
+};
 
-export default TopRatedCarousel
+export default TopRatedCarousel;

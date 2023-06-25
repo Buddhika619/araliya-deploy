@@ -1,25 +1,23 @@
-import axios from "axios";
+
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import {  useLocation, useNavigate, useParams } from "react-router-dom";
+import { Form, Button, } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+
 import FormContainer from "../../components/FormContainer";
-import {
-  listProductsDetails,
-  updateProduct,
-} from "../../actions/productActions";
+
 import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
 import {
-  createMaterial,
+
   updateMaterials,
   viewSingleMaterial,
 } from "../../actions/materialActions";
-import { viewMatrialsReset } from "../../reducers/matrialSlice";
+
+import { updateMaterialsReset } from "../../reducers/updateMaterialsSlice";
 
 const MaterialEditScren = () => {
   const { id } = useParams();
@@ -41,9 +39,7 @@ const MaterialEditScren = () => {
   const materialDetail = useSelector((state) => state.matrialDetails);
   const { sloading, serror, matrial, ssuccess } = materialDetail;
 
-  console.log(ssuccess);
-
-  const materialUpdate = useSelector((state) => state.matrialDetails);
+  const materialUpdate = useSelector((state) => state.materialUpdate);
 
   const {
     loading,
@@ -52,7 +48,17 @@ const MaterialEditScren = () => {
     success,
   } = materialUpdate;
 
+  console.log(materialUpdate)
+  if(success) {
+    toast.success("Success");
+    setTimeout(function () {
+      navigate("/admin/materials/all");
+    }, 1000);
+  }
+
   useEffect(() => {
+    dispatch(updateMaterialsReset())
+    
     if (ssuccess) {
       // toast.success('Success')
 
@@ -61,7 +67,7 @@ const MaterialEditScren = () => {
     } else {
       dispatch(viewSingleMaterial(id));
     }
-  }, [id, ssuccess]);
+  }, [id, ssuccess,]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -76,13 +82,11 @@ const MaterialEditScren = () => {
       })
     );
 
-    toast.success("Success");
-    setTimeout(function () {
-      navigate("/admin/materials/all");
-    }, 1000);
+
   };
 
   const onMutate = (e) => {
+    dispatch(updateMaterialsReset())
     let boolean = null;
 
     if (e.target.value === "true") {
@@ -129,6 +133,7 @@ const MaterialEditScren = () => {
           Go Back
         </Button>
         <FormContainer>
+        {error && <Message varient="danger">{error}</Message>}
           <form onSubmit={onSubmit}>
             <header>
               <p className="pageHeader"> Add Material</p>

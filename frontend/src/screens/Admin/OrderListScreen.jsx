@@ -15,13 +15,12 @@ import {
   GridToolbarDensitySelector,
 } from '@mui/x-data-grid'
 import {
-  AddBoxOutlined,
+
   DeleteOutlineOutlined,
   DirectionsBike,
-  EditOutlined,
-  Info,
+  
   InfoOutlined,
-  MenuOpenRounded,
+
   PlayCircleFilledWhite,
 } from '@material-ui/icons'
 
@@ -32,10 +31,9 @@ import {
   updateOrderState,
 } from '../../actions/orderActions'
 
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import {  toast } from 'react-toastify'
 
-import { Container } from 'react-bootstrap'
+
 import styled from 'styled-components'
 import {
 
@@ -140,7 +138,8 @@ const OrderListScreen = () => {
     { field: 'id',headerName: 'Order ID', width:250 },
     { field: 'USER',  headerName: 'User',  flex:1 },
     { field: 'CREATEDDATE', headerName: 'Date Created',  flex:1 },
-    { field: 'TOTAL',headerName:'Total',   flex:1 },
+    { field: 'TOTAL',headerName:'Order Total',   flex:1 },
+    { field: 'DILIVARY',headerName:'Dilivery Cost',   flex:1 },
     {
       field: 'PAYMENTMETHOD',
       headerName: 'Payment Method',
@@ -182,6 +181,7 @@ const OrderListScreen = () => {
       USER: order.user && order.user.name,
       CREATEDDATE: order.createdAt.slice(0, 10),
       TOTAL: `Rs ${order.totalPrice}`,
+      DILIVARY: `Rs ${order.shippingPrice}`,
       PAYMENTMETHOD: order.paymentMethod,
       PAID: order.isPaid,
       PAIDAT: order.paidAt,

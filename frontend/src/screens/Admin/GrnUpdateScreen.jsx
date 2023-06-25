@@ -1,26 +1,19 @@
-import axios from "axios";
+
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {  Button, } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+
 import FormContainer from "../../components/FormContainer";
-import {
-  listProductsDetails,
-  updateProduct,
-} from "../../actions/productActions";
+
 import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
-import {
-  createMaterial,
-  updateMaterials,
-  viewSingleMaterial,
-} from "../../actions/materialActions";
-import { viewMatrialsReset } from "../../reducers/matrialSlice";
+
 import { updateBatches, viewSingleBatch } from "../../actions/batchActions";
+import { updateBatchesReset } from "../../reducers/updateBatchSlice";
 
 const GrnUpdateScreen = () => {
   const { id } = useParams();
@@ -44,7 +37,7 @@ const GrnUpdateScreen = () => {
 
 
 
-  const materialUpdate = useSelector((state) => state.batchDetails);
+  const materialUpdate = useSelector((state) => state.batchUpdate);
 
   const {
     loading,
@@ -52,6 +45,17 @@ const GrnUpdateScreen = () => {
 
     success,
   } = materialUpdate;
+
+  console.log(materialUpdate)
+
+  if(success) {
+    toast.success("Success");
+    setTimeout(function () {
+      navigate("/admin/batches");
+    }, 1000);
+  }
+
+  
 
   useEffect(() => {
     
@@ -83,13 +87,11 @@ supplierId,
       })
     );
 
-    toast.success("Success");
-    setTimeout(function () {
-      navigate("/admin/batches");
-    }, 1000);
+   
   };
 
   const onMutate = (e) => {
+    dispatch(updateBatchesReset())
     let boolean = null;
 
     if (e.target.value === "true") {
@@ -120,9 +122,7 @@ supplierId,
     return <Spinner />;
   }
 
-  if (serror) {
-    toast.error(serror);
-  }
+
 
   const path = location.pathname.split("/")[3];
 
@@ -138,6 +138,7 @@ supplierId,
           Go Back
         </Button>
         <FormContainer>
+        {error && <Message varient="danger">{error}</Message>}
           <form onSubmit={onSubmit}>
             <header>
               <p className="pageHeader"> Update Batch</p>
@@ -155,7 +156,7 @@ supplierId,
               required
             />
 
-            <label className="formLabel">Supplier ID</label>
+            {/* <label className="formLabel">Supplier ID</label>
             <input
               className="formInputName"
               type="text"
@@ -165,7 +166,7 @@ supplierId,
               // maxLength='32'
               // minLength='10'
               required
-            />
+            /> */}
 
             <label className="formLabel">Quantity</label>
             <input

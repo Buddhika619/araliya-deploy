@@ -202,8 +202,8 @@ export const listProductsDetails = (id) => async (dispatch) => {
   }
 }
 
-export const removeProduct = (ids) => async (dispatch, getState) => {
-  console.log(ids)
+export const removeProduct = (id) => async (dispatch, getState) => {
+  console.log(id)
   try {
     dispatch(productRemoveRequest())
 
@@ -215,15 +215,15 @@ export const removeProduct = (ids) => async (dispatch, getState) => {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
-        data: ids,
+        data: id,
       },
     }
 
     //deleteOne
-    // await axios.delete(`/api/products/${id}`, config)
+    await axios.delete(`/api/products/${id}`, config)
 
     //deleteMultiple
-    axios.delete(`/api/products`, config)
+    // axios.delete(`/api/products`, config)
 
     dispatch(productRemoveSuccess())
   } catch (error) {

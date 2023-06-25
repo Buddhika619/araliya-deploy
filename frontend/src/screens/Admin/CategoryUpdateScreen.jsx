@@ -1,20 +1,16 @@
-import axios from 'axios'
+
 import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import {  Button,  } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import Message from '../../components/Message'
-import Loader from '../../components/Loader'
+
 import FormContainer from '../../components/FormContainer'
-import { listProductsDetails, updateProduct } from '../../actions/productActions'
+
 import { productUpdateReset } from '../../reducers/singleProductSlice'
 
 import Spinner from '../../components/Spinner'
 import { toast } from 'react-toastify'
-import { createMaterial, updateMaterials, viewSingleMaterial } from '../../actions/materialActions'
-import { viewMatrialsReset } from '../../reducers/matrialSlice'
-import { updateSupplier, viewSingleSupplier } from '../../actions/supplierActions'
-import { viewSingleSupplierReset, viewSupplierReset } from '../../reducers/supplierSlice'
+
 import { updateCategory, viewSingleCategory } from '../../actions/categoryActions'
 
 const CategoryUpdateScreen = () => {

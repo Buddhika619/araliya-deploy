@@ -1,15 +1,14 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate,  } from "react-router-dom";
 import { Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import {
-  removeProduct,
+
   createProduct,
-  listProductsAdmin,
-  listProductsAdminOut,
+  
 } from "../../actions/productActions";
 import { toast } from "react-toastify";
 import { productRemoveReset } from "../../reducers/singleProductSlice";
@@ -25,11 +24,11 @@ import {
 } from "@mui/x-data-grid";
 import {
   AddBoxOutlined,
-  DeleteOutlineOutlined,
+
   EditOutlined,
 } from "@material-ui/icons";
 import styled from "styled-components";
-import { productListReset } from "../../reducers/productsSlice";
+
 import { listMaterialsStock } from "../../actions/materialActions";
 import {
   allocateBulkKitchn,
@@ -144,7 +143,7 @@ const MaterialStockScreen = () => {
 
     { field: "totalQty", headerName: "Total Quantity", flex: 1 },
     { field: "measurement", headerName: "Mesurement", flex: 1 },
-    { field: "supplier", headerName: "Supplier ID", flex: 1 },
+    { field: "supplier", headerName: "Supplier ID", width: 220 },
     {
       width: 180,
       renderCell: (cellValues) => {

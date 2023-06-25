@@ -6,8 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 
-import { listUsers, removeUser } from '../../actions/userActions'
-import { removeUserReset } from '../../reducers/userDetailsSlice'
+
 
 import Sidebar from '../../components/layouts/Sidebar'
 import {
@@ -25,6 +24,7 @@ import {
 import styled from 'styled-components'
 import { listMaterials, removeMaterial } from '../../actions/materialActions'
 import { viewMatrialsReset } from '../../reducers/matrialSlice'
+import { updateMaterialsReset } from '../../reducers/updateMaterialsSlice'
 
 const ToggleWrapper = styled('div')`
   position: relative;
@@ -63,9 +63,11 @@ const MaterialListScreen = () => {
   //   }
 
   useEffect(() => {
-   
+    dispatch(viewMatrialsReset())
+    dispatch(updateMaterialsReset())
     if (user && user.isAdmin) {
       dispatch(listMaterials())
+    
     } else {
       navigate('/login')
     }
@@ -103,7 +105,7 @@ const MaterialListScreen = () => {
 
   //data grid columns
   const columns = [
-    { field: 'id', flex: 1 },
+    { field: 'id',  width: 220,},
     { field: 'name',flex: 1 },
     { field: "supplier", headerName: "Supplier ID",  width: 220, },
     { field: 'reOrderLevel', flex: 1 },
@@ -168,7 +170,7 @@ const MaterialListScreen = () => {
           </Button>
         )}
 
-        {selectionModel.length > 0 && (
+        {selectionModel.length === 1 && (
           <Button
             className='p-0 pe-2'
             variant='contained'

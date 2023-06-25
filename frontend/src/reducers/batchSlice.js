@@ -28,6 +28,8 @@ const batchDetailsSlice = createSlice({
     viewBatchesReset: (state) => {
       state.success = false;
       state.loading = false;
+       state.ssuccess = false;
+       state.rSuccess = false;
       state.batches = [];
       state.batch= {}
     },
@@ -88,21 +90,6 @@ const batchDetailsSlice = createSlice({
     },
 
 
-    updateBatchesRequest: (state) => {
-      state.ssuccess = false;
-      state.sloading = true;
-      state.serror = false;
-    },
-    updateBatchesSuccess: (state, action) => {
-      state.sloading = false;
-      state.ssuccess = true;
-      state.batch = action.payload;
-    },
-    updateBatchesFail: (state, action) => {
-      state.ssuccess = false;
-      state.sloading = false;
-      state.serror = action.payload;
-    },
   },
 });
 
@@ -124,10 +111,6 @@ export const {
   viewSingleBatchesRequest,
   viewSingleBatchesSuccess,
   viewSingleBatchesFail,
-
-  updateBatchesRequest,
-  updateBatchesSuccess,
-  updateBatchesFail
 
 
 } = batchDetailsSlice.actions;

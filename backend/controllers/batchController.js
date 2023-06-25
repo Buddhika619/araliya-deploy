@@ -215,6 +215,7 @@ const createBatch = asyncHandler(async (req, res) => {
   // Find the material or  product with the given ID in the request body
   const material = await Material.findById(req.body.materialId);
   const product = await Product.findById(req.body.materialId);
+  
 
   // If a material with the given ID was found Create a new batch with the material ID, quantity, and cost from the request body
   if (material) {
@@ -240,10 +241,14 @@ const createBatch = asyncHandler(async (req, res) => {
       Number(req.body.qty) < 1 ||
       Number(req.body.cost) < 1
     ) {
-      res.status(401);
+      res.status(400);
       throw new Error("Invalid Input");
     }
 
+    if(!req.body.salesPrice){
+      res.status(400);
+      throw new Error("Sales price is required!");
+    }
     // Create a new batch
     const batch = new Batch({
       productId: req.body.materialId,
@@ -270,6 +275,7 @@ const updateBatch = asyncHandler(async (req, res) => {
 
   const batch = await Batch.findById(req.params.id);
 
+console.log(req.body)
   if (batch) {
     //If the batch has a material ID, update it with the new value
     if (batch.materialId) {
@@ -278,6 +284,10 @@ const updateBatch = asyncHandler(async (req, res) => {
 
     // If the batch has a product ID, update it with the new value, and update the sales price
     if (batch.productId) {
+      if(!req.body.salesPrice){
+        res.status(400);
+        throw new Error("Sales price is required!");
+      }
       batch.productId = materialId;
       batch.salesPrice = salesPrice;
     }

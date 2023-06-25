@@ -8,7 +8,7 @@ import Loader from "../../components/Loader";
 import {
   removeProduct,
   createProduct,
-  listProductsAdmin,
+
   listProductsAdminOut,
 } from "../../actions/productActions";
 
@@ -29,8 +29,7 @@ import {
   EditOutlined,
 } from "@material-ui/icons";
 import styled from "styled-components";
-import { productListReset } from "../../reducers/productsSlice";
-import DateModal from "../../components/Modals/DateModel";
+
 import ReorderModel from "../../components/Modals/ReorderModel";
 import { viewSingleSupplier } from "../../actions/supplierActions";
 

@@ -1,6 +1,6 @@
 import { DataGrid } from '@mui/x-data-grid'
 import { useState, useEffect } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate,  } from 'react-router-dom'
 import { Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../../components/Message'
@@ -8,7 +8,7 @@ import Loader from '../../components/Loader'
 import {
   removeProduct,
   createProduct,
-  listProductsAdmin,
+
   listProductsAdminOut,
 } from '../../actions/productActions'
 
@@ -29,7 +29,7 @@ import {
   EditOutlined,
 } from '@material-ui/icons'
 import styled from 'styled-components'
-import { productListReset } from '../../reducers/productsSlice'
+
 
 const ToggleWrapper = styled('div')`
   position: relative;
@@ -232,7 +232,7 @@ const ProductOutListScreen = () => {
           </Button>
         )}
 
-        {selectionModel.length > 0 && (
+        {selectionModel.length ===  1 && (
           <Button
             className='p-0 pe-2'
             variant='contained'

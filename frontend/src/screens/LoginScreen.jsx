@@ -6,7 +6,7 @@ import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRig
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import { toast } from 'react-toastify'
 import { login } from '../actions/userActions'
-import { Container, Spinner } from 'react-bootstrap'
+import { Spinner } from 'react-bootstrap'
 import styled from 'styled-components'
 import { resetErrors } from '../reducers/userSlice'
 

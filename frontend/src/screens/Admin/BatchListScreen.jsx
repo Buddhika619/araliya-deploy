@@ -2,12 +2,11 @@ import { DataGrid } from '@mui/x-data-grid'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Row, Col } from 'react-bootstrap'
-import { batch, useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 
-import { listUsers, removeUser } from '../../actions/userActions'
-import { removeUserReset } from '../../reducers/userDetailsSlice'
+
 
 import Sidebar from '../../components/layouts/Sidebar'
 import {
@@ -19,14 +18,15 @@ import {
 } from '@mui/x-data-grid'
 import {
   AddBoxOutlined,
-  DeleteOutlineOutlined,
+
   EditOutlined,
 } from '@material-ui/icons'
 import styled from 'styled-components'
-import { listMaterials, removeMaterial } from '../../actions/materialActions'
-import { viewMatrialsReset } from '../../reducers/matrialSlice'
+import {  removeMaterial } from '../../actions/materialActions'
+
 import { listBatches } from '../../actions/batchActions'
 import { viewBatchesReset } from '../../reducers/batchSlice'
+import { updateBatchesReset } from '../../reducers/updateBatchSlice'
 
 const ToggleWrapper = styled('div')`
   position: relative;
@@ -66,7 +66,8 @@ const BatchListScreen = () => {
   //   }
 
   useEffect(() => {
-   
+    dispatch(viewBatchesReset())
+    dispatch(updateBatchesReset())
     if (user && user.isAdmin) {
       dispatch(listBatches())
     } else {
@@ -106,10 +107,10 @@ const BatchListScreen = () => {
 
   //data grid columns
   const columns = [
-    { field: 'id',flex:1 },
+    { field: 'id',width: 220 },
     { field: 'name',flex:1  },
-    { field: 'materialId',flex:1  },
-    { field: 'productId', flex:1 },
+    { field: 'materialId',width: 220 },
+    { field: 'productId', width: 220 },
     { field: 'originalQty', flex:1 },
     { field: 'qty',flex:1 },
     { field: 'cost',flex:1 },
@@ -122,7 +123,7 @@ const BatchListScreen = () => {
   
     rows = materialList?.batches.map((row) => ({
       id: row._id,
-      name: (row.materialId) ? row.materialId.name :  row.productId.name,
+      name: (row.materialId) ? row.materialId?.name :  row.productId?.name,
       materialId: row.materialId && row.materialId._id,
       productId: row.productId && row.productId._id,
       qty: row.qty,

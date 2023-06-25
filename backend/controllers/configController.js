@@ -8,9 +8,9 @@ import Product from '../models/productModel.js'
 //@access Private/admin
 
 const updateConfig = asyncHandler(async (req, res) => {
+  
   const { formData, offer } = req.body;
-  const product = await Product.findById(offer.productId)
-  const {name, image, description, price} = product
+
   // Create an array containing the carousel images and offers
   let carouselArr = [formData.image];
   let offersArr = Object.values(offer);
@@ -58,6 +58,8 @@ const updateConfig = asyncHandler(async (req, res) => {
     }
   }
 
+  const product = await Product.findById(offer.productId)
+  const {name, image, description, price} = product
   // Update the offers if all three offer fields were filled out
   if (offersArr.length === 3) {
     // Check that the product ID is in the correct format

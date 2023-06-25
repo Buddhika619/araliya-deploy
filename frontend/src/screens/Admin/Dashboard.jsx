@@ -1,50 +1,28 @@
-import { DataGrid } from "@mui/x-data-grid";
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../../components/Message";
+
 import Loader from "../../components/Loader";
 
 import Sidebar from "../../components/layouts/Sidebar";
-import {
-  GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
-  GridToolbarExport,
-  GridToolbarDensitySelector,
-} from "@mui/x-data-grid";
-import {
-  AddBoxOutlined,
-  DeleteOutlineOutlined,
-  EditOutlined,
-  Info,
-  InfoOutlined,
-  WidgetsOutlined,
-} from "@material-ui/icons";
 
-import FormContainer from "../../components/FormContainer";
-import { listOrders } from "../../actions/orderActions";
 
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Container } from "react-bootstrap";
-import styled from "styled-components";
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 
-import { mockTransactions } from "../../data/mockData";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
-import EmailIcon from "@mui/icons-material/Email";
+import styled from "styled-components";
+import { Box,  Typography,  } from "@mui/material";
+
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 
 import LineChart from "../../components/charts/LineChart";
-import GeographyChart from "../../components/charts/GeographyChart";
-import BarChart from "../../components/charts/BarChart";
+
 import StatBox from "../../components/charts/StatBox";
-import ProgressCircle from "../../components/charts/ProgressCircle";
+
 import { listStats } from "../../actions/statsActions";
 
 const ToggleWrapper = styled("div")`

@@ -1,15 +1,12 @@
-import axios from "axios";
+
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import {  useLocation, useNavigate, useParams } from "react-router-dom";
+import { Form, Button, } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+
 import FormContainer from "../../components/FormContainer";
-import {
-  listProductsDetails,
-  updateProduct,
-} from "../../actions/productActions";
+
 import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
@@ -38,6 +35,7 @@ const CreateListing = () => {
 
   const { loading, error, success } = addMaterial;
 
+ 
   console.log(success);
   useEffect(() => {
     dispatch(viewMatrialsReset());
@@ -52,12 +50,14 @@ const CreateListing = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    
     dispatch(
       createMaterial({
         name,
         reOrderLevel,
         dailyCap,
         measurement,
+        supplierId
       })
     );
   };
@@ -109,6 +109,7 @@ const CreateListing = () => {
           Go Back
         </Button>
         <FormContainer>
+        {error && <Message varient="danger">{error}</Message>}
           <form onSubmit={onSubmit}>
             <header>
               <p className="pageHeader"> Add Material</p>
@@ -157,7 +158,7 @@ const CreateListing = () => {
               type="text"
               id="supplierId"
               value={supplierId}
-              onChange={supplierId}
+              onChange={onMutate}
               // maxLength='32'
               // minLength='10'
               required

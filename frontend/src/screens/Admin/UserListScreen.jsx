@@ -18,7 +18,6 @@ import {
   GridToolbarDensitySelector,
 } from '@mui/x-data-grid'
 import {
-  AddBoxOutlined,
   DeleteOutlineOutlined,
   EditOutlined,
 } from '@material-ui/icons'

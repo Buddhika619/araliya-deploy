@@ -1,4 +1,4 @@
-import { style } from '@mui/system'
+
 import { Row, Col, Form, Button, Container } from 'react-bootstrap'
 import styled from 'styled-components'
 
@@ -38,7 +38,7 @@ const Footer = () => {
         <Row className='row gy-4 gx-5'>
           <Col lg={4} md={6}>
             <h5 className='h1 text-white'>ARALIYA</h5>
-            <p className=' text-muted mb-0 mt-4'>NO. 302, Digana, Rajawalla,, Kandy, Sri Lanka</p>
+            <p className=' text-muted mb-0 mt-4'>NO. 302, Digana, Rajawalla, Kandy, Sri Lanka</p>
             <p className=' text-muted mb-0'>Email: araliyahoteldigana@gmail.com</p>
             <p className=' text-muted mb-0'>Phone: +94 81 237 6865</p>
             <p className='small text-muted mt-4'>

@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Form, Button, Row, Col, Table } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
+
 import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
+
 import Loader from '../components/Loader'
 import {
   getUserDetails,
@@ -11,7 +10,7 @@ import {
   updateUserProfile,
 } from '../actions/userActions'
 import { myOrderList } from '../actions/orderActions'
-import styled from 'styled-components'
+
 
 import { Container } from 'react-bootstrap'
 import { userUpdateReset } from '../reducers/userUpdateSlice'
@@ -20,20 +19,19 @@ import CustomButton from '../components/microComponents/CustomButton'
 
 import { DataGrid } from '@mui/x-data-grid'
 
-import { useParams } from 'react-router-dom'
+
 
 import {
-  listOrders,
+
   removeOrder,
-  updateOrderState,
+
 } from '../actions/orderActions'
 
 import { toast } from 'react-toastify'
 
-import { myOrdersReset, orderStateUpdateReset } from '../reducers/orderSlice'
+
 import { orderRemoveReset } from '../reducers/orderRemoveSlice'
-import { orderListReset } from '../reducers/orderListSlice'
-import { userDetailsReset } from '../reducers/userDetailsSlice'
+
 
 const Profile = () => {
   const [changeDetails, setChangeDetails] = useState(false)
@@ -50,7 +48,7 @@ const Profile = () => {
   const navigate = useNavigate()
 
   const uerDetails = useSelector((state) => state.userDetails)
-  const { loading, error, user } = uerDetails
+  const {  error, user } = uerDetails
   //log out if token is not valid
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -208,7 +206,7 @@ console.log(orders)
     }
   }
 
-  const onEdit = (listingId) => navigate(`/editlisting/${listingId}`)
+
   console.log(window.screen.width)
 
   if (loadingOrders) {

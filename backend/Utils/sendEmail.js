@@ -58,7 +58,7 @@ const sendEmail = async (to, qty, product, mesurement) => {
                                                 </tr>
                                                 <tr>
                                                     <td style="font-size: 14px; line-height: 18px; color: #666666; padding-bottom: 25px;">
-                                                       <strong>Order Date:</strong> 21-Nov-19
+                                                       <strong>Order Date:</strong> ${new Date().toString().slice(0,15)}
                                                     </td>
                                                 </tr>
                                             </tbody>

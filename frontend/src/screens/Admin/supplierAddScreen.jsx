@@ -1,21 +1,17 @@
-import axios from "axios";
+
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import {  useLocation, useNavigate, useParams } from "react-router-dom";
+import {  Button, } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+
 import FormContainer from "../../components/FormContainer";
-import {
-  listProductsDetails,
-  updateProduct,
-} from "../../actions/productActions";
+
+
 import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
-import { createMaterial } from "../../actions/materialActions";
-import { viewMatrialsReset } from "../../reducers/matrialSlice";
+
 import { viewSupplierReset } from "../../reducers/supplierSlice";
 import { createSupplier } from "../../actions/supplierActions";
 
@@ -43,7 +39,7 @@ const SupplierAddScreen = () => {
 
     success,
   } = addSupplier;
-console.log(addSupplier)
+  console.log(addSupplier);
   useEffect(() => {
     dispatch(viewSupplierReset());
     if (success) {
@@ -56,15 +52,22 @@ console.log(addSupplier)
   }, [id, dispatch, success]);
 
   const onSubmit = async (e) => {
-    e.preventDefault();
-    dispatch(
-      createSupplier({
-        name,
-        email,
-        address,
-        contactNo,
-      })
-    );
+    const phoneRegex =
+      /^(?:\+94|0)?(?:7\d{8}|0\d{2}-\d{7}|[1-9](?:\d{8}|\d{2}-\d{7}))$/;
+    const isValid = phoneRegex.test(contactNo);
+    if (isValid) {
+      dispatch(
+        createSupplier({
+          _id: id,
+          name,
+          email,
+          address,
+          contactNo,
+        })
+      );
+    } else {
+      toast.error("Invalid phone Number!");
+    }
   };
 
   const onMutate = (e) => {
@@ -104,7 +107,7 @@ console.log(addSupplier)
 
   const back = () => {
     dispatch(productUpdateReset());
-    navigate(`/admin/materials`);
+    navigate(`/admin/supplier`);
   };
 
   return (
@@ -165,7 +168,6 @@ console.log(addSupplier)
               onChange={onMutate}
               // maxLength='32'
               // minLength='10'
-              
             />
 
             <button type="submit" className="primaryButton createListingButton">
