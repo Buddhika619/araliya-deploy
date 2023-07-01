@@ -147,7 +147,7 @@ const SuppplierListScreen = () => {
             style={{ color: '#4cbb17' }}
           />
           <span className='px-2' style={{ color: '#4cbb17' }}>
-            Add Material
+            Add Suppliers
           </span>
         </Button>
 
