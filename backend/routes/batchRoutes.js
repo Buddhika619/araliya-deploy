@@ -8,7 +8,8 @@ import {
     getBatches, 
     assignBulk,
     getKitchenDetails,
-    assignOne
+    assignOne,
+    getAllIds
 } from '../controllers/batchController.js'
 
 
@@ -24,7 +25,7 @@ router.post('/one',protect, admin, assignOne)
 
 router.get('/kitchen',protect, admin, getKitchenDetails)
 
-
+router.get('/getIds',protect, admin, getAllIds)
 router
   .route('/:id')
   .get(protect, admin, getBatchbyID)

@@ -352,26 +352,13 @@ const getBatchbyID = asyncHandler(async (req, res) => {
 // @access Private/Admin
 
 const getBatches = asyncHandler(async (req, res) => {
-  let returnArr = [];
+  const batches = await Batch.find()
+    .sort({ createdAt: -1 })
+    .populate("materialId")
+    .populate("productId");
 
-  // get all batches and sort by createdAt in descending order
-  const batch = await Batch.find().sort({ createdAt: -1 });
-
-  for (let i = 0; i < batch.length; i++) {
-    // if batch has materialId, populate material object
-    if (batch[i].materialId) {
-      const mat = await Batch.findById(batch[i]._id).populate("materialId");
-      returnArr.push(mat);
-    } else {
-      // if batch has productId, populate product object
-      const pro = await Batch.findById(batch[i]._id).populate("productId");
-      returnArr.push(pro);
-    }
-  }
-
-  res.status(201).json(returnArr);
+  res.status(201).json(batches);
 });
-
 // @desc  Get all kitchenRecerved
 // @route GET /api/materials/kitchen
 // @access Private/Admin
@@ -384,6 +371,45 @@ const getKitchenDetails = asyncHandler(async (req, res) => {
 
   res.status(201).json(reservations);
 });
+
+
+// @desc  Get all product and mat ids
+// @route GET /api/materials/kitchen
+// @access Private/Admin
+
+const getAllIds = asyncHandler(async (req, res) => {
+  // get all batches and sort by createdAt in descending order
+  const products = await Product.aggregate([
+    {
+      $match: {
+        type: false
+      }
+    },
+    {
+      $project: {
+        label: "$_id"
+      }
+    }
+  ]);
+
+  const materials = await Material.aggregate([
+
+    {
+      $project: {
+        label: "$_id"
+      }
+    }
+  ]);
+
+
+
+  
+  res.status(201).json([...products, ...materials]);
+});
+
+
+
+
 export {
   createBatch,
   updateBatch,
@@ -392,4 +418,5 @@ export {
   assignBulk,
   getKitchenDetails,
   assignOne,
+  getAllIds
 };

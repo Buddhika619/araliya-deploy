@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
-import {  useLocation, useNavigate, useParams } from "react-router-dom";
-import { Button, } from "react-bootstrap";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
 
@@ -14,6 +13,35 @@ import { toast } from "react-toastify";
 
 import { createBatches } from "../../actions/batchActions";
 import { viewBatchesReset } from "../../reducers/batchSlice";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import axios from "axios";
+
+const top100Films = [
+  { label: "The Shawshank Redemption", year: 1994 },
+  { label: "The Godfather", year: 1972 },
+  { label: "The Godfather: Part II", year: 1974 },
+  { label: "The Dark Knight", year: 2008 },
+  { label: "12 Angry Men", year: 1957 },
+  { label: "Schindler's List", year: 1993 },
+  { label: "Pulp Fiction", year: 1994 },
+  {
+    label: "The Lord of the Rings: The Return of the King",
+    year: 2003,
+  },
+  { label: "The Good, the Bad and the Ugly", year: 1966 },
+  { label: "Fight Club", year: 1999 },
+  {
+    label: "The Lord of the Rings: The Fellowship of the Ring",
+    year: 2001,
+  },
+  {
+    label: "Star Wars: Episode V - The Empire Strikes Back",
+    year: 1980,
+  },
+  { label: "Forrest Gump", year: 1994 },
+  { label: "Inception", year: 2010 },
+];
 
 const CreateListing = () => {
   const { id } = useParams();
@@ -32,9 +60,13 @@ const CreateListing = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const [keyword, setKeyword] = useState("");
 
   const addBatch = useSelector((state) => state.batchDetails);
-  console.log(addBatch);
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const [suggestions, setSuggestions] = useState([]);
 
   const {
     loading,
@@ -42,9 +74,27 @@ const CreateListing = () => {
 
     success,
   } = addBatch;
+  
+  useEffect(() => {
+    // Fetch suggestions from the database based on the keyword
+    const fetchSuggestions = async () => {
+      console.log("hi");
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
 
-  console.log(success);
-
+        const response = await axios.get(`/api/batches/getIds`, config);
+        console.log(response.data);
+        setSuggestions(response.data);
+      } catch (error) {
+        // Handle fetch error
+      }
+    };
+    fetchSuggestions();
+  }, []);
   useEffect(() => {
     dispatch(viewBatchesReset());
     if (success) {
@@ -58,9 +108,10 @@ const CreateListing = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log(keyword);
     dispatch(
       createBatches({
-        materialId,
+        materialId: keyword,
         qty,
         cost,
         salesPrice,
@@ -91,6 +142,9 @@ const CreateListing = () => {
   if (loading) {
     return <Spinner />;
   }
+  if (suggestions.length < 1) {
+    return <Spinner />;
+  }
 
   const back = () => {
     dispatch(productUpdateReset());
@@ -116,17 +170,27 @@ const CreateListing = () => {
             </header>
 
             <label className="formLabel">Material/Product ID</label>
-            <input
-              className="formInputName"
-              type="text"
-              id="materialId"
-              value={materialId}
-              onChange={onMutate}
-              // maxLength='32'
-              // minLength='10'
-              required
+
+            <Autocomplete
+              disablePortal
+              options={suggestions}
+              sx={{ width: 300 }}
+              onChange={(event, value) => setKeyword(value)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  required
+                  className="formInputName"
+                  sx={{
+                    backgroundColor: "#ffffff",
+                    width: "600px",
+                    fontWeight: 600,
+                    "& fieldset": { border: "none" },
+                  }}
+                />
+              )}
             />
-{/* 
+            {/* 
             <label className="formLabel">Supplier ID</label>
             <input
               className="formInputName"

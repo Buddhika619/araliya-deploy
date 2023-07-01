@@ -799,7 +799,7 @@ button {
 
 .formInputName {
   padding: 0.9rem 1rem;
-  width: 100%;
+  width: 600px;
  
 }
 
@@ -856,3 +856,37 @@ button {
 }
 
 
+.suggestions-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.suggestion-card {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.suggestion-card:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-card:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-card:focus {
+  outline: none;
+}
+
+.suggestion-card .highlight {
+  background-color: #f9a825;
+}
