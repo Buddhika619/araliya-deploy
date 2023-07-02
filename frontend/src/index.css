@@ -65,7 +65,7 @@ button {
 .emailInput,
 .nameInput,
 .textarea {
-  box-shadow: rgba(0, 0, 0, 0.11);
+ 
   
   background: #ffffff;
   border-radius: 3rem;
@@ -787,7 +787,7 @@ button {
 .formInputSmall,
 .formInputFile {
   border: none;
-  outline: none;
+
   font-family: 'Montserrat', sans-serif;
 }
 .formInputSmall,
@@ -799,8 +799,8 @@ button {
 
 .formInputName {
   padding: 0.9rem 1rem;
-  width: 600px;
- 
+  width: 100%;
+  border: 2px solid rgb(198, 231, 198)
 }
 
 .formInputAddress {
