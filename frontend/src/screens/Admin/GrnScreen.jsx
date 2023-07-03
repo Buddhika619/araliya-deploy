@@ -119,7 +119,7 @@ const CreateListing = () => {
   if (loading) {
     return <Spinner />;
   }
-  if (suggestions.length < 1) {
+  if (suggestions.length < 0) {
     return <Spinner />;
   }
 

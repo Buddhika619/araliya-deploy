@@ -97,7 +97,25 @@ const sendSupplierMail = asyncHandler(async (req, res) => {
   res.status(200).json('Email send')
 });
 
-// sendSupplierMail()
+const getAllIds = asyncHandler(async (req, res) => {
+  // get all batches and sort by createdAt in descending order
+  const suppliers = await Supplier.aggregate([
+  
+    {
+      $project: {
+        label: "$_id",
+        _id: 0
+      }
+    }
+  ]);
+
+
+
+
+  
+  res.status(201).json(suppliers);
+});
+
 
 export {
   createSupplier,
@@ -105,5 +123,6 @@ export {
   deleteSupplier,
   getSupplierById,
   getSuppliers,
-  sendSupplierMail
+  sendSupplierMail,
+  getAllIds
 };

@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
-import {  useLocation, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, } from "react-bootstrap";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
 
@@ -13,6 +12,8 @@ import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
 import { createMaterial } from "../../actions/materialActions";
 import { viewMatrialsReset } from "../../reducers/matrialSlice";
+import { Autocomplete, TextField } from "@mui/material";
+import axios from "axios";
 
 const CreateListing = () => {
   const { id } = useParams();
@@ -35,8 +36,31 @@ const CreateListing = () => {
 
   const { loading, error, success } = addMaterial;
 
- 
-  console.log(success);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const [suggestions, setSuggestions] = useState([]);
+  const [keyword, setKeyword] = useState("");
+
+  useEffect(() => {
+    // Fetch suggestions from the database based on the keyword
+    const fetchSuggestions = async () => {
+
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
+
+        const response = await axios.get(`/api/supplier/getIds`, config);
+        setSuggestions(response.data);
+      } catch (error) {
+        // Handle fetch error
+      }
+    };
+    fetchSuggestions();
+  }, []);
+
   useEffect(() => {
     dispatch(viewMatrialsReset());
     if (success) {
@@ -50,14 +74,14 @@ const CreateListing = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    
+
     dispatch(
       createMaterial({
         name,
         reOrderLevel,
         dailyCap,
         measurement,
-        supplierId
+        supplierId: keyword.label,
       })
     );
   };
@@ -93,9 +117,14 @@ const CreateListing = () => {
     return <Spinner />;
   }
 
-  console.log(location.pathname.split("/")[3]);
 
-  const path = location.pathname.split("/")[3];
+  if (suggestions.length < 0) {
+    return <Spinner />;
+  }
+
+
+
+
 
   const back = () => {
     dispatch(productUpdateReset());
@@ -109,7 +138,7 @@ const CreateListing = () => {
           Go Back
         </Button>
         <FormContainer>
-        {error && <Message varient="danger">{error}</Message>}
+          {error && <Message varient="danger">{error}</Message>}
           <form onSubmit={onSubmit}>
             <header>
               <p className="pageHeader"> Add Material</p>
@@ -153,7 +182,7 @@ const CreateListing = () => {
             />
 
             <label className="formLabel">Supplier ID</label>
-            <input
+            {/* <input
               className="formInputName"
               type="text"
               id="supplierId"
@@ -162,6 +191,27 @@ const CreateListing = () => {
               // maxLength='32'
               // minLength='10'
               required
+            /> */}
+
+            <Autocomplete
+              disablePortal
+              options={suggestions}
+              sx={{ width: 300 }}
+              onChange={(event, value) => setKeyword(value)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  required
+                  className="formInputName"
+                  style={{ border: "2px solid rgb(198, 231, 198)" }}
+                  sx={{
+                    backgroundColor: "#ffffff",
+                    width: "600px",
+                    fontWeight: 600,
+                    "& fieldset": { border: "none" },
+                  }}
+                />
+              )}
             />
 
             <Form.Group controlId="measurement">

@@ -145,6 +145,7 @@ const ProudctOutStockListScreen = () => {
     { field: "CATEGORY", headerName: "Category", flex: 1 },
 
     { field: "BRAND", headerName: "Brand", flex: 1 },
+    { field: "REORDERLEVEL", headerName: "Re Order Level", flex: 1 },
     { field: "availableQty", headerName: "Available Qty", flex: 1 },
 
     { field: "REVIEWNUMBER", headerName: "No of Reviews", flex: 1 },

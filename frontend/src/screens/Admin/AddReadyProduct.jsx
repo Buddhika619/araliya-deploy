@@ -1,20 +1,18 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import {  useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
 
 import FormContainer from "../../components/FormContainer";
-import {
-  createProduct,
-
-} from "../../actions/productActions";
+import { createProduct } from "../../actions/productActions";
 import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
 import { listCategories } from "../../actions/categoryActions";
+import { Autocomplete, TextField } from "@mui/material";
 
 const AddReadyProduct = () => {
   const { id } = useParams();
@@ -35,7 +33,6 @@ const AddReadyProduct = () => {
     type: false,
     discountedPrice: "",
     brand: "",
-    supplierId: "",
   });
 
   const {
@@ -49,7 +46,6 @@ const AddReadyProduct = () => {
     active,
     type,
     brand,
-    supplierId,
   } = formData;
 
   const dispatch = useDispatch();
@@ -58,15 +54,39 @@ const AddReadyProduct = () => {
 
   // const productUpdate = useSelector((state) => state.productDetails);
   // const { loading, error, product, success } = productUpdate;
-  
+
   const categoryList = useSelector((state) => state.categoryDetails);
-  const { categories,loading: catloading } = categoryList;
+  const { categories, loading: catloading } = categoryList;
 
   const productCreate = useSelector((state) => state.createProduct);
   const { error, success, loading } = productCreate;
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const [suggestions, setSuggestions] = useState([]);
+  const [keyword, setKeyword] = useState("");
+
   useEffect(() => {
-    dispatch(listCategories())
+    // Fetch suggestions from the database based on the keyword
+    const fetchSuggestions = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
+
+        const response = await axios.get(`/api/supplier/getIds`, config);
+        setSuggestions(response.data);
+      } catch (error) {
+        // Handle fetch error
+      }
+    };
+    fetchSuggestions();
+  }, []);
+
+  useEffect(() => {
+    dispatch(listCategories());
     if (success) {
       toast.success("Success");
       navigate("/admin/productsout/active");
@@ -83,12 +103,13 @@ const AddReadyProduct = () => {
       !image ||
       !brand ||
       !reOrderLevel ||
-      !supplierId
+      !keyword
     ) {
       setFormError(true);
     } else {
-      console.log(formData);
-      dispatch(createProduct({ ...formData, image }));
+      dispatch(
+        createProduct({ ...formData, supplierId: keyword.label, image })
+      );
     }
   };
 
@@ -147,7 +168,12 @@ const AddReadyProduct = () => {
       setUploading(false);
     }
   };
+
   if (loading || catloading) {
+    return <Spinner />;
+  }
+
+  if (suggestions.length < 0) {
     return <Spinner />;
   }
 
@@ -179,7 +205,7 @@ const AddReadyProduct = () => {
               placeholder="Chicken Burger"
               //   required
             />
-            {(formError && !name) && (
+            {formError && !name && (
               <p
                 style={{
                   color: "red",
@@ -204,7 +230,9 @@ const AddReadyProduct = () => {
               >
                 <option value="">None</option>
                 {categories.map((category) => (
-                  <option key={category._id} value={category.category}>{category.category}</option>
+                  <option key={category._id} value={category.category}>
+                    {category.category}
+                  </option>
                 ))}
               </select>
             </Form.Group>
@@ -451,27 +479,27 @@ const AddReadyProduct = () => {
             {!type && (
               <>
                 <label className="formLabel">SupplierId</label>
-                <input
-                  className="formInputName"
-                  type="text"
-                  id="supplierId"
-                  value={supplierId}
-                  onChange={onMutate}
-                  placeholder="supplier ID"
-                  //   required
+
+                <Autocomplete
+                  disablePortal
+                  options={suggestions}
+                  sx={{ width: 300 }}
+                  onChange={(event, value) => setKeyword(value)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      required
+                      className="formInputName"
+                      style={{ border: "2px solid rgb(198, 231, 198)" }}
+                      sx={{
+                        backgroundColor: "#ffffff",
+                        width: "600px",
+                        fontWeight: 600,
+                        "& fieldset": { border: "none" },
+                      }}
+                    />
+                  )}
                 />
-                 {formError && (
-                  <p
-                    style={{
-                      color: "red",
-                      margin: "10px 20px",
-                      fontWeight: "600",
-                      fontSize: "14px",
-                    }}
-                  >
-                    Field can't be Empty
-                  </p>
-                )}
               </>
             )}
 
