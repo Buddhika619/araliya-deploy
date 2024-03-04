@@ -13,6 +13,15 @@ import {
   adminProductListSuccess,
   adminProductListFail,
 } from '../reducers/adminProductList'
+
+import {
+
+  stockProductListRequest,
+  stockProductListSuccess,
+  stockProductListFail,
+} from '../reducers/stockProductSlice'
+
+
 import {
   productDetailsRequest,
   productDetailsSuccess,
@@ -44,6 +53,11 @@ import {
   productTopSuccess,
   productTopFail,
 } from '../reducers/productTopRatedSlice'
+
+
+import {
+  viewKitchenRequest, viewKitchenSuccess, viewKitchenFail
+} from '../reducers/stockProductSlice'
 
 export const listProducts =
   (keyword = '', pagenumber = '', filter = '', category='') =>
@@ -105,35 +119,71 @@ export const listProducts =
   export const listProductsAdminOut =
   (path='') =>
   async (dispatch,getState) => {
-    try {
-      dispatch(adminProductListRequest())
 
 
-      const {
-      userLogin: { userInfo },
-    } = getState()
-
-      const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
-
-
-      const { data } = await axios.get(
-        `/api/products/admin/productList/out?path=${path}`, config
-      )
-
-      dispatch(adminProductListSuccess(data))
-    } catch (error) {
-      dispatch(
-        adminProductListFail(
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message
+    if(path === 'inStock'){
+      try {
+        dispatch(stockProductListRequest())
+  
+  
+        const {
+        userLogin: { userInfo },
+      } = getState()
+  
+        const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+  
+  
+        const { data } = await axios.get(
+          `/api/products/admin/productList/out?path=${path}`, config
         )
-      )
+  
+        dispatch(stockProductListSuccess(data))
+      } catch (error) {
+        dispatch(
+          adminProductListFail(
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message
+          )
+        )
+      }
+
+    }else{
+      try {
+        dispatch(stockProductListRequest())
+  
+  
+        const {
+        userLogin: { userInfo },
+      } = getState()
+  
+        const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      }
+  
+  
+        const { data } = await axios.get(
+          `/api/products/admin/productList/out?path=${path}`, config
+        )
+  
+        dispatch(adminProductListSuccess(data))
+      } catch (error) {
+        dispatch(
+          adminProductListFail(
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message
+          )
+        )
+      }
     }
+
   }
 
 export const listProductsDetails = (id) => async (dispatch) => {
@@ -152,8 +202,8 @@ export const listProductsDetails = (id) => async (dispatch) => {
   }
 }
 
-export const removeProduct = (ids) => async (dispatch, getState) => {
-  console.log(ids)
+export const removeProduct = (id) => async (dispatch, getState) => {
+  console.log(id)
   try {
     dispatch(productRemoveRequest())
 
@@ -165,15 +215,15 @@ export const removeProduct = (ids) => async (dispatch, getState) => {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${userInfo.token}`,
-        data: ids,
+        data: id,
       },
     }
 
     //deleteOne
-    // await axios.delete(`/api/products/${id}`, config)
+    await axios.delete(`/api/products/${id}`, config)
 
     //deleteMultiple
-    axios.delete(`/api/products`, config)
+    // axios.delete(`/api/products`, config)
 
     dispatch(productRemoveSuccess())
   } catch (error) {
@@ -187,7 +237,7 @@ export const removeProduct = (ids) => async (dispatch, getState) => {
   }
 }
 
-export const createProduct = () => async (dispatch, getState) => {
+export const createProduct = (product) => async (dispatch, getState) => {
   try {
     dispatch(productCreateRequest())
 
@@ -201,7 +251,7 @@ export const createProduct = () => async (dispatch, getState) => {
       },
     }
 
-    const { data } = await axios.post(`/api/products/`, {}, config)
+    const { data } = await axios.post(`/api/products/`, product, config)
 
     dispatch(productCreateSuccess(data))
   } catch (error) {

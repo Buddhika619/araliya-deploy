@@ -147,6 +147,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 }
 
 export const updateUserProfile = (user) => async (dispatch, getState) => {
+  console.log(user)
   try {
     dispatch(userUpdateRequest())
 

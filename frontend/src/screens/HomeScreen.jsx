@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Helmet } from 'react-helmet'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { Col, Form, Row } from 'react-bootstrap'
 import Product from '../components/Product'
@@ -17,15 +17,12 @@ import { Container } from 'react-bootstrap'
 import TopRatedCarousel from '../components/Carousels/TopRatedCarousel'
 import TopRateCarouselMobile from '../components/Carousels/TopRateCarouselMobile'
 import styled from 'styled-components'
-import ProductFilter from '../components/ProductFilter'
+
 import PromotionsCard from '../components/PromotionsCard'
 import MobileNavbar from '../components/layouts/MobileNavBar'
-// import { ToastContainer, toast } from 'react-toastify'
-// import 'react-toastify/dist/ReactToastify.css'
+import { getConfigdata } from '../actions/configAction'
 
-const Wrapper = styled(Row)`
-  overflow-x: hidden;
-`
+
 
 const Title = styled.div`
   text-align: center;
@@ -123,7 +120,8 @@ const FilterWrapper = styled(Container)`
 const HomeScreen = () => {
   // const notify = () => toast('Wow so easy!')
 
-  const [view, setView] = useState('')
+
+
 
   const navigate = useNavigate()
   const { keyword, filter, category } = useParams()
@@ -139,10 +137,15 @@ const HomeScreen = () => {
   const { loading, error, products, success, page, pages, resultCount,categories } =
     productList
 
-  console.log(products)
+    const viewConfig = useSelector((state) => state.configUpdate)
+    const { config: configData } = viewConfig
+
+
+  console.log(configData)
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(listProducts(keyword, pagenumber, filter, category))
+    dispatch(getConfigdata())
   }, [dispatch, keyword, pagenumber, filter,category])
 
   const handleChange = (e) => {
@@ -197,9 +200,9 @@ const HomeScreen = () => {
 
               <PromoWrapper>
               
-              {['a','b',].map((item) => (
+              {configData?.offers?.map((offer,item) => (
                 <Col lg={5} md={12} sm={12}  className='m-4' key={item}>
-                <PromotionsCard />
+                <PromotionsCard data={offer} />
                 </Col>
               ) )}
              

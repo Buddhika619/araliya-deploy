@@ -25,6 +25,16 @@ import orderRemoveReducer from './reducers/orderRemoveSlice'
 import configReducer from './reducers/configSlice'
 import materialReducer from './reducers/matrialSlice'
 import batchRedcuer from './reducers/batchSlice'
+import kitchenReducer from './reducers/kitchenSlice'
+import statsReducer from './reducers/statsSlice'
+import stockProductReducer from './reducers/stockProductSlice'
+import supplierReducer from './reducers/supplierSlice'
+import materialStockReducer from './reducers/materialStockSlice'
+import categoryReducer from './reducers/categorySlice'
+import categorySlice from './reducers/categorySlice'
+import batchUpdateSlice from './reducers/updateBatchSlice'
+import materialUpdateSlice from './reducers/updateMaterialsSlice'
+
 
 const reducer = combineReducers({
   productList: productListReducer,
@@ -46,7 +56,15 @@ const reducer = combineReducers({
   orderRemove:orderRemoveReducer,
   configUpdate :configReducer,
   matrialDetails: materialReducer,
-  batchDetails: batchRedcuer
+  batchDetails: batchRedcuer,
+  kitchenDetails:kitchenReducer,
+  stats: statsReducer,
+  stockProuct: stockProductReducer,
+  supplierDetails: supplierReducer,
+  materialStockDetails: materialStockReducer,
+  categoryDetails: categorySlice,
+  batchUpdate: batchUpdateSlice,
+  materialUpdate: materialUpdateSlice
 })
 
 // const middleware = []

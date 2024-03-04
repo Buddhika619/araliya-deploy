@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Form, Button, Row, Col, Table } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import { Link, useNavigate } from 'react-router-dom'
+
 import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
+
 import Loader from '../components/Loader'
 import {
   getUserDetails,
@@ -11,7 +10,7 @@ import {
   updateUserProfile,
 } from '../actions/userActions'
 import { myOrderList } from '../actions/orderActions'
-import styled from 'styled-components'
+
 
 import { Container } from 'react-bootstrap'
 import { userUpdateReset } from '../reducers/userUpdateSlice'
@@ -20,20 +19,19 @@ import CustomButton from '../components/microComponents/CustomButton'
 
 import { DataGrid } from '@mui/x-data-grid'
 
-import { useParams } from 'react-router-dom'
+
 
 import {
-  listOrders,
+
   removeOrder,
-  updateOrderState,
+
 } from '../actions/orderActions'
 
 import { toast } from 'react-toastify'
 
-import { myOrdersReset, orderStateUpdateReset } from '../reducers/orderSlice'
+
 import { orderRemoveReset } from '../reducers/orderRemoveSlice'
-import { orderListReset } from '../reducers/orderListSlice'
-import { userDetailsReset } from '../reducers/userDetailsSlice'
+
 
 const Profile = () => {
   const [changeDetails, setChangeDetails] = useState(false)
@@ -50,7 +48,7 @@ const Profile = () => {
   const navigate = useNavigate()
 
   const uerDetails = useSelector((state) => state.userDetails)
-  const { loading, error, user } = uerDetails
+  const {  error, user } = uerDetails
   //log out if token is not valid
 
   const userLogin = useSelector((state) => state.userLogin)
@@ -92,11 +90,12 @@ const Profile = () => {
   if (error && errorOrders === 'Not Authorized, token failed') {
     dispatch(logout())
   }
+  dispatch(userUpdateReset())
   useEffect(() => {
     // dispatch(userUpdateReset())
     // dispatch(myOrdersReset())
     dispatch(orderRemoveReset())
-    dispatch(userUpdateReset())
+    
 
     if (!userInfo) {
       navigate('/login')
@@ -111,7 +110,7 @@ const Profile = () => {
       }
     }
   }, [
-    dispatch, navigate, userInfo, user, success ,removeSuccess
+    dispatch, navigate, userInfo, user, success ,removeSuccess,updateError
   ])
 
   let columns = ''
@@ -120,7 +119,7 @@ const Profile = () => {
     columns = [
       { field: 'id', headerName: 'ID',width: 270 },
 
-      { field: 'TOTAL',headerName: 'Date', width: 120 },
+      { field: 'TOTAL',headerName: 'AMOUNT(LKR)', width: 120 },
    
       {
         field: 'STATUS',
@@ -185,10 +184,10 @@ console.log(orders)
       id: order._id,
       USER: order.user && order.user.name,
       STATUS: order.orderStatus,
-      TOTAL: `Rs ${order.totalPrice}`,
-      CREATEDDATE:  new Date(order.createdAt).toString().slice(0,16),
+      TOTAL: order.totalPrice,
+      CREATEDDATE:  (order.createdAt).toString().slice(0,10),
       CREATEDTIME:new Date(order.createdAt).toString().slice(16, 21),
-      DELIVEREDDATE: (order.deliveredAt && new Date(order.deliveredAt).toString().slice(0,16)),
+      DELIVEREDDATE: (order.deliveredAt && (order.createdAt).toString().slice(0,10)),
       DELIVEREDTIME: new Date(order.deliveredAt).toString().slice(16,21),
       PAYMENT: order.isPaid,
     }))
@@ -207,7 +206,7 @@ console.log(orders)
     }
   }
 
-  const onEdit = (listingId) => navigate(`/editlisting/${listingId}`)
+
   console.log(window.screen.width)
 
   if (loadingOrders) {

@@ -6,8 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 
-import { listUsers, removeUser } from '../../actions/userActions'
-import { removeUserReset } from '../../reducers/userDetailsSlice'
+
 
 import Sidebar from '../../components/layouts/Sidebar'
 import {
@@ -25,6 +24,7 @@ import {
 import styled from 'styled-components'
 import { listMaterials, removeMaterial } from '../../actions/materialActions'
 import { viewMatrialsReset } from '../../reducers/matrialSlice'
+import { updateMaterialsReset } from '../../reducers/updateMaterialsSlice'
 
 const ToggleWrapper = styled('div')`
   position: relative;
@@ -63,9 +63,11 @@ const MaterialListScreen = () => {
   //   }
 
   useEffect(() => {
-   
+    dispatch(viewMatrialsReset())
+    dispatch(updateMaterialsReset())
     if (user && user.isAdmin) {
       dispatch(listMaterials())
+    
     } else {
       navigate('/login')
     }
@@ -103,11 +105,12 @@ const MaterialListScreen = () => {
 
   //data grid columns
   const columns = [
-    { field: 'id', width: 220 },
-    { field: 'name', width: 250 },
-    { field: 'reOrderLevel', width: 100 },
-    { field: 'dailyCap', width: 100 },
-    { field: 'measurement', width: 100 },
+    { field: 'id',  width: 220,},
+    { field: 'name',flex: 1 },
+    { field: "supplier", headerName: "Supplier ID",  width: 220, },
+    { field: 'reOrderLevel', flex: 1 },
+    { field: 'dailyCap', flex: 1 },
+    { field: 'measurement', flex: 1 },
 
 
    
@@ -123,6 +126,7 @@ const MaterialListScreen = () => {
       reOrderLevel: row.reOrderLevel,
       dailyCap: row.dailyCap,
       measurement: row.measurement,
+      supplier: row.supplierId
     }))
   }
 
@@ -166,7 +170,7 @@ const MaterialListScreen = () => {
           </Button>
         )}
 
-        {selectionModel.length > 0 && (
+        {selectionModel.length === 1 && (
           <Button
             className='p-0 pe-2'
             variant='contained'
@@ -204,8 +208,17 @@ const MaterialListScreen = () => {
 
             <h1>Materials</h1>
             {success && (
-              <div style={{ height: 700, width: '100%' }}>
+              <div style={{ height: 700, width: '90%' }}>
                 <DataGrid
+                 sx={{
+                  boxShadow: 3,
+                  border: 1,
+                  borderColor: '#00cc66',
+                  backgroundColor: 'white',
+                  '& .MuiDataGrid-cell:hover': {
+                    color: 'primary.main',
+                  },
+                }}
                   rows={rows}
                   columns={columns}
                   pageSize={10}

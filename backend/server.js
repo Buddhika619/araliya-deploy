@@ -13,12 +13,15 @@ import uploadRoutes from './routes/uploadRoutes.js'
 import configRoutes from './routes/configRoutes.js'
 import meterialRoutes from './routes/materialRoutes.js'
 import batchRoutes from './routes/batchRoutes.js'
-
+import statsRoutes from './routes/statsRoutes.js'
+import supplierRoutes from './routes/supplierRoutes.js'
+import reportsRoutes from './routes/reportsRoutes.js'
+import categoryRoutes from './routes/categoryRoutes.js'
 
 import fetch from 'node-fetch';
 
 import cors from 'cors'
-import Material from './models/rawMaterialModel.js'
+
 
 
 
@@ -44,6 +47,10 @@ app.use('/api/upload', uploadRoutes)
 app.use('/api/config', configRoutes)
 app.use('/api/materials', meterialRoutes)
 app.use('/api/batches', batchRoutes)
+app.use('/api/stats', statsRoutes)
+app.use('/api/supplier', supplierRoutes)
+app.use('/api/reports', reportsRoutes)
+app.use('/api/category', categoryRoutes)
 
 //paypal config
 app.get('/api/config/paypal', (req, res) =>
@@ -53,7 +60,6 @@ app.get('/api/config/paypal', (req, res) =>
 //getting distance
 app.get('/api/distance', async(req, res) => {
 
-  console.log(req.query)
   const url = `https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${req.query.lat}, ${req.query.lng}&=&origins=7.297516055555007, 80.73621449338462&key=${process.env.GOOGLE_API_KEY}`
   // fetch(url)
   // .then((response) => response.json())
@@ -61,6 +67,7 @@ app.get('/api/distance', async(req, res) => {
   const response= await fetch(url)
   const data = await response.json()
   data.api = process.env.GOOGLE_API_KEY
+  data.costPerKm = process.env.DILIVERY_RATE
   res.json(data)
 
   })

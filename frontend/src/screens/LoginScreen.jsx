@@ -6,7 +6,7 @@ import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRig
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import { toast } from 'react-toastify'
 import { login } from '../actions/userActions'
-import { Container, Spinner } from 'react-bootstrap'
+import { Spinner } from 'react-bootstrap'
 import styled from 'styled-components'
 import { resetErrors } from '../reducers/userSlice'
 
@@ -68,6 +68,7 @@ const Signin = () => {
    // reset error msg
     if (userInfo) {
       navigate(redirect)
+      toast.success("Sign-in Success!")
     }
   }, [navigate, userInfo, redirect])
 
@@ -101,6 +102,7 @@ const Signin = () => {
             placeholder='Email'
             value={email}
             onChange={onChange}
+            required
           />
 
           <div className='passwordInputDiv'>
@@ -111,6 +113,7 @@ const Signin = () => {
               id='password'
               value={password}
               onChange={onChange}
+              required
             />
             <img
               src={visibilityIcon}
@@ -119,9 +122,7 @@ const Signin = () => {
               onClick={() => setShowPasssword(!showPassword)}
             />
           </div>
-          <Link to='/forgotpassword' className='forgotPasswordLink'>
-            Forgot Password
-          </Link>
+         
           <div className='signInBar'>
             <p className='signInText'>Sign In</p>
             <button className='signInButton'>

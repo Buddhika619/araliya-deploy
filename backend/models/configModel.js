@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const configSchema = mongoose.Schema({
   carousel: [
@@ -17,18 +17,22 @@ const configSchema = mongoose.Schema({
       },
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: "Product",
       },
+
+      image: { type: String },
+      description: { type: String },
+      price: { type: String,  },
+      name: { type: String },
     },
   ],
-})
-
+});
 
 // configSchema.pre('save', async function (next) {
 
 //   this.productId = await mongoose.Types.ObjectId(this.productId)
 // })
 
-const Config = mongoose.model('Config', configSchema)
+const Config = mongoose.model("Config", configSchema);
 
-export default Config
+export default Config;

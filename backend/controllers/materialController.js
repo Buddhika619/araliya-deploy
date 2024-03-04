@@ -1,16 +1,26 @@
+import Batch from "../models/batchModel.js";
 import Material from "../models/rawMaterialModel.js";
 import asyncHandler from "express-async-handler";
-
-
+import Supplier from "../models/supplierModel.js";
 // @des  create a Material
 // @route POST /api/materials/
 // @access Private/Admin
 const createMaterial = asyncHandler(async (req, res) => {
+
+
+  const supplier = await Supplier.findById(req.body.supplierId)
+  console.log(supplier)
+  if(!supplier) {
+    res.status(404);
+    throw new Error("Supplier not found");
+  }
+
   const material = new Material({
     name: req.body.name,
     reOrderLevel: req.body.reOrderLevel,
     dailyCap: req.body.dailyCap,
     measurement: req.body.measurement,
+    supplierId: req.body.supplierId
   });
 
   const createdMaterial = await material.save();
@@ -21,18 +31,27 @@ const createMaterial = asyncHandler(async (req, res) => {
 // @route PUT /api/materials/:id
 // @access Private/Admin
 const updateMaterial = asyncHandler(async (req, res) => {
-  console.log(req.body);
-  const { name, reOrderLevel, dailyCap, measurement } = req.body;
+
+  const { name, reOrderLevel, dailyCap, measurement,supplierId } = req.body;
+
+  const supplier =await Supplier.findById(req.body.supplierId)
+
+  console.log(supplier)
+  if(!supplier) {
+    res.status(404);
+    throw new Error("Supplier not found");
+  }
 
   const material = await Material.findById(req.params.id);
 
   if (material) {
-    (material.name = name),
-      (material.reOrderLevel = reOrderLevel),
-      (material.dailyCap = dailyCap),
-      (material.measurement = measurement);
-    const update = await material.save();
-    res.json(update);
+    material.name = name;
+    material.reOrderLevel = reOrderLevel;
+    material.dailyCap = dailyCap;
+    material.measurement = measurement;
+    material.supplierId = supplierId
+    const updatedMaterial = await material.save();
+    res.json(updatedMaterial);
   } else {
     res.status(404);
     throw new Error("Material not found");
@@ -43,6 +62,7 @@ const updateMaterial = asyncHandler(async (req, res) => {
 // @route DELETE /api/materials/:id
 // @access Private/Admin
 const deleteMaterial = asyncHandler(async (req, res) => {
+  console.log('hti')
   const material = await Material.findById(req.params.id);
 
   if (material) {
@@ -77,10 +97,56 @@ const getMaterials = asyncHandler(async (req, res) => {
   res.json(materials);
 });
 
+
+
+// @des  fetch material stock
+// @route GET /api/materials/stock
+// @access admin
+
+/**this function for get all off the shelf  products*/
+const getMaterialStock = asyncHandler(async (req, res) => {
+
+
+  const stock = await Batch.aggregate([
+    // Match products with a productRating field
+    { $match: { materialId: { $exists: true } } },
+    
+    // Group products by productId and calculate the total qty
+    { $group: {
+        _id: "$materialId",
+        totalQty: { $sum: "$qty" },
+      } },
+  
+    // Lookup data from the Product collection using productId
+    { $lookup: {
+        from: "materials",
+        localField: "_id",
+        foreignField: "_id",
+        as: "material"
+      } },
+  
+    // Unwind the product array to get a single document per batch item
+    { $unwind: "$material" },
+
+    { $sort: { "material.createdAt": 1 } }
+  ]);
+
+console.log(stock)
+
+
+
+  //  products = await Product.find({ active: true })
+
+  res.json({
+    stock,
+  })
+})
+
 export {
   createMaterial,
   updateMaterial,
   deleteMaterial,
   getMaterialById,
   getMaterials,
+  getMaterialStock
 };

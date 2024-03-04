@@ -16,11 +16,20 @@ import {
   viewSingleMatrialsSuccess,
   viewSingleMatrialsFail,
 
+} from "../reducers/matrialSlice";
+import {
+  
   updateMatrialsRequest,
   updateMatrialsSuccess,
   updateMatrialsFail
-} from "../reducers/matrialSlice";
+} from "../reducers/updateMaterialsSlice"
 
+import {
+  materialStockRequest,
+  materialStockSuccess,
+  materialStockFail,
+  materialStockReset
+} from '../reducers/materialStockSlice'
 
 
 export const listMaterials = () => async (dispatch, getState) => {
@@ -50,6 +59,36 @@ export const listMaterials = () => async (dispatch, getState) => {
     );
   }
 };
+
+
+export const listMaterialsStock = () => async (dispatch, getState) => {
+  try {
+    dispatch(materialStockRequest());
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/materials/stock`,config );
+
+    dispatch(materialStockSuccess(data));
+  } catch (error) {
+    dispatch(
+      materialStockFail(
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message
+      )
+    );
+  }
+};
+
 
 
 

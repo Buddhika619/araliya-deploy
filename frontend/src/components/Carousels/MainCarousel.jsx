@@ -81,7 +81,7 @@ const MainCarousel = () => {
     <Message variant='danger'>{error}</Message>
   ) : (
     <HeroCarousel pause='hover' className='mb-5' variant='dark'>
-      {config.carousel?.map((item, index) => (
+      {config?.carousel?.map((item, index) => (
         <Carousel.Item key={index}>
           {/* <Link to={`/product/${product._id}`}> */}
        

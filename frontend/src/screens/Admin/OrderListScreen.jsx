@@ -15,13 +15,12 @@ import {
   GridToolbarDensitySelector,
 } from '@mui/x-data-grid'
 import {
-  AddBoxOutlined,
+
   DeleteOutlineOutlined,
   DirectionsBike,
-  EditOutlined,
-  Info,
+  
   InfoOutlined,
-  MenuOpenRounded,
+
   PlayCircleFilledWhite,
 } from '@material-ui/icons'
 
@@ -32,10 +31,9 @@ import {
   updateOrderState,
 } from '../../actions/orderActions'
 
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import {  toast } from 'react-toastify'
 
-import { Container } from 'react-bootstrap'
+
 import styled from 'styled-components'
 import {
 
@@ -69,6 +67,8 @@ const OrderListScreen = () => {
   //getting product list from redux store
   const orderList = useSelector((state) => state.orderList)
   const { loading, error, orders, success } = orderList
+
+  console.log(orders)
 
   const orderRemove = useSelector((state) => state.orderRemove)
   const { error: removeError, success: removeSuccess } = orderRemove
@@ -135,31 +135,21 @@ const OrderListScreen = () => {
 
   //data grid columns
   const columns = [
-    { field: 'id', width: 220 },
-    { field: 'USER', width: 250 },
-    { field: 'CREATEDDATE', headerName: 'DATE CREATED', width: 150 },
-    { field: 'TOTAL', width: 100 },
+    { field: 'id',headerName: 'Order ID', width:250 },
+    { field: 'USER',  headerName: 'User',  flex:1 },
+    { field: 'CREATEDDATE', headerName: 'Date Created',  flex:1 },
+    { field: 'TOTAL',headerName:'Order Total',   flex:1 },
+    { field: 'DILIVARY',headerName:'Dilivery Cost',   flex:1 },
     {
       field: 'PAYMENTMETHOD',
       headerName: 'Payment Method',
-      width: 150,
-      renderCell: (params) =>
-        params.value === 'Cash' ? (
-          <i
-            className='fa-solid fa-sack-dollar fa-lg'
-            style={{ color: 'green', margin: 'auto' }}
-          ></i>
-        ) : (
-          <i
-            className='fa-solid fa-credit-card fa-lg'
-            style={{ color: 'skyblue', margin: 'auto' }}
-          ></i>
-        ), // renderCell will render the component
+      flex:1
     },
 
     {
       field: 'PAID',
-      width: 150,
+      headerName: 'Paid',
+      flex:1,
       renderCell: (params) =>
         params.value === true ? (
           <i className='fa-solid fa-check' style={{ color: 'green' }}></i>
@@ -168,10 +158,11 @@ const OrderListScreen = () => {
         ), 
     },
 
-    { field: 'PAIDAT', headerName: 'PAID AT', width: 100 },
+    { field: 'PAIDAT', headerName: 'Paid at', width: 100 },
     {
       field: 'DELIVERED',
-      width: 150,
+      headerName: 'Delivered',
+      flex:1,
       renderCell: (params) =>
         params.value === true ? (
           <i className='fa-solid fa-check' style={{ color: 'green' }}></i>
@@ -188,8 +179,9 @@ const OrderListScreen = () => {
     rows = orders?.map((order) => ({
       id: order._id,
       USER: order.user && order.user.name,
-      CREATEDDATE: order.createdAt.slice(0, 16),
+      CREATEDDATE: order.createdAt.slice(0, 10),
       TOTAL: `Rs ${order.totalPrice}`,
+      DILIVARY: `Rs ${order.shippingPrice}`,
       PAYMENTMETHOD: order.paymentMethod,
       PAID: order.isPaid,
       PAIDAT: order.paidAt,
@@ -275,6 +267,22 @@ const OrderListScreen = () => {
     )
   }
 
+  let header = "";
+  switch (path) {
+    case "neworders":
+      header = "New Orders";
+      break;
+    case "processing":
+      header = "Processing Orders";
+      break;
+    case "dispatched":
+      header = "Dispatched Orders";
+      break;
+    case "completed":
+        header = "Completed Orders";
+        break;
+  }
+
   return (
     <>
       <Row>
@@ -292,10 +300,19 @@ const OrderListScreen = () => {
             {removeError && <Message varient='danger'>{removeError}</Message>}
             {updateError && <Message varient='danger'>{updateError}</Message>}
 
-            <h1>Orders</h1>
+            <h1>{header}</h1>
             {success && (
               <div style={{ height: 700, width: '100%' }}>
                 <DataGrid
+                 sx={{
+                    boxShadow: 3,
+                    border: 1,
+                    borderColor: "#00cc66",
+                    backgroundColor: "white",
+                    "& .MuiDataGrid-cell:hover": {
+                      color: "primary.main",
+                    },
+                  }}
                   rows={rows}
                   columns={columns}
                   pageSize={10}

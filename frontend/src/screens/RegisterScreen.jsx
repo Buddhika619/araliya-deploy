@@ -57,11 +57,12 @@ const Signup = () => {
   let { search } = useLocation()
 
   const redirect = search ? search.split('=')[1] : '/'
-
+  dispatch(resetErrors())
   useEffect(() => {
     dispatch(resetErrors()) // reset error msg
     if (userInfo) {
       navigate(redirect)
+      toast.success("Sign-up Success!")
     }
   }, [navigate, userInfo, redirect])
 
@@ -99,6 +100,7 @@ const Signup = () => {
             placeholder='name'
             value={name}
             onChange={onChange}
+            required
           />
 
           <input
@@ -108,6 +110,7 @@ const Signup = () => {
             placeholder='Email'
             value={email}
             onChange={onChange}
+            required
           />
 
           <div className='passwordInputDiv'>
@@ -118,6 +121,7 @@ const Signup = () => {
               id='password'
               value={password}
               onChange={onChange}
+              required
             />
             <img
               src={visibilityIcon}
@@ -135,6 +139,7 @@ const Signup = () => {
               id='confrimPassword'
               value={confrimPassword}
               onChange={onChange}
+              required
             />
             <img
               src={visibilityIcon}
@@ -144,9 +149,7 @@ const Signup = () => {
             />
           </div>
 
-          <Link to='/forgotpassword' className='forgotPasswordLink'>
-            Forgot Password
-          </Link>
+         
           <div className='signUpBar'>
             <p className='signUpText'>Sign Up</p>
             <button className='signUpButton'>

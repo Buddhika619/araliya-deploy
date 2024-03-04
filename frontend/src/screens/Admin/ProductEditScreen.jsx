@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import {  useLocation, useNavigate, useParams } from "react-router-dom";
+import { Button,  } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+
 import FormContainer from "../../components/FormContainer";
 import {
   listProductsDetails,
@@ -32,6 +31,7 @@ const CreateListing = () => {
     active: true,
     type: false,
     discountedPrice: 0,
+    supplierId: "",
   });
 
   const {
@@ -45,6 +45,7 @@ const CreateListing = () => {
     description,
     active,
     type,
+    supplierId,
   } = formData;
 
   const dispatch = useDispatch();
@@ -97,6 +98,7 @@ const CreateListing = () => {
         active,
         type,
         reOrderLevel,
+        supplierId
       })
     );
   };
@@ -333,6 +335,37 @@ const CreateListing = () => {
                   type="number"
                   id="reOrderLevel"
                   value={reOrderLevel}
+                  onChange={onMutate}
+                  // maxLength='32'
+                  // minLength='10'
+                  required
+                />
+              </>
+            )}
+
+{!type && (
+              <>
+                <label className="formLabel">Brand</label>
+                <input
+                  className="formInputName"
+                  type="text"
+                  id="brand"
+                  value={brand}
+                  onChange={onMutate}
+                  // maxLength='32'
+                  // minLength='10'
+                  required
+                />
+              </>
+            )}
+              {!type && (
+              <>
+                <label className="formLabel">Supplier ID</label>
+                <input
+                  className="formInputName"
+                  type="text"
+                  id="supplierId"
+                  value={supplierId}
                   onChange={onMutate}
                   // maxLength='32'
                   // minLength='10'

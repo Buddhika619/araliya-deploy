@@ -25,6 +25,9 @@ const orderSlice = createSlice({
 
     orderCreateReset: (state) => {
       state.success = false
+      state.dsuccess = false
+      state.loading = false
+      state.error = false
       state.order = {}
     },
     myOrdersRequest: (state) => {
@@ -51,7 +54,7 @@ const orderSlice = createSlice({
     },
     orderDeliverSuccess: (state, action) => {
       state.loading = false
-      state.success = true
+      state.dsuccess = true
       state.order = action.payload
     },
     orderDeliverFail: (state, action) => {

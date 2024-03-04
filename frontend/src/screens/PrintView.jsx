@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: -15,
+    fontSize: 15,
   },
 
   img: {
@@ -153,6 +154,7 @@ function BasicDocument() {
     generateQR(`${window.location.href}`)
   }, [])
 
+
   return (
     <>
       {success && (
@@ -162,26 +164,26 @@ function BasicDocument() {
             {/*render a single page*/}
             <Page size='A4' style={styles.page}>
               <View style={styles.header}>
-                <Text>Araliya Foods</Text>
+                <Text>Hotel Araliya</Text>
               </View>
 
               <View style={styles.client}>
                 <View style={styles.person}>
-                  <Text>Name: {order.user.name}</Text>
-                  <Text>Date: {order.createdAt.slice(0, 10)}</Text>
+                  <Text style={{paddingBottom:'6'}}>Name: {order.user.name}</Text>
+                  <Text style={{paddingBottom:'6'}}>Date: {order.createdAt.slice(0, 10)}</Text>
                   <Text>ID: {order._id}</Text>
                 </View>
 
                 <View style={styles.address}>
-                  <Text>{order.shippingAddress.address}</Text>
-                  <Text>{order.shippingAddress.city}</Text>
-                  <Text>{order.shippingAddress.postalCode}</Text>
-                  <Text>{order.user.name}</Text>
+                  {/* <Text>{order.shippingAddress.lineOne}</Text>
+                  <Text>{order.shippingAddress.lenetwo}</Text>
+                  <Text>{order.shippingAddress.lineThree}</Text>
+                  <Text>{order.user.name}</Text> */}
                 </View>
               </View>
 
               <View style={styles.itemHeader}>
-                <Text style={{ flex: '1.5' }}>Product ID</Text>
+                <Text style={{ flex: '1.5',  }}>Product ID</Text>
                 <Text style={{ flex: '2'}}>Description</Text>
                 <Text style={{ flex: '1'}}>price</Text>
                 <Text style={{ flex: '1'}}>SubTotal</Text>
@@ -205,15 +207,29 @@ function BasicDocument() {
               <View style={styles.border}></View>
               <View style={styles.total}>
                 <Text style={{ flex: '1.5' }}></Text>
-                <Text style={{ flex: '2' }}></Text>
-                <Text style={{ flex: '1' }}>SubTotal</Text>
-                <Text style={{ flex: '1' }}>Rs{order.subTotal}</Text>
+                <Text style={{ flex: '1' }}></Text>
+                <Text style={{ flex: '2' }}>SubTotal</Text>
+                <Text style={{ flex: '1' }}>: Rs{order.subTotal}</Text>
               </View>
+             
+              <View style={styles.total}>
+                <Text style={{ flex: '1.5' }}></Text>
+                <Text style={{ flex: '1' }}></Text>
+                <Text style={{ flex: '2' }}>Delivery Charge</Text>
+                <Text style={{ flex: '1' }}>: Rs{order.shippingPrice}</Text>
+              </View>
+              <View style={styles.border}></View>
+              <View style={styles.total}>
+                
+                <Text style={{ flex: '1.5' }}></Text>
+                <Text style={{ flex: '1' }}></Text>
+                <Text style={{ flex: '2' }}>Total Price</Text>
+                <Text style={{ flex: '1' }}>: Rs{order.totalPrice}</Text>
+              </View>
+              <View style={styles.border}></View>
               <Image style={styles.img} src={qr} alt='Red dot' />
               <View style={styles.footer}>
                 <Text>CreatedBy: {order.user.name}</Text>
-
-                
               </View>
             </Page>
           </Document>

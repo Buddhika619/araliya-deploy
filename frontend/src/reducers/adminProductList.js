@@ -25,6 +25,12 @@ const productSlice = createSlice({
       state.loading = false
       state.error = action.payload
     },
+    adminProductListReset: (state, action) => {
+      state.error = false
+      state.loading = false
+      state.success = false
+      state.products = []
+    }
   },
 })
 
@@ -32,6 +38,7 @@ export const {
 
   adminProductListRequest,
   adminProductListSuccess,
-  adminProductListFail
+  adminProductListFail,
+  adminProductListReset
 } = productSlice.actions
 export default productSlice.reducer

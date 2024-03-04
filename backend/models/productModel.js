@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Batch from "./batchModel.js";
 
 const reviewSchema = mongoose.Schema({
     name: {
@@ -11,7 +12,6 @@ const reviewSchema = mongoose.Schema({
     },
     comment: {
         type:String,
-        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -32,6 +32,7 @@ const productSchema = mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
     },
     image: {
         type: String,
@@ -62,7 +63,6 @@ const productSchema = mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true,
         default: 0,
     },
     countInStock: {
@@ -77,7 +77,7 @@ const productSchema = mongoose.Schema({
     },
     dailyCapacity: {
         type: Number,
-        required: true,
+       
         default: 0,
     },
     active: {
@@ -90,10 +90,44 @@ const productSchema = mongoose.Schema({
         required: true,
         default: false,
     },
+    supplierId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Supplier',
+    },
+    
 
 },{
     timestamps:true
 })
+
+
+// Add a pre hook to the material schema to prevent deletion if there are referencing documents
+productSchema.pre("remove", async function (next) {
+    console.log('holup')
+    try {
+      // Retrieve the ID of the material being deleted
+      const productId = this._id;
+  
+      // Count the number of referencing documents
+      const batchCount = await Batch.countDocuments({ productId });
+      console.log(batchCount)
+  
+      // If there are any referencing documents, throw an error
+      if (batchCount > 0) {
+        const error = new Error(
+          "Cannot delete Batch with referencing batches"
+        );
+        error.statusCode = 400;
+        throw error;
+      }
+  
+      // If there are no referencing documents, proceed with the deletion of the material document
+      next();
+    } catch (error) {
+      next(error);
+    }
+  });
+  
 
 const Product = mongoose.model('Product', productSchema)
 

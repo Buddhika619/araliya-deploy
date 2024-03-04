@@ -6,7 +6,10 @@ import {
     updateBatch,
     getBatchbyID,
     getBatches, 
-    testfunc
+    assignBulk,
+    getKitchenDetails,
+    assignOne,
+    getAllIds
 } from '../controllers/batchController.js'
 
 
@@ -17,11 +20,17 @@ router
   .get(protect, admin,getBatches)
   .post(protect, admin, createBatch)
 
-router.get('/test', testfunc)
+router.get('/bulk',protect,admin, assignBulk)
+router.post('/one',protect, admin, assignOne)
 
+router.get('/kitchen',protect, admin, getKitchenDetails)
+
+router.get('/getIds',protect, admin, getAllIds)
 router
   .route('/:id')
   .get(protect, admin, getBatchbyID)
   .put(protect, admin, updateBatch)
+
+
 
 export default router

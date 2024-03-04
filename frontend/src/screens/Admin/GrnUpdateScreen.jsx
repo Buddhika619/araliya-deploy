@@ -1,26 +1,19 @@
-import axios from "axios";
+
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {  Button, } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+
 import FormContainer from "../../components/FormContainer";
-import {
-  listProductsDetails,
-  updateProduct,
-} from "../../actions/productActions";
+
 import { productUpdateReset } from "../../reducers/singleProductSlice";
 
 import Spinner from "../../components/Spinner";
 import { toast } from "react-toastify";
-import {
-  createMaterial,
-  updateMaterials,
-  viewSingleMaterial,
-} from "../../actions/materialActions";
-import { viewMatrialsReset } from "../../reducers/matrialSlice";
+
 import { updateBatches, viewSingleBatch } from "../../actions/batchActions";
+import { updateBatchesReset } from "../../reducers/updateBatchSlice";
 
 const GrnUpdateScreen = () => {
   const { id } = useParams();
@@ -30,9 +23,10 @@ const GrnUpdateScreen = () => {
     qty: 0,
     cost: 0,
     salesPrice: "",
+    supplierId: "",
   });
 
-  const { materialId, qty, cost, salesPrice } = formData;
+  const { materialId, qty, cost,supplierId, salesPrice } = formData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,7 +37,7 @@ const GrnUpdateScreen = () => {
 
 
 
-  const materialUpdate = useSelector((state) => state.batchDetails);
+  const materialUpdate = useSelector((state) => state.batchUpdate);
 
   const {
     loading,
@@ -51,6 +45,17 @@ const GrnUpdateScreen = () => {
 
     success,
   } = materialUpdate;
+
+  console.log(materialUpdate)
+
+  if(success) {
+    toast.success("Success");
+    setTimeout(function () {
+      navigate("/admin/batches");
+    }, 1000);
+  }
+
+  
 
   useEffect(() => {
     
@@ -74,7 +79,7 @@ console.log(batch)
     dispatch(
       updateBatches({
         _id: id,
-
+supplierId,
         materialId,
         qty,
         cost,
@@ -82,13 +87,11 @@ console.log(batch)
       })
     );
 
-    toast.success("Success");
-    setTimeout(function () {
-      navigate("/admin/batches");
-    }, 1000);
+   
   };
 
   const onMutate = (e) => {
+    dispatch(updateBatchesReset())
     let boolean = null;
 
     if (e.target.value === "true") {
@@ -119,9 +122,7 @@ console.log(batch)
     return <Spinner />;
   }
 
-  if (serror) {
-    toast.error(serror);
-  }
+
 
   const path = location.pathname.split("/")[3];
 
@@ -137,12 +138,13 @@ console.log(batch)
           Go Back
         </Button>
         <FormContainer>
+        {error && <Message varient="danger">{error}</Message>}
           <form onSubmit={onSubmit}>
             <header>
               <p className="pageHeader"> Update Batch</p>
             </header>
 
-            <label className="formLabel">Material ID</label>
+            <label className="formLabel">Material /Product ID</label>
             <input
               className="formInputName"
               type="text"
@@ -153,6 +155,19 @@ console.log(batch)
               // minLength='10'
               required
             />
+
+            {/* <label className="formLabel">Supplier ID</label>
+            <input
+              className="formInputName"
+              type="text"
+              id="supplierId"
+              value={supplierId}
+              onChange={onMutate}
+              // maxLength='32'
+              // minLength='10'
+              required
+            /> */}
+
             <label className="formLabel">Quantity</label>
             <input
               className="formInputName"
