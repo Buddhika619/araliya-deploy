@@ -102,7 +102,7 @@ const OrderScreen = () => {
 
         setDistanceLoading(false)
       } catch (error) {
-        toast.error('Faild to fetch location')
+        // toast.error('Faild to fetch location')
 
         setDistanceLoading(false)
       }
