@@ -1,69 +1,60 @@
-import axios from 'axios'
+import axios from "axios";
 import {
   userLoginRequest,
   userLoginSuccess,
   userLoginFail,
   userLogout,
-
   userRegisterRequest,
   userRegisterSuccess,
   userRegisterFail,
-} from '../reducers/userSlice'
-// import {
-//   userRegisterRequest,
-//   userRegisterSuccess,
-//   userRegisterFail,
-// } from '../reducers/userRegisterSlice'
+} from "../reducers/userSlice";
 
 import {
   userDetailsRequest,
   userDetailsSuccess,
   userDetailsFail,
   userDetailsReset,
-
   removeUserRequest,
   removeUserSuccess,
   removeUserFail,
-
   userUpdateAdminRequest,
   userUpdateAdminSuccess,
-  userUpdateAdminFail
-} from '../reducers/userDetailsSlice'
+  userUpdateAdminFail,
+} from "../reducers/userDetailsSlice";
 
 import {
   userUpdateRequest,
   userUpdateSuccess,
   userUpdateFail,
-} from '../reducers/userUpdateSlice'
+} from "../reducers/userUpdateSlice";
 
 import {
   userListRequest,
   userListSuccess,
-  userListFail,} from '../reducers/userListSlice'
+  userListFail,
+} from "../reducers/userListSlice";
 
-import { myOrdersReset } from '../reducers/orderSlice'
-
-
+import { myOrdersReset } from "../reducers/orderSlice";
 
 export const login = (email, password) => async (dispatch) => {
   try {
-    dispatch(userLoginRequest())
+    dispatch(userLoginRequest());
 
     const config = {
       Headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    }
+    };
 
     const { data } = await axios.post(
-      '/api/users/login',
+      "/api/users/login",
       { email, password },
       config
-    )
+    );
 
-    dispatch(userLoginSuccess(data))
+    dispatch(userLoginSuccess(data));
 
-    localStorage.setItem('userInfo', JSON.stringify(data))
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch(
       userLoginFail(
@@ -71,40 +62,38 @@ export const login = (email, password) => async (dispatch) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};
 
 export const logout = () => (dispatch) => {
-  dispatch(userDetailsReset())
-  dispatch(myOrdersReset())
-  localStorage.removeItem('userInfo')
-  dispatch(userLogout())
- 
-
-}
+  dispatch(userDetailsReset());
+  dispatch(myOrdersReset());
+  localStorage.removeItem("userInfo");
+  dispatch(userLogout());
+};
 
 export const register = (name, email, password) => async (dispatch) => {
   try {
-    dispatch(userRegisterRequest())
+    dispatch(userRegisterRequest());
 
     const config = {
       Headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    }
+    };
 
     const { data } = await axios.post(
-      '/api/users',
+      "/api/users",
       { name, email, password },
       config
-    )
+    );
 
-    dispatch(userRegisterSuccess(data))
+    dispatch(userRegisterSuccess(data));
 
-    dispatch(userLoginSuccess(data))
+    dispatch(userLoginSuccess(data));
 
-    localStorage.setItem('userInfo', JSON.stringify(data))
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch(
       userRegisterFail(
@@ -112,29 +101,28 @@ export const register = (name, email, password) => async (dispatch) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
   try {
-    dispatch(userDetailsRequest())
+    dispatch(userDetailsRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
- 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
-    const { data } = await axios.get(`/api/users/${id}`, config)
+    const { data } = await axios.get(`/api/users/${id}`, config);
 
-    dispatch(userDetailsSuccess(data))
+    dispatch(userDetailsSuccess(data));
   } catch (error) {
     dispatch(
       userDetailsFail(
@@ -142,33 +130,33 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};
 
 export const updateUserProfile = (user) => async (dispatch, getState) => {
-  console.log(user)
+  console.log(user);
   try {
-    dispatch(userUpdateRequest())
+    dispatch(userUpdateRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
-    console.log(user)
+    };
+    console.log(user);
 
-    const { data } = await axios.put(`/api/users/profile`, user, config)
+    const { data } = await axios.put(`/api/users/profile`, user, config);
 
-    dispatch(userUpdateSuccess(data))
-    dispatch(userLoginSuccess(data))
-    dispatch(userDetailsSuccess(data))
-    localStorage.setItem('userInfo', JSON.stringify(data))
+    dispatch(userUpdateSuccess(data));
+    dispatch(userLoginSuccess(data));
+    dispatch(userDetailsSuccess(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch(
       userUpdateFail(
@@ -176,28 +164,27 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};
 
 export const listUsers = (user) => async (dispatch, getState) => {
   try {
-    dispatch(userListRequest())
+    dispatch(userListRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
+    const { data } = await axios.get(`/api/users`, config);
 
-    const { data } = await axios.get(`/api/users`, config)
-
-    dispatch(userListSuccess(data))
+    dispatch(userListSuccess(data));
   } catch (error) {
     dispatch(
       userListFail(
@@ -205,34 +192,28 @@ export const listUsers = (user) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
-
-// removeUserRequest,
-// removeUserSuccess,
-// removeUserFail
+};
 
 export const removeUser = (ids) => async (dispatch, getState) => {
   try {
-    dispatch(removeUserRequest())
+    dispatch(removeUserRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
-        'data': ids
+        data: ids,
       },
-    }
+    };
 
- 
-    // await axios.delete(`/api/users/${id}`, config)
-    await axios.delete(`/api/users/`, config)
-    
-    dispatch(removeUserSuccess())
+    await axios.delete(`/api/users/`, config);
+
+    dispatch(removeUserSuccess());
   } catch (error) {
     dispatch(
       removeUserFail(
@@ -240,33 +221,28 @@ export const removeUser = (ids) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
-
-// userUpdateAdminRequest,
-//   userUpdateAdminSuccess,
-//   userUpdateAdminFail
+};
 
 export const updateUser = (user) => async (dispatch, getState) => {
   try {
-    dispatch(userUpdateAdminRequest())
+    dispatch(userUpdateAdminRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
- 
-    const { data } = await axios.put(`/api/users/${user._id}`,user, config)
-    
-    dispatch(userUpdateAdminSuccess(data))
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+
+    dispatch(userUpdateAdminSuccess(data));
   } catch (error) {
     dispatch(
       userUpdateAdminFail(
@@ -274,6 +250,6 @@ export const updateUser = (user) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};

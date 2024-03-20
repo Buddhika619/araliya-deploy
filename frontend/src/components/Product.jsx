@@ -1,19 +1,10 @@
-import Button from 'react-bootstrap/Button'
-import Modal from 'react-bootstrap/Modal'
-import { Row, Col } from 'react-bootstrap'
+import { SearchOutlined, ShoppingCartOutlined } from "@material-ui/icons";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-import {
-  FavoriteBorderOutlined,
-  SearchOutlined,
-  ShoppingCartOutlined,
-} from '@material-ui/icons'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import Rating from './Rating'
-import { useEffect, useState } from 'react'
-import { listProductsDetails } from '../actions/productActions'
-import { useDispatch, useSelector } from 'react-redux'
-import MyVerticallyCenteredModal from './Modals/productPopUp'
+import { useDispatch } from "react-redux";
+import MyVerticallyCenteredModal from "./Modals/productPopUp";
+import { useState } from "react";
 
 const Info = styled.div`
   opacity: 0;
@@ -29,7 +20,7 @@ const Info = styled.div`
   justify-content: center;
   transition: all 0.5s ease;
   cursor: pointer;
-`
+`;
 
 const Container = styled.div`
   flex: 1;
@@ -46,7 +37,7 @@ const Container = styled.div`
     opacity: 1;
     backdrop-filter: blur(3px);
   }
-`
+`;
 
 const Circle = styled.div`
   width: 200px;
@@ -54,12 +45,12 @@ const Circle = styled.div`
   border-radius: 50%;
   background-color: white;
   position: absolute;
-`
+`;
 
 const Image = styled.img`
   height: 75%;
   z-index: 2;
-`
+`;
 
 const Icon = styled.div`
   width: 40px;
@@ -75,28 +66,28 @@ const Icon = styled.div`
     background-color: #e9f5f5;
     transform: scale(1.1);
   }
-`
+`;
 
 const TextContainer = styled.div`
   .name {
     padding-top: 10px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
   }
   .price {
     color: #d23f57;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: bold;
   }
-`
+`;
 
 const Product = ({ product }) => {
-  const dispatch = useDispatch()
-  const [modalShow, setModalShow] = useState(false)
+  const dispatch = useDispatch();
+  const [modalShow, setModalShow] = useState(false);
 
   const cartHandler = () => {
-    setModalShow(true)
-  }
+    setModalShow(true);
+  };
 
   return (
     <>
@@ -122,13 +113,13 @@ const Product = ({ product }) => {
           </Icon> */}
         </Info>
       </Container>
-      <TextContainer className='ps-3'>
-        <p className='name'>{product.name}</p>
+      <TextContainer className="ps-3">
+        <p className="name">{product.name}</p>
         {/* <Rating value={product.rating} text={`${product.numReviews} reviews`} /> */}
-        <p className='price'>RS {product.price}</p>
+        <p className="price">RS {product.price}</p>
       </TextContainer>
     </>
-  )
-}
+  );
+};
 
-export default Product
+export default Product;

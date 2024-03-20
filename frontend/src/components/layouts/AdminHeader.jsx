@@ -87,9 +87,6 @@ const AdminHeader = () => {
 
   const [newOrders, setNewOrders] = useState(0)
 
-  const cart = useSelector((state) => state.cart)
- 
-
   const logoutHandler = () => {
     dispatch(logout())
     navigate('/')

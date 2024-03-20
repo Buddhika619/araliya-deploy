@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice,  } from '@reduxjs/toolkit'
 
 const initialState = {
   user: {},
@@ -26,25 +26,7 @@ const userDetailsSlice = createSlice({
     userDetailsReset: (state, action) => {
       state.user = {}
     },
-    // userListRequest: (state) => {
-    //   state.loading = true
-    //   state.error = false
-    //   state.success = false
-    // },
-    // userListSuccess: (state, action) => {
-    //   state.loading = false
-    //   state.success = true
-    //   state.users = action.payload
-    // },
-    // userListFail: (state, action) => {
-    //   state.success = false
-    //   state.loading = false
-    //   state.error = action.payload
-    // },
-    // userListReset: (state, action) => {
-    //   state.success = false
-    //   state.users = []
-    // },
+   
     removeUserRequest: (state) => {
       state.loading = true
       state.error = false

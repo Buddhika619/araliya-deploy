@@ -1,11 +1,11 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   products: [],
-  adminPro: {},
-  pages: {},
-  page: {},
-  resultCount: {},
+  pages: 0,
+  page: 0,
+  resultCount: 0,
+  categories: [],
 }
 
 const productSlice = createSlice({

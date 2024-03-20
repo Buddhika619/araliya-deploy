@@ -1,20 +1,13 @@
-import Button from 'react-bootstrap/Button'
-import Modal from 'react-bootstrap/Modal'
-import { Row, Col, Form } from 'react-bootstrap'
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { Row, Col, Form } from "react-bootstrap";
+import styled from "styled-components";
+import Rating from "../Rating";
+import {  useState } from "react";
 
-import {
-  FavoriteBorderOutlined,
-  SearchOutlined,
-  ShoppingCartOutlined,
-} from '@material-ui/icons'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import styled from 'styled-components'
-import Rating from '../Rating'
-import { useEffect, useState } from 'react'
-import { listProductsDetails } from '../../actions/productActions'
-import { useDispatch, useSelector } from 'react-redux'
-import { addTocart } from '../../actions/cartActions'
-import { toast } from 'react-toastify'
+import { useDispatch } from "react-redux";
+import { addTocart } from "../../actions/cartActions";
+import { toast } from "react-toastify";
 
 const Wrapper = styled(Row)`
   display: flex;
@@ -40,22 +33,22 @@ const Wrapper = styled(Row)`
 
   .name {
     font-weight: 700;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
   }
 
   .categoryIn {
     margin-top: -15px;
-    color:#aeb4be;
-    font-size:22px;
-    font-family: 'Roboto', sans-serif;
+    color: #aeb4be;
+    font-size: 22px;
+    font-family: "Roboto", sans-serif;
     font-weight: 300;
   }
 
   .price {
     margin-top: -15px;
-    color:#d23f57;
-    font-size:36px;
-    font-family: 'Roboto', sans-serif;
+    color: #d23f57;
+    font-size: 36px;
+    font-family: "Roboto", sans-serif;
     font-weight: 700;
   }
 
@@ -65,87 +58,82 @@ const Wrapper = styled(Row)`
   }
 
   .description {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
   }
 
-  hr{
+  hr {
     opacity: 0.1;
   }
 
-  .qty{
-  
-    color:#1d1d1e;
-    font-size:22px;
-    font-family: 'Roboto', sans-serif;
+  .qty {
+    color: #1d1d1e;
+    font-size: 22px;
+    font-family: "Roboto", sans-serif;
     font-weight: 600;
     margin-bottom: 25px;
   }
 
-  .button{
-    background-color: #00cc66;;
-    font-family: 'Roboto', sans-serif;
+  .button {
+    background-color: #00cc66;
+    font-family: "Roboto", sans-serif;
     font-weight: 500;
-    padding:10px 25px;
-    border:none;
+    padding: 10px 25px;
+    border: none;
     border-radius: 4%;
-    &:hover{
+    &:hover {
       background-color: #e21133;
     }
-    &:active{
+    &:active {
       background-color: #d23f57;
     }
   }
-`
+`;
 
 function MyVerticallyCenteredModal(props) {
-  const [qty, setQty] = useState(1)
-  const [rating, setRating] = useState(0)
-  const [comment, setComment] = useState('')
+  const [qty, setQty] = useState(1);
 
-  const dispatch = useDispatch()
-
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
 
   const addToCartHandler = () => {
-    dispatch(addTocart(props.product._id, qty))
-  }
+    dispatch(addTocart(props.product._id, qty));
+  };
 
   const submitHandler = (e) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   return (
-    <Modal {...props} size='lg' centered>
-      <Modal.Header closeButton className=' border-bottom-0'></Modal.Header>
+    <Modal {...props} size="lg" centered>
+      <Modal.Header closeButton className=" border-bottom-0"></Modal.Header>
       <Modal.Body>
         <Wrapper>
-          <Col className='col1'>
+          <Col className="col1">
             <img src={props.product.image} />
           </Col>
-          <Col className='col2'>
-            <h1 className='name'>{props.product.name}</h1>
-            <p className='categoryIn'>{props.product.category}</p>
+          <Col className="col2">
+            <h1 className="name">{props.product.name}</h1>
+            <p className="categoryIn">{props.product.category}</p>
             {/* <Rating value={product.rating} text={`${product.numReviews} reviews`} /> */}
-            {(props.product.countInStock  > 0 ? (
-              <p className='price'>RS {props.product.price}</p>
-            ): (
-              <p className='price'>SOLD OUT</p>
-            ))}
-            
-           
-            <Rating className="ratingIn"
+            {props.product.countInStock > 0 ? (
+              <p className="price">RS {props.product.price}</p>
+            ) : (
+              <p className="price">SOLD OUT</p>
+            )}
+
+            <Rating
+              className="ratingIn"
               value={props.product.rating}
               text={`(${props.product.numReviews})`}
             />
-            <p className='description'>{props.product.description}</p>
+            <p className="description">{props.product.description}</p>
 
-           <hr />
+            <hr />
             {props.product.countInStock > 0 && (
               <Row>
-                <Col className='qty'>Qty</Col>
+                <Col className="qty">Qty</Col>
                 <Col>
                   <Form.Select
-                    as='select'
+                    as="select"
                     value={qty}
                     onChange={(e) => setQty(e.target.value)}
                   >
@@ -161,12 +149,12 @@ function MyVerticallyCenteredModal(props) {
 
             <Button
               onClick={() => {
-                addToCartHandler()
-                props.onHide()
-                toast.success('Item Added to the Cart!')
+                addToCartHandler();
+                props.onHide();
+                toast.success("Item Added to the Cart!");
               }}
-              className='button'
-              type='button'
+              className="button"
+              type="button"
               disabled={props.product.countInStock === 0}
             >
               Add to Cart
@@ -178,7 +166,7 @@ function MyVerticallyCenteredModal(props) {
         <Button onClick={props.onHide}>Close</Button>
       </Modal.Footer> */}
     </Modal>
-  )
+  );
 }
 
-export default MyVerticallyCenteredModal
+export default MyVerticallyCenteredModal;

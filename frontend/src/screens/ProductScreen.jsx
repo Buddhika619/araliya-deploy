@@ -1,26 +1,24 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { Row, Col, Image, ListGroup, Card,  Form } from 'react-bootstrap'
-import Rating from '../components/Rating'
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Row, Col, Image, ListGroup, Card, Form } from "react-bootstrap";
+import Rating from "../components/Rating";
 import {
   listProductsDetails,
   createProductReview,
-} from '../actions/productActions'
-import Loader from '../components/Loader'
-import Message from '../components/Message'
-import { productCreateReviewReset } from '../reducers/productReviewSlice'
-import Meta from '../components/Meta'
-import styled from 'styled-components'
-import CustomButton from '../components/microComponents/CustomButton'
+} from "../actions/productActions";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
+import { productCreateReviewReset } from "../reducers/productReviewSlice";
+import Meta from "../components/Meta";
+import styled from "styled-components";
+import CustomButton from "../components/microComponents/CustomButton";
 
 const DetailsWrapper = styled(Row)`
   * {
     background-color: #f6f9fc;
   }
-
-
-`
+`;
 
 const Reviews = styled(ListGroup)`
   * {
@@ -41,74 +39,73 @@ const Reviews = styled(ListGroup)`
       box-shadow: none;
     }
   }
-`
+`;
 
 const ProductScreen = () => {
-  const [qty, setQty] = useState(1)
-  const [rating, setRating] = useState(0)
-  const [comment, setComment] = useState('')
+  const [qty, setQty] = useState(1);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const productDetails = useSelector((state) => state.productDetails)
-  const { loading, product, error } = productDetails
+  const productDetails = useSelector((state) => state.productDetails);
+  const { loading, product, error } = productDetails;
 
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
-  const productReviewCreate = useSelector((state) => state.productReview)
+  const productReviewCreate = useSelector((state) => state.productReview);
   const { success: successProductReview, error: errorProductReview } =
-    productReviewCreate
+    productReviewCreate;
 
-  const { id } = useParams()
+  const { id } = useParams();
 
-  
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(listProductsDetails(id))
-    dispatch(productCreateReviewReset())
+    dispatch(listProductsDetails(id));
+    dispatch(productCreateReviewReset());
     if (successProductReview) {
-      alert('Review Submitted!')
-      setRating(0)
-      setComment('')
-      dispatch(productCreateReviewReset())
+      alert("Review Submitted!");
+      setRating(0);
+      setComment("");
+      dispatch(productCreateReviewReset());
     }
-  }, [dispatch, id, successProductReview])
+  }, [dispatch, id, successProductReview]);
 
   const addToCartHandler = () => {
-    navigate(`/cart/${id}?qty=${qty}`)
-  }
+    navigate(`/cart/${id}?qty=${qty}`);
+  };
 
   const submitHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(
       createProductReview(id, {
         rating,
         comment,
       })
-    )
-  }
-console.log(product)
+    );
+  };
+  console.log(product);
   return (
     <>
-      <Link className='btn btn-light my-3' to='/'>
+      <Link className="btn btn-light my-3" to="/">
         Go Back
       </Link>
       {loading ? (
         <Loader />
       ) : error ? (
-        <Message varient='danger'>{error}</Message>
+        <Message varient="danger">{error}</Message>
       ) : (
         <>
           <Meta title={product.name} />
           <DetailsWrapper>
             <Col md={6}>
-              <Image src={product.image}  alt={product.name} fluid />
+              <Image src={product.image} alt={product.name} fluid />
             </Col>
             <Col md={3}>
-              <ListGroup variant='flush'>
+              <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h3>{product.name}</h3>
                 </ListGroup.Item>
@@ -129,7 +126,7 @@ console.log(product)
             </Col>
             <Col md={3}>
               <Card>
-                <ListGroup variant='flush'>
+                <ListGroup variant="flush">
                   <ListGroup.Item>
                     <Row>
                       <Col>Price:</Col>
@@ -144,7 +141,7 @@ console.log(product)
                       <Col>Availability:</Col>
                       <Col>
                         <strong>
-                          {product.countInStock > 0 ? 'Available' : 'Sold Out'}
+                          {product.countInStock > 0 ? "Available" : "Sold Out"}
                         </strong>
                       </Col>
                     </Row>
@@ -156,7 +153,7 @@ console.log(product)
                         <Col>Qty</Col>
                         <Col>
                           <Form.Select
-                            as='select'
+                            as="select"
                             value={qty}
                             onChange={(e) => setQty(e.target.value)}
                           >
@@ -175,9 +172,9 @@ console.log(product)
 
                   <ListGroup.Item>
                     <CustomButton
-                      type='submit'
+                      type="submit"
                       onClick={addToCartHandler}
-                      className='col-12'
+                      className="col-12"
                       visibility={product.countInStock}
                     >
                       Add To Cart
@@ -191,7 +188,7 @@ console.log(product)
             <Col md={6}>
               <h2>Reviews</h2>
               {product.reviews < 1 && <Message>No Reviewss</Message>}
-              <Reviews variant='flush'>
+              <Reviews variant="flush">
                 {product.reviews?.map((review) => (
                   <ListGroup.Item key={review._id}>
                     <strong>{review.name}</strong>
@@ -203,42 +200,42 @@ console.log(product)
                 <ListGroup.Item>
                   <h2>Write a Customer Review</h2>
                   {errorProductReview && (
-                    <Message varient='danger'>{errorProductReview}</Message>
+                    <Message varient="danger">{errorProductReview}</Message>
                   )}
                   {userInfo ? (
                     <Form onSubmit={submitHandler}>
-                      <Form.Group controlId='rating'>
+                      <Form.Group controlId="rating">
                         <Form.Label>Rating</Form.Label>
                         <Form.Control
-                          className='input'
-                          as='select'
+                          className="input"
+                          as="select"
                           value={rating}
                           onChange={(e) => setRating(e.target.value)}
                         >
-                          <option className='input' value=''>
+                          <option className="input" value="">
                             Select...
                           </option>
-                          <option value='1'>1 - Very Poor</option>
-                          <option value='2'>2 - Poor</option>
-                          <option value='3'>3 - Fair</option>
-                          <option value='4'>4 - Good</option>
-                          <option value='5'>5 - Excellent</option>
+                          <option value="1">1 - Very Poor</option>
+                          <option value="2">2 - Poor</option>
+                          <option value="3">3 - Fair</option>
+                          <option value="4">4 - Good</option>
+                          <option value="5">5 - Excellent</option>
                         </Form.Control>
                       </Form.Group>
-                      <Form.Group controlId='comment'>
+                      <Form.Group controlId="comment">
                         <Form.Label>Comment</Form.Label>
                         <Form.Control
-                          className='input'
-                          as='textarea'
-                          row='3'
+                          className="input"
+                          as="textarea"
+                          row="3"
                           onChange={(e) => setComment(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
-                      <CustomButton type='submit'>Submit</CustomButton>
+                      <CustomButton type="submit">Submit</CustomButton>
                     </Form>
                   ) : (
                     <Message>
-                      Please <Link to='/login'>sign in</Link> to write a review
+                      Please <Link to="/login">sign in</Link> to write a review
                     </Message>
                   )}
                 </ListGroup.Item>
@@ -248,9 +245,10 @@ console.log(product)
           </Row>
         </>
       )}
-      <br/> <br/> <br/> <br/> <br/><br/> <br/>
+      <br /> <br /> <br /> <br /> <br />
+      <br /> <br />
     </>
-  )
-}
+  );
+};
 
-export default ProductScreen
+export default ProductScreen;

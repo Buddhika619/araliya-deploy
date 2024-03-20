@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Button, Carousel, Image } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import {Carousel, Image } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../Loader'
 import Message from '../Message'
-import { listTopProducts } from '../../actions/productActions'
+
 import styled from 'styled-components'
 import { getConfigdata } from '../../actions/configAction'
 

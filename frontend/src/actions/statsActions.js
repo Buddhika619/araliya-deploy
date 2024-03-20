@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 
 export const listStats = () => async (dispatch, getState) => {
-    console.log('hit')
+  console.log("hit");
   try {
     dispatch(viewStatsRequest());
 
@@ -26,7 +26,7 @@ export const listStats = () => async (dispatch, getState) => {
     dispatch(viewStatsSuccess(data));
   } catch (error) {
     dispatch(
-        viewStatsFail(
+      viewStatsFail(
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message

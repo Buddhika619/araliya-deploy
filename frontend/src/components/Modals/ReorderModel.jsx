@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+
 import { toast } from "react-toastify";
-import { viewSingleSupplier } from "../../actions/supplierActions";
+
 import axios from "axios";
 
 function ReorderModel({ showModal, handleClose, data, token, product, type }) {
@@ -28,7 +28,7 @@ function ReorderModel({ showModal, handleClose, data, token, product, type }) {
 
         await axios.post(
           `/api/supplier/mail`,
-          { email: data.email, product, quantity,type },
+          { email: data.email, product, quantity, type },
           config
         );
         toast.success(`Order email sent`);

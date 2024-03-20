@@ -5,7 +5,7 @@ import UserEditScreen from "../screens/UserEditScreen";
 import ProductlistScreen from "../screens/Admin/ProductListScreen";
 import ProductEditScreen from "../screens/Admin/ProductEditScreen";
 import OrderListScreen from "../screens/Admin/OrderListScreen";
-import Header from "../components/layouts/Header";
+
 import { Container } from "react-bootstrap";
 import Footer from "../components/layouts/Footer";
 import NotFound from "../screens/NotFound";

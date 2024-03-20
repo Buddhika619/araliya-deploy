@@ -1,19 +1,17 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Form, Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import Checkoutsteps from '../components/Checkoutsteps'
-import Message from '../components/Message'
-import { createOrder } from '../actions/orderActions'
-import MapComponent from '../components/MapComponent'
-import { orderCreateReset } from '../reducers/orderSlice'
-import styled from 'styled-components'
-import CustomButton from '../components/microComponents/CustomButton'
-import { toast } from 'react-toastify'
-import axios from 'axios'
-import TestBuwa from './TestBuwa'
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
-import Loader from '../components/Loader'
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import Checkoutsteps from "../components/Checkoutsteps";
+import Message from "../components/Message";
+import { createOrder } from "../actions/orderActions";
+import MapComponent from "../components/MapComponent";
+import { orderCreateReset } from "../reducers/orderSlice";
+import styled from "styled-components";
+import CustomButton from "../components/microComponents/CustomButton";
+
+import axios from "axios";
+import Loader from "../components/Loader";
 
 const OrderDetails = styled(ListGroup)`
   * {
@@ -23,7 +21,7 @@ const OrderDetails = styled(ListGroup)`
   a {
     color: black;
   }
-`
+`;
 
 const Summary = styled(Card)`
   * {
@@ -36,68 +34,63 @@ const Summary = styled(Card)`
       font-weight: 500;
     }
   }
-`
+`;
 
 const PlaceOrderScreen = () => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [distance, setDistance] = useState(0)
-  const [diliverCost, setDiliverCost] = useState(0)
-  const [distanceLoading, setDistanceLoading] = useState(true)
-  const fetchCart = useSelector((state) => state.cart)
-  const cart = { ...fetchCart }
-  const [api, setApi] = useState('')
-
-  //   calculate prices
+  const [distance, setDistance] = useState(0);
+  const [diliverCost, setDiliverCost] = useState(0);
+  const [distanceLoading, setDistanceLoading] = useState(true);
+  const fetchCart = useSelector((state) => state.cart);
+  const cart = { ...fetchCart };
+  const [api, setApi] = useState("");
 
   cart.itemsPrice = cart.cartItems.reduce(
     (acc, item) => acc + item.price * item.qty,
     0
-  )
+  );
 
-  cart.itemsPrice = cart.itemsPrice.toFixed(2)
+  cart.itemsPrice = cart.itemsPrice.toFixed(2);
 
- 
+  cart.shippingPrice = (Math.ceil(distance) * diliverCost).toFixed(2);
 
-  cart.shippingPrice = (Math.ceil(distance) * diliverCost).toFixed(2)
-  // cart.taxPrice = Number((0.15 *  cart.itemsPrice ).toFixed(2))
+  cart.totalPrice = (
+    Number(cart.itemsPrice) + Number(cart.shippingPrice)
+  ).toFixed(2);
 
-  cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice)).toFixed(2)
+  const orderCreate = useSelector((state) => state.orderCreate);
 
-  const orderCreate = useSelector((state) => state.orderCreate)
-
-  const { order, success, error } = orderCreate
+  const { order, success, error } = orderCreate;
 
   useEffect(() => {
     const fetchDistance = async (location) => {
       try {
         const { data } = await axios.get(
           `/api/distance?lat=${location.lat}&lng=${location.long}`
-        )
+        );
 
         const distance = Number(
-          data.rows[0].elements[0].distance.text.split(' ')[0]
-        )
-        
-        setApi(data.api)
-        setDistance(distance)
-        setDiliverCost(data.costPerKm)
-        setDistanceLoading(false)
+          data.rows[0].elements[0].distance.text.split(" ")[0]
+        );
+
+        setApi(data.api);
+        setDistance(distance);
+        setDiliverCost(data.costPerKm);
+        setDistanceLoading(false);
       } catch (error) {
-        // toast.error('Faild to fetch location')
-
-        setDistanceLoading(false)
+        setDistanceLoading(false);
       }
-    }
+    };
 
-    fetchDistance(cart.shippingAddress.location)
+    fetchDistance(cart.shippingAddress.location);
 
-    dispatch(orderCreateReset())
+    dispatch(orderCreateReset());
     if (success) {
-      navigate(`/order/${order._id}`)
+      navigate(`/order/${order._id}`);
     }
-  }, [navigate, success])
+  }, [navigate, success]);
 
   const placeOrderHandler = () => {
     dispatch(
@@ -108,15 +101,15 @@ const PlaceOrderScreen = () => {
         subTotal: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         // taxPrice: cart.taxPrice,
-        location :cart.shippingAddress.location,
+        location: cart.shippingAddress.location,
         distance: distance,
         totalPrice: cart.totalPrice,
       })
-    )
-  }
+    );
+  };
 
   if (distanceLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   // if (window.matchMedia("(max-width: 700px)").matches) {
@@ -126,21 +119,25 @@ const PlaceOrderScreen = () => {
   // }
   return (
     <>
-      <Checkoutsteps step1='step1' step2='step2' step3='step3' />
+      <Checkoutsteps step1="step1" step2="step2" step3="step3" />
       <Row>
         <Col md={8}>
-          <div className='ms-3'>
+          <div className="ms-3">
             <h2>Delivery Location</h2>
-            <MapComponent api={api} zoom={17} lat={cart.shippingAddress.location.lat} long={cart.shippingAddress.location.long}/>
+            <MapComponent
+              api={api}
+              zoom={17}
+              lat={cart.shippingAddress.location.lat}
+              long={cart.shippingAddress.location.long}
+            />
           </div>
 
-          <OrderDetails variant='flush'>
+          <OrderDetails variant="flush">
             <ListGroup.Item>
-             
               <p>
                 <strong>Address: </strong>
-                {cart.shippingAddress.lineOne}, {cart.shippingAddress.lineTwo},{' '}
-                {cart.shippingAddress.lineThree},{' '}
+                {cart.shippingAddress.lineOne}, {cart.shippingAddress.lineTwo},{" "}
+                {cart.shippingAddress.lineThree},{" "}
               </p>
               <p>
                 <strong>Dilivery Distance: </strong>
@@ -165,7 +162,7 @@ const PlaceOrderScreen = () => {
               {cart.cartItems.length === 0 ? (
                 <Message>Your Cart is Empty</Message>
               ) : (
-                <ListGroup variant='flush'>
+                <ListGroup variant="flush">
                   {cart.cartItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
@@ -183,7 +180,7 @@ const PlaceOrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x Rs {item.price} = Rs{' '}
+                          {item.qty} x Rs {item.price} = Rs{" "}
                           {(item.qty * item.price).toFixed(2)}
                         </Col>
                       </Row>
@@ -197,7 +194,7 @@ const PlaceOrderScreen = () => {
 
         <Col md={4}>
           <Summary>
-            <ListGroup variant='flush'>
+            <ListGroup variant="flush">
               <ListGroup.Item>
                 <h2>Order Summary</h2>
               </ListGroup.Item>
@@ -228,17 +225,17 @@ const PlaceOrderScreen = () => {
 
               {error && (
                 <>
-                  <ListGroup.Item className='errorText'>
-                    <Message varient='danger'>{error}</Message>
+                  <ListGroup.Item className="errorText">
+                    <Message varient="danger">{error}</Message>
                   </ListGroup.Item>
                 </>
               )}
 
               <ListGroup.Item>
                 <CustomButton
-                  type='button'
+                  type="button"
                   onClick={placeOrderHandler}
-                  className='col-12'
+                  className="col-12"
                   visibility={cart.cartItems.length}
                 >
                   Place Order
@@ -248,9 +245,10 @@ const PlaceOrderScreen = () => {
           </Summary>
         </Col>
       </Row>
-      <br/> <br/> <br/> <br/> <br/><br/> <br/>
+      <br /> <br /> <br /> <br /> <br />
+      <br /> <br />
     </>
-  )
-}
+  );
+};
 
-export default PlaceOrderScreen
+export default PlaceOrderScreen;

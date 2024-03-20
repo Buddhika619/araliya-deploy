@@ -5,13 +5,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
- 
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {  useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Message from "../../components/Message";
 
 import axios from "axios";
@@ -23,17 +22,15 @@ const ReservationReport = () => {
 
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log(id);
+
   const [loading, setLoading] = useState(true);
   const [adata, setaData] = useState({});
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState({});
-  console.log(adata);
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const user = userInfo;
-
-  const data = "test";
 
   const fetchData = async (id) => {
     try {
@@ -52,7 +49,6 @@ const ReservationReport = () => {
 
       setLoading(false);
     } catch (error) {
-      //   toast.error("Faild to fetch location");
       setErrorMsg(error);
       setError(true);
       setLoading(false);
@@ -62,7 +58,7 @@ const ReservationReport = () => {
   const handlePrint = () => {
     window.print();
   };
-  
+
   useEffect(() => {
     //resting state
 
@@ -118,19 +114,6 @@ const ReservationReport = () => {
               <TableCell>{item.materialId.measurement}</TableCell>
             </TableRow>
           ))}
-          {/* <TableRow style={{background:'#eae6e3'}}>
-              <TableCell>Discount</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>{content.sale.discount}%</TableCell>
-            </TableRow> */}
-
-          {/* <TableRow style={{background:'#eae6e3'}}>
-              <TableCell>Sub Total</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>{content.sale.subTotal}LKR</TableCell>
-            </TableRow> */}
         </TableBody>
       </Table>
 
@@ -148,7 +131,9 @@ const ReservationReport = () => {
       </Box>
 
       <p>{new Date().toString()}</p>
-      <CustomButton onClick={handlePrint}  className="print-button">Print this page</CustomButton>
+      <CustomButton onClick={handlePrint} className="print-button">
+        Print this page
+      </CustomButton>
     </Container>
   );
 };

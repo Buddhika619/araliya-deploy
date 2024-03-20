@@ -5,7 +5,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
@@ -33,7 +32,6 @@ const ReservationReport = () => {
   const { userInfo } = userLogin;
   const user = userInfo;
 
-
   const fetchData = async (id) => {
     try {
       const config = {
@@ -42,10 +40,7 @@ const ReservationReport = () => {
         },
       };
 
-      const { data } = await axios.get(
-        `/api/reports/monthlycost`,
-        config
-      );
+      const { data } = await axios.get(`/api/reports/monthlycost`, config);
 
       setaData(data);
 
@@ -61,7 +56,7 @@ const ReservationReport = () => {
   const handlePrint = () => {
     window.print();
   };
-  
+
   useEffect(() => {
     //resting state
 
@@ -76,19 +71,27 @@ const ReservationReport = () => {
     return <Loader />;
   }
 
-
-  const totalRevenue = adata.reduce((acc, cv) => (acc + cv.stats.totalCost),0)
-  const totalQty = adata.reduce((acc, cv) => (acc + cv.stats.totalQty),0)
+  const totalRevenue = adata.reduce((acc, cv) => acc + cv.stats.totalCost, 0);
+  const totalQty = adata.reduce((acc, cv) => acc + cv.stats.totalQty, 0);
 
   const months = [
-    "January", "February", "March", "April", "May", "June", "July",
-    "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
-  
+
   const currentDate = new Date();
   const currentMonthName = months[currentDate.getMonth()];
   return (
-    
     <Container>
       <Box>
         <Box margin="0% 0">
@@ -99,11 +102,10 @@ const ReservationReport = () => {
         {error && <Message varient="danger">{errorMsg.message}</Message>}
       </Box>
       <Box margin="2% 0 2%">
-        <span style={{ fontSize: "20px", fontWeight:'900'}}>
+        <span style={{ fontSize: "20px", fontWeight: "900" }}>
           MONTHLY EXPENCES REPORT - {currentMonthName.toUpperCase()}
           <br />
         </span>
-    
       </Box>
 
       <Table id="myId">
@@ -117,23 +119,20 @@ const ReservationReport = () => {
         <TableBody>
           {adata.map((item, i) => (
             <TableRow key={i} style={{ background: "#eae6e3" }}>
-              <TableCell>{item.material?.name ? item.material.name : item.product.name}</TableCell>
+              <TableCell>
+                {item.material?.name ? item.material.name : item.product.name}
+              </TableCell>
               <TableCell>{item.stats.totalQty}</TableCell>
               <TableCell>{item.stats.totalCost} LKR</TableCell>
             </TableRow>
           ))}
-          <TableRow style={{background:'#eae6e3'}}>
-              <TableCell style={{fontWeight:'900'}}>Total</TableCell>
-              <TableCell style={{fontWeight:'900'}}>{totalQty}</TableCell>
-              <TableCell style={{fontWeight:'900'}}>{totalRevenue} LKR</TableCell>
-            </TableRow>
-
-          {/* <TableRow style={{background:'#eae6e3'}}>
-              <TableCell>Sub Total</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>{content.sale.subTotal}LKR</TableCell>
-            </TableRow> */}
+          <TableRow style={{ background: "#eae6e3" }}>
+            <TableCell style={{ fontWeight: "900" }}>Total</TableCell>
+            <TableCell style={{ fontWeight: "900" }}>{totalQty}</TableCell>
+            <TableCell style={{ fontWeight: "900" }}>
+              {totalRevenue} LKR
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
 
@@ -149,9 +148,13 @@ const ReservationReport = () => {
           <br />
         </Box>
       </Box>
-      <p style={{ fontSize:'11px'}}>*This is a computer-generated document. No signature is required.</p>
-      <p style={{ fontSize:'11px'}}>{new Date().toString()}</p>
-      <CustomButton onClick={handlePrint}  className="print-button">Print this page</CustomButton>
+      <p style={{ fontSize: "11px" }}>
+        *This is a computer-generated document. No signature is required.
+      </p>
+      <p style={{ fontSize: "11px" }}>{new Date().toString()}</p>
+      <CustomButton onClick={handlePrint} className="print-button">
+        Print this page
+      </CustomButton>
     </Container>
   );
 };

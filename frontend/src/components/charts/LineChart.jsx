@@ -5,10 +5,6 @@ import { mockLineData as data } from "../../data/mockData";
 const LineChart = ({ isCustomLineColors = false, isDashboard = false,data }) => {
 
 
-
-
-  
-
   return (
    <>
    {data && (

@@ -1,10 +1,10 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Button, Col, Container, Row } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import React from "react";
+import styled from "styled-components";
+import { Button, Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const SidebarContainer = styled.div`
-background-color: white;
+  background-color: white;
   .wrapper {
     padding-top: 30vh;
     margin-bottom: -16px;
@@ -34,30 +34,29 @@ background-color: white;
       margin-top: 40px;
     }
   }
-`
+`;
 
 const NotFound = () => {
   return (
     <SidebarContainer>
-     
-        <Row className='wrapper'>
-          <Col s={12} className='col1'>
-            <h1>404</h1>
-            <h2>Page Not Found</h2>
-            <Link to='/'>
-              <Button>back to home page</Button>
-            </Link>
-          </Col>
-          <Col s={12} className='col2'>
-            <img
-              src='https://cdn.glitch.global/04ac2eab-7093-47ad-976f-739938dcbb74/pulp-fiction-john-travolta.gif?v=1667742225377'
-              className='image'
-            />
-          </Col>
-        </Row>
-    
+      <Row className="wrapper">
+        <Col s={12} className="col1">
+          <h1>404</h1>
+          <h2>Page Not Found</h2>
+          <Link to="/">
+            <Button>back to home page</Button>
+          </Link>
+        </Col>
+        <Col s={12} className="col2">
+          <img
+            src="https://cdn.glitch.global/04ac2eab-7093-47ad-976f-739938dcbb74/pulp-fiction-john-travolta.gif?v=1667742225377"
+            className="image"
+            alt=""
+          />
+        </Col>
+      </Row>
     </SidebarContainer>
-  )
-}
+  );
+};
 
-export default NotFound
+export default NotFound;

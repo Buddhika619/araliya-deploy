@@ -5,13 +5,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
-
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {  useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Message from "../../components/Message";
 
 import axios from "axios";
@@ -32,7 +31,6 @@ const ReservationReport = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const user = userInfo;
-
 
   const fetchData = async (date) => {
     try {
@@ -61,7 +59,7 @@ const ReservationReport = () => {
   const handlePrint = () => {
     window.print();
   };
-  
+
   useEffect(() => {
     //resting state
 
@@ -76,15 +74,12 @@ const ReservationReport = () => {
     return <Loader />;
   }
 
+  const totalRevenue = adata.reduce((acc, cv) => acc + cv.stats.totalCost, 0);
+  const totalQty = adata.reduce((acc, cv) => acc + cv.stats.totalQty, 0);
 
-  const totalRevenue = adata.reduce((acc, cv) => (acc + cv.stats.totalCost),0)
-  const totalQty = adata.reduce((acc, cv) => (acc + cv.stats.totalQty),0)
-
- 
-  const start = new Date(date.split('x')[0]);
-  const end = new Date(date.split('x')[1]);
+  const start = new Date(date.split("x")[0]);
+  const end = new Date(date.split("x")[1]);
   return (
-    
     <Container>
       <Box>
         <Box margin="0% 0">
@@ -95,15 +90,15 @@ const ReservationReport = () => {
         {error && <Message varient="danger">{errorMsg.message}</Message>}
       </Box>
       <Box margin="2% 0 2%">
-        <span style={{ fontSize: "20px", fontWeight:'900'}}>
+        <span style={{ fontSize: "20px", fontWeight: "900" }}>
           EXPENCES REPORT
           <br />
         </span>
-    
       </Box>
       <Box margin="2% 0 2%">
-        <span style={{ fontSize: "15px", fontWeight:'900'}}>
-       Expenses from {start.toString().slice(0,15)}  to {end.toString().slice(0,15)}
+        <span style={{ fontSize: "15px", fontWeight: "900" }}>
+          Expenses from {start.toString().slice(0, 15)} to{" "}
+          {end.toString().slice(0, 15)}
           <br />
         </span>
       </Box>
@@ -119,23 +114,20 @@ const ReservationReport = () => {
         <TableBody>
           {adata.map((item, i) => (
             <TableRow key={i} style={{ background: "#eae6e3" }}>
-              <TableCell>{item.material?.name ? item.material.name : item.product.name}</TableCell>
+              <TableCell>
+                {item.material?.name ? item.material.name : item.product.name}
+              </TableCell>
               <TableCell>{item.stats.totalQty}</TableCell>
-              <TableCell >{item.stats.totalCost} LKR</TableCell>
+              <TableCell>{item.stats.totalCost} LKR</TableCell>
             </TableRow>
           ))}
-          <TableRow style={{background:'#eae6e3'}}>
-              <TableCell style={{fontWeight:'900'}}>Total</TableCell>
-              <TableCell style={{fontWeight:'900'}}>{totalQty}</TableCell>
-              <TableCell style={{fontWeight:'900'}}>{totalRevenue} LKR</TableCell>
-            </TableRow>
-
-          {/* <TableRow style={{background:'#eae6e3'}}>
-              <TableCell>Sub Total</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>{content.sale.subTotal}LKR</TableCell>
-            </TableRow> */}
+          <TableRow style={{ background: "#eae6e3" }}>
+            <TableCell style={{ fontWeight: "900" }}>Total</TableCell>
+            <TableCell style={{ fontWeight: "900" }}>{totalQty}</TableCell>
+            <TableCell style={{ fontWeight: "900" }}>
+              {totalRevenue} LKR
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
 
@@ -151,9 +143,13 @@ const ReservationReport = () => {
           <br />
         </Box>
       </Box>
-      <p style={{ fontSize:'11px'}}>*This is a computer-generated document. No signature is required.</p>
-      <p style={{ fontSize:'11px'}}>{new Date().toString()}</p>
-      <CustomButton onClick={handlePrint}  className="print-button">Print this page</CustomButton>
+      <p style={{ fontSize: "11px" }}>
+        *This is a computer-generated document. No signature is required.
+      </p>
+      <p style={{ fontSize: "11px" }}>{new Date().toString()}</p>
+      <CustomButton onClick={handlePrint} className="print-button">
+        Print this page
+      </CustomButton>
     </Container>
   );
 };

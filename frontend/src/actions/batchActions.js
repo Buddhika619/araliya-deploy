@@ -9,32 +9,28 @@ import {
   viewSingleBatchesRequest,
   viewSingleBatchesSuccess,
   viewSingleBatchesFail,
-
-
 } from "../reducers/batchSlice";
 
 import {
   updateBatchesRequest,
   updateBatchesSuccess,
   updateBatchesFail,
-} from "../reducers/updateBatchSlice"
+} from "../reducers/updateBatchSlice";
 
 import {
   viewKitchenRequest,
   viewKitchenSuccess,
   viewKitchenFail,
-} from "../reducers/kitchenSlice"
-
+} from "../reducers/kitchenSlice";
 
 import {
   dailyAssingRequest,
   dailyAssingSuccess,
   dailyAssingFail,
-
   manualAssingRequest,
   manualAssingSuccess,
   manualAssingFail,
-} from '../reducers/materialStockSlice'
+} from "../reducers/materialStockSlice";
 
 export const listBatches = () => async (dispatch, getState) => {
   try {
@@ -64,7 +60,6 @@ export const listBatches = () => async (dispatch, getState) => {
   }
 };
 
-
 export const allocateBulkKitchn = () => async (dispatch, getState) => {
   try {
     dispatch(dailyAssingRequest());
@@ -93,36 +88,35 @@ export const allocateBulkKitchn = () => async (dispatch, getState) => {
   }
 };
 
+export const allocateManualKitchen =
+  (payload) => async (dispatch, getState) => {
+    console.log("payload");
+    try {
+      dispatch(manualAssingRequest());
 
-export const allocateManualKitchen = (payload) => async (dispatch, getState) => {
-  console.log("payload");
-  try {
-    dispatch(manualAssingRequest());
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+      const { data } = await axios.post(`/api/batches/one`, payload, config);
 
-    const { data } = await axios.post(`/api/batches/one`, payload, config);
-
-    dispatch(manualAssingSuccess(data));
-  } catch (error) {
-    dispatch(
-      manualAssingFail(
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message
-      )
-    );
-  }
-};
-
+      dispatch(manualAssingSuccess(data));
+    } catch (error) {
+      dispatch(
+        manualAssingFail(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        )
+      );
+    }
+  };
 
 export const listKitchenReservations = () => async (dispatch, getState) => {
   try {
@@ -138,7 +132,7 @@ export const listKitchenReservations = () => async (dispatch, getState) => {
       },
     };
 
-    console.log(userInfo.token)
+    console.log(userInfo.token);
     const { data } = await axios.get(`/api/batches/kitchen`, config);
 
     dispatch(viewKitchenSuccess(data));
@@ -182,33 +176,6 @@ export const createBatches = (payload) => async (dispatch, getState) => {
   }
 };
 
-// export const removeBatches = (id) => async (dispatch, getState) => {
-//   try {
-//     dispatch(deleteMatrialsRequest())
-
-//     const {
-//       userLogin: { userInfo },
-//     } = getState()
-
-//     const config = {
-//       headers: {
-//         Authorization: `Bearer ${userInfo.token}`,
-//       },
-//     }
-
-//     //deleteOne
-//     await axios.delete(`/api/batches/${id}`, config)
-//     dispatch(deleteMatrialsSuccess(id))
-//   } catch (error) {
-//     dispatch(
-//       deleteMatrialsFail(
-//         error.response && error.response.data.message
-//           ? error.response.data.message
-//           : error.message
-//       )
-//     )
-//   }
-// }
 
 export const viewSingleBatch = (id) => async (dispatch, getState) => {
   try {

@@ -1,15 +1,8 @@
-import { useEffect, useState } from 'react'
-import {
-  Form,
-  Button,
-  Row,
-  Col,
-  DropdownButton,
-  Dropdown,
-} from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import styled from 'styled-components'
+import { useEffect, useState } from "react";
+import { Form, Row, Col } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
 
 const SearchBar = styled(Form)`
   .formContainer {
@@ -95,112 +88,96 @@ const SearchBar = styled(Form)`
     box-shadow: 0 10px 10px -5px;
     border: 0px;
   }
-`
+`;
 
 const SearchContainer = styled(Col)`
-  border: ${(props) => (props.hover ? '2px solid #00cc66;' : 'white')};
-`
+  border: ${(props) => (props.hover ? "2px solid #00cc66;" : "white")};
+`;
 
 const DropButton = styled.button`
-  border: ${(props) => (props.hover ? '2px solid #00cc66;' : 'white')};
-`
+  border: ${(props) => (props.hover ? "2px solid #00cc66;" : "white")};
+`;
 
 const SearchBox = () => {
-  const navigate = useNavigate()
-  const [keyWord, setKeyword] = useState('')
-  const [hover, setHover] = useState(0)
-  const params = useParams()
-  console.log(params.category)
+  const navigate = useNavigate();
+  const [keyWord, setKeyword] = useState("");
+  const [hover, setHover] = useState(0);
+  const params = useParams();
+  console.log(params.category);
 
-  // const submitHandler = (e) => {
-  //   e.preventDefault()
-  //   if (keyWord.trim()) {
-  //     navigate(`/search/${keyWord}`)
-  //     //   setKeyword('')
-  //   } else {
-  //     navigate('/')
-  //   }
-  // }
-  const dispatch = useDispatch()
-
-  const productList = useSelector((state) => state.productList)
-  const { loading, error, success, categories } = productList
+  const productList = useSelector((state) => state.productList);
+  const { success, categories } = productList;
 
   const inputHandler = (e) => {
-    setKeyword(e.target.value)
-  }
+    setKeyword(e.target.value);
+  };
 
   const hoverHandler = () => {
-    setHover(1)
-  }
+    setHover(1);
+  };
 
   const hoverOutHandler = () => {
-    setHover(0)
-  }
+    setHover(0);
+  };
 
   useEffect(() => {
     if (hover === 1) {
-      navigate(`/search/${keyWord}`)
-      if (keyWord === '') {
-        navigate('/')
+      navigate(`/search/${keyWord}`);
+      if (keyWord === "") {
+        navigate("/");
       }
     }
-  }, [keyWord])
+  }, [keyWord]);
 
   const handleCategory = (cat) => {
-    navigate(`/category/${cat}`)
-  }
+    navigate(`/category/${cat}`);
+  };
 
   return (
     <>
-    
-        <SearchBar>
-          <Row className='mt-2 formContainer'>
-            <SearchContainer xs={8} className='searchContainer' hover={hover}>
-              <i className='fa-solid fa-magnifying-glass searchIcon'></i>
+      <SearchBar>
+        <Row className="mt-2 formContainer">
+          <SearchContainer xs={8} className="searchContainer" hover={hover}>
+            <i className="fa-solid fa-magnifying-glass searchIcon"></i>
 
-              <Form.Control
-                type='text'
-                name='q'
-                onChange={inputHandler}
-                onFocus={hoverHandler}
-                onBlur={hoverOutHandler}
-                placeholder='Search Products'
-                className='ms-sm-2 me-sm-2 search override'
-              ></Form.Control>
-            </SearchContainer>
-            {success && (
-            <Col xs={1} className='buttonContainer dropdown'>
-              {/* <Button type='submit' className='btn btn-primary'>
-         <i className='fas fa-paper-plane'></i>
-         </Button> */}
-
+            <Form.Control
+              type="text"
+              name="q"
+              onChange={inputHandler}
+              onFocus={hoverHandler}
+              onBlur={hoverOutHandler}
+              placeholder="Search Products"
+              className="ms-sm-2 me-sm-2 search override"
+            ></Form.Control>
+          </SearchContainer>
+          {success && (
+            <Col xs={1} className="buttonContainer dropdown">
               <DropButton
-                className='btn btn-secondary dropdown-toggle dropButton'
+                className="btn btn-secondary dropdown-toggle dropButton"
                 hover={hover}
-                type='button'
-                data-bs-toggle='dropdown'
-                aria-expanded='false'
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
-                {params.category ? params.category : 'All products'}
+                {params.category ? params.category : "All products"}
               </DropButton>
 
-              <ul className='dropdown-menu'>
+              <ul className="dropdown-menu">
                 <li>
                   <a
-                    className='dropdown-item'
-                    href='#'
-                    onClick={() => handleCategory('All Products')}
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => handleCategory("All Products")}
                   >
                     All Products
                   </a>
                 </li>
 
-                {categories.map((cat,index) => (
+                {categories.map((cat, index) => (
                   <li key={index}>
                     <a
-                      className='dropdown-item'
-                      href='#'
+                      className="dropdown-item"
+                      href="#"
                       onClick={() => handleCategory(cat)}
                     >
                       {cat}
@@ -209,12 +186,11 @@ const SearchBox = () => {
                 ))}
               </ul>
             </Col>
-            )}
-          </Row>
-        </SearchBar>
-   
+          )}
+        </Row>
+      </SearchBar>
     </>
-  )
-}
+  );
+};
 
-export default SearchBox
+export default SearchBox;

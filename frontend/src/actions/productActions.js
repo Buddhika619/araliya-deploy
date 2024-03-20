@@ -1,26 +1,20 @@
-import axios from 'axios'
+import axios from "axios";
 import {
   productListRequest,
   productListSuccess,
   productListFail,
-
-} from '../reducers/productsSlice'
-
+} from "../reducers/productsSlice";
 
 import {
-
   adminProductListRequest,
   adminProductListSuccess,
   adminProductListFail,
-} from '../reducers/adminProductList'
+} from "../reducers/adminProductList";
 
 import {
-
   stockProductListRequest,
   stockProductListSuccess,
-  stockProductListFail,
-} from '../reducers/stockProductSlice'
-
+} from "../reducers/stockProductSlice";
 
 import {
   productDetailsRequest,
@@ -32,44 +26,37 @@ import {
   productUpdateRequest,
   productUpdateSuccess,
   productUpdateFail,
-  productUpdateReset,
-} from '../reducers/singleProductSlice'
+} from "../reducers/singleProductSlice";
 
 import {
   productCreateReviewRequest,
   productCreateReviewSuccess,
   productCreateReviewFail,
-} from '../reducers/productReviewSlice'
+} from "../reducers/productReviewSlice";
 
 import {
   productCreateRequest,
   productCreateSuccess,
   productCreateFail,
-  productCreateReset,
-} from '../reducers/productCreateSlice'
+} from "../reducers/productCreateSlice";
 
 import {
   productTopRequest,
   productTopSuccess,
   productTopFail,
-} from '../reducers/productTopRatedSlice'
-
-
-import {
-  viewKitchenRequest, viewKitchenSuccess, viewKitchenFail
-} from '../reducers/stockProductSlice'
+} from "../reducers/productTopRatedSlice";
 
 export const listProducts =
-  (keyword = '', pagenumber = '', filter = '', category='') =>
+  (keyword = "", pagenumber = "", filter = "", category = "") =>
   async (dispatch) => {
     try {
-      dispatch(productListRequest())
+      dispatch(productListRequest());
 
       const { data } = await axios.get(
         `/api/products?keyword=${keyword}&pagenumber=${pagenumber}&filter=${filter}&category=${category}`
-      )
+      );
 
-      dispatch(productListSuccess(data))
+      dispatch(productListSuccess(data));
     } catch (error) {
       dispatch(
         productListFail(
@@ -77,33 +64,32 @@ export const listProducts =
             ? error.response.data.message
             : error.message
         )
-      )
+      );
     }
-  }
+  };
 
-  export const listProductsAdminIn =
-  (path='') =>
-  async (dispatch,getState) => {
+export const listProductsAdminIn =
+  (path = "") =>
+  async (dispatch, getState) => {
     try {
-      dispatch(adminProductListRequest())
-
+      dispatch(adminProductListRequest());
 
       const {
-      userLogin: { userInfo },
-    } = getState()
+        userLogin: { userInfo },
+      } = getState();
 
       const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    }
-
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
 
       const { data } = await axios.get(
-        `/api/products/admin/productList/in?path=${path}`, config
-      )
+        `/api/products/admin/productList/in?path=${path}`,
+        config
+      );
 
-      dispatch(adminProductListSuccess(data))
+      dispatch(adminProductListSuccess(data));
     } catch (error) {
       dispatch(
         adminProductListFail(
@@ -111,37 +97,33 @@ export const listProducts =
             ? error.response.data.message
             : error.message
         )
-      )
+      );
     }
-  }
+  };
 
-
-  export const listProductsAdminOut =
-  (path='') =>
-  async (dispatch,getState) => {
-
-
-    if(path === 'inStock'){
+export const listProductsAdminOut =
+  (path = "") =>
+  async (dispatch, getState) => {
+    if (path === "inStock") {
       try {
-        dispatch(stockProductListRequest())
-  
-  
+        dispatch(stockProductListRequest());
+
         const {
-        userLogin: { userInfo },
-      } = getState()
-  
+          userLogin: { userInfo },
+        } = getState();
+
         const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      }
-  
-  
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
+
         const { data } = await axios.get(
-          `/api/products/admin/productList/out?path=${path}`, config
-        )
-  
-        dispatch(stockProductListSuccess(data))
+          `/api/products/admin/productList/out?path=${path}`,
+          config
+        );
+
+        dispatch(stockProductListSuccess(data));
       } catch (error) {
         dispatch(
           adminProductListFail(
@@ -149,30 +131,28 @@ export const listProducts =
               ? error.response.data.message
               : error.message
           )
-        )
+        );
       }
-
-    }else{
+    } else {
       try {
-        dispatch(stockProductListRequest())
-  
-  
+        dispatch(stockProductListRequest());
+
         const {
-        userLogin: { userInfo },
-      } = getState()
-  
+          userLogin: { userInfo },
+        } = getState();
+
         const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      }
-  
-  
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        };
+
         const { data } = await axios.get(
-          `/api/products/admin/productList/out?path=${path}`, config
-        )
-  
-        dispatch(adminProductListSuccess(data))
+          `/api/products/admin/productList/out?path=${path}`,
+          config
+        );
+
+        dispatch(adminProductListSuccess(data));
       } catch (error) {
         dispatch(
           adminProductListFail(
@@ -180,17 +160,16 @@ export const listProducts =
               ? error.response.data.message
               : error.message
           )
-        )
+        );
       }
     }
-
-  }
+  };
 
 export const listProductsDetails = (id) => async (dispatch) => {
   try {
-    const { data } = await axios.get('/api/products/' + id)
-    dispatch(productDetailsRequest())
-    dispatch(productDetailsSuccess(data))
+    const { data } = await axios.get("/api/products/" + id);
+    dispatch(productDetailsRequest());
+    dispatch(productDetailsSuccess(data));
   } catch (error) {
     dispatch(
       productDetailsFail(
@@ -198,34 +177,34 @@ export const listProductsDetails = (id) => async (dispatch) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};
 
 export const removeProduct = (id) => async (dispatch, getState) => {
-  console.log(id)
+  console.log(id);
   try {
-    dispatch(productRemoveRequest())
+    dispatch(productRemoveRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
         data: id,
       },
-    }
+    };
 
     //deleteOne
-    await axios.delete(`/api/products/${id}`, config)
+    await axios.delete(`/api/products/${id}`, config);
 
     //deleteMultiple
     // axios.delete(`/api/products`, config)
 
-    dispatch(productRemoveSuccess())
+    dispatch(productRemoveSuccess());
   } catch (error) {
     dispatch(
       productRemoveFail(
@@ -233,27 +212,27 @@ export const removeProduct = (id) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};
 
 export const createProduct = (product) => async (dispatch, getState) => {
   try {
-    dispatch(productCreateRequest())
+    dispatch(productCreateRequest());
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
-    const { data } = await axios.post(`/api/products/`, product, config)
+    const { data } = await axios.post(`/api/products/`, product, config);
 
-    dispatch(productCreateSuccess(data))
+    dispatch(productCreateSuccess(data));
   } catch (error) {
     dispatch(
       productCreateFail(
@@ -261,33 +240,33 @@ export const createProduct = (product) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};
 
 export const updateProduct = (product) => async (dispatch, getState) => {
   try {
-    dispatch(productUpdateRequest())
+    dispatch(productUpdateRequest());
 
-    console.log(product)
+    console.log(product);
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
     const { data } = await axios.put(
       `/api/products/${product._id}`,
       product,
       config
-    )
+    );
 
-    dispatch(productUpdateSuccess(data))
+    dispatch(productUpdateSuccess(data));
   } catch (error) {
     dispatch(
       productUpdateFail(
@@ -295,29 +274,29 @@ export const updateProduct = (product) => async (dispatch, getState) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
+};
 
 export const createProductReview =
   (productId, review) => async (dispatch, getState) => {
     try {
-      dispatch(productCreateReviewRequest())
+      dispatch(productCreateReviewRequest());
 
       const {
         userLogin: { userInfo },
-      } = getState()
+      } = getState();
 
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${userInfo.token}`,
         },
-      }
+      };
 
-      await axios.post(`/api/products/${productId}/reviews`, review, config)
+      await axios.post(`/api/products/${productId}/reviews`, review, config);
 
-      dispatch(productCreateReviewSuccess())
+      dispatch(productCreateReviewSuccess());
     } catch (error) {
       dispatch(
         productCreateReviewFail(
@@ -325,17 +304,17 @@ export const createProductReview =
             ? error.response.data.message
             : error.message
         )
-      )
+      );
     }
-  }
+  };
 
 export const listTopProducts = () => async (dispatch) => {
   try {
-    dispatch(productTopRequest())
+    dispatch(productTopRequest());
 
-    const { data } = await axios.get(`/api/products/top`)
+    const { data } = await axios.get(`/api/products/top`);
 
-    dispatch(productTopSuccess(data))
+    dispatch(productTopSuccess(data));
   } catch (error) {
     dispatch(
       productTopFail(
@@ -343,8 +322,6 @@ export const listTopProducts = () => async (dispatch) => {
           ? error.response.data.message
           : error.message
       )
-    )
+    );
   }
-}
-
-
+};

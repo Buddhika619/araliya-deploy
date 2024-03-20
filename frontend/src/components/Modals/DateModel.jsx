@@ -7,8 +7,8 @@ function DateModal({ showModal, handleClose, url }) {
   console.log(selectedDate);
 
   const handleSaveDate = () => {
-    if (selectedDate && endDate && (selectedDate < endDate)) {
-      window.open(url + "/" + selectedDate + 'x' + endDate);
+    if (selectedDate && endDate && selectedDate < endDate) {
+      window.open(url + "/" + selectedDate + "x" + endDate);
     }
     setSelectedDate("");
     setEndDate("");

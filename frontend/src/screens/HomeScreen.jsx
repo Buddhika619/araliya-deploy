@@ -1,28 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from "react";
 
-import { useDispatch, useSelector } from 'react-redux'
-import { Col, Form, Row } from 'react-bootstrap'
-import Product from '../components/Product'
-import { listProducts } from '../actions/productActions'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
+import { useDispatch, useSelector } from "react-redux";
+import { Col, Form, Row } from "react-bootstrap";
+import Product from "../components/Product";
+import { listProducts } from "../actions/productActions";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
 
-import Paginate from '../components/Paginate'
-import { useParams, Link, useNavigate } from 'react-router-dom'
-import MainCarousel from '../components/Carousels/MainCarousel'
-import Meta from '../components/Meta'
-import Header from '../components/layouts/Header'
-import Footer from '../components/layouts/Footer'
-import { Container } from 'react-bootstrap'
-import TopRatedCarousel from '../components/Carousels/TopRatedCarousel'
-import TopRateCarouselMobile from '../components/Carousels/TopRateCarouselMobile'
-import styled from 'styled-components'
+import Paginate from "../components/Paginate";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import MainCarousel from "../components/Carousels/MainCarousel";
+import Meta from "../components/Meta";
+import Header from "../components/layouts/Header";
+import Footer from "../components/layouts/Footer";
+import { Container } from "react-bootstrap";
+import TopRatedCarousel from "../components/Carousels/TopRatedCarousel";
+import TopRateCarouselMobile from "../components/Carousels/TopRateCarouselMobile";
+import styled from "styled-components";
 
-import PromotionsCard from '../components/PromotionsCard'
-import MobileNavbar from '../components/layouts/MobileNavBar'
-import { getConfigdata } from '../actions/configAction'
-
-
+import PromotionsCard from "../components/PromotionsCard";
+import MobileNavbar from "../components/layouts/MobileNavBar";
+import { getConfigdata } from "../actions/configAction";
 
 const Title = styled.div`
   text-align: center;
@@ -30,9 +28,9 @@ const Title = styled.div`
   h1 {
     font-size: 40px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
   }
-`
+`;
 const Line = styled.div`
   margin: 0 auto;
   margin-top: -10px;
@@ -40,17 +38,16 @@ const Line = styled.div`
   height: 2px;
   background-color: #00cc66;
   width: 250px;
-`
-
+`;
 
 const PromoWrapper = styled(Container)`
- display: flex;
- justify-content: center;
- flex-wrap: wrap;
- @media (max-width: 1000px) {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  @media (max-width: 1000px) {
     display: inline-block;
   }
-`
+`;
 
 const FilterWrapper = styled(Container)`
   background-color: white;
@@ -87,7 +84,7 @@ const FilterWrapper = styled(Container)`
     margin-bottom: 10px;
     @media (max-width: 800px) {
       display: inline-block;
-      margin:auto;
+      margin: auto;
     }
   }
 
@@ -115,97 +112,93 @@ const FilterWrapper = styled(Container)`
     &:hover {
     }
   }
-`
+`;
 
 const HomeScreen = () => {
-  // const notify = () => toast('Wow so easy!')
+  const navigate = useNavigate();
+  const { keyword, filter, category } = useParams();
 
+  const { pagenumber } = useParams() || 1;
 
+  const dispatch = useDispatch();
 
+  const productList = useSelector((state) => state.productList);
 
-  const navigate = useNavigate()
-  const { keyword, filter, category } = useParams()
+  const {
+    loading,
+    error,
+    products,
+    success,
+    page,
+    pages,
+    resultCount,
+    categories,
+  } = productList;
 
+  const viewConfig = useSelector((state) => state.configUpdate);
+  const { config: configData } = viewConfig;
 
-
-  const { pagenumber } = useParams() || 1
-
-  const dispatch = useDispatch()
-
-  const productList = useSelector((state) => state.productList)
-
-  const { loading, error, products, success, page, pages, resultCount,categories } =
-    productList
-
-    const viewConfig = useSelector((state) => state.configUpdate)
-    const { config: configData } = viewConfig
-
-
-  console.log(configData)
+  console.log(configData);
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(listProducts(keyword, pagenumber, filter, category))
-    dispatch(getConfigdata())
-  }, [dispatch, keyword, pagenumber, filter,category])
+    dispatch(listProducts(keyword, pagenumber, filter, category));
+    dispatch(getConfigdata());
+  }, [dispatch, keyword, pagenumber, filter, category]);
 
   const handleChange = (e) => {
     //  setFilter(e.currentTarget.value)
     window.scrollTo(0, 800);
     if (keyword) {
-      const filter = e.target.value
+      const filter = e.target.value;
 
-      navigate(`/search/${keyword}/sort/${filter}`)
+      navigate(`/search/${keyword}/sort/${filter}`);
     } else {
-      const filter = e.target.value
+      const filter = e.target.value;
 
-      console.log(filter)
-      navigate(`/sort/${filter}`)
+      console.log(filter);
+      navigate(`/sort/${filter}`);
     }
 
-
-    if(category){
-      const filter = e.target.value
-      navigate(`/category/${category}/sort/${filter}`)
+    if (category) {
+      const filter = e.target.value;
+      navigate(`/category/${category}/sort/${filter}`);
     }
-  }
+  };
 
-  let selectValue = filter
+  let selectValue = filter;
 
   switch (selectValue) {
-    case 'asc':
-      selectValue = 'Price Low to High'
+    case "asc":
+      selectValue = "Price Low to High";
 
-      break
-    case 'dsc':
-      selectValue = 'Price High to Low'
-      break
-    case 'top':
-      selectValue = 'Top Rated Products'
-      break
+      break;
+    case "dsc":
+      selectValue = "Price High to Low";
+      break;
+    case "top":
+      selectValue = "Top Rated Products";
+      break;
     default:
-      selectValue = 'Newest Product'
+      selectValue = "Newest Product";
   }
 
   return (
     <>
       <Meta />
 
-      <Header categories={categories}/>
+      <Header categories={categories} />
       <main>
-        <Col className='col-12'>
-          {!keyword && !filter && !category? (
+        <Col className="col-12">
+          {!keyword && !filter && !category ? (
             <>
               <MainCarousel />
-        
 
               <PromoWrapper>
-              
-              {configData?.offers?.map((offer,item) => (
-                <Col lg={5} md={12} sm={12}  className='m-4' key={item}>
-                <PromotionsCard data={offer} />
-                </Col>
-              ) )}
-             
+                {configData?.offers?.map((offer, item) => (
+                  <Col lg={5} md={12} sm={12} className="m-4" key={item}>
+                    <PromotionsCard data={offer} />
+                  </Col>
+                ))}
               </PromoWrapper>
 
               <Title>
@@ -222,48 +215,45 @@ const HomeScreen = () => {
               </Title>
             </>
           ) : (
-            <Link to='/' className='btn btn-light mt-3'>
+            <Link to="/" className="btn btn-light mt-3">
               Go Back
             </Link>
           )}
 
           <Container>
             {loading && <Loader />}
-            {error && <Message varient='danger'>{error}</Message>}
+            {error && <Message varient="danger">{error}</Message>}
             {success && (
               <>
-                <FilterWrapper className='mb-4'>
-                  <div className='a'>
+                <FilterWrapper className="mb-4">
+                  <div className="a">
                     {keyword && (
                       <>
-                        <p className='keyword'> searching for " {keyword} "</p>
-                        <p className='resultCount'>
+                        <p className="keyword"> searching for " {keyword} "</p>
+                        <p className="resultCount">
                           {resultCount} results found
                         </p>
                       </>
                     )}
                   </div>
-                  <div className='b'>
+                  <div className="b">
                     <span> Sort By:</span>
-                    <Form.Select
-                      className='select'
-                      onChange={handleChange}
-                    >
+                    <Form.Select className="select" onChange={handleChange}>
                       <option default>{selectValue}</option>
-                      {filter !== 'new' && (
-                        <option value='new'>Newest Product</option>
+                      {filter !== "new" && (
+                        <option value="new">Newest Product</option>
                       )}
 
-                      {filter !== 'asc' && (
-                        <option value='asc'>Price Low to High</option>
+                      {filter !== "asc" && (
+                        <option value="asc">Price Low to High</option>
                       )}
 
-                      {filter !== 'dsc' && (
-                        <option value='dsc'>Price High to Low</option>
+                      {filter !== "dsc" && (
+                        <option value="dsc">Price High to Low</option>
                       )}
 
-                      {filter !== 'top' && (
-                        <option value='top'>Top Rated Products</option>
+                      {filter !== "top" && (
+                        <option value="top">Top Rated Products</option>
                       )}
                     </Form.Select>
                   </div>
@@ -279,22 +269,22 @@ const HomeScreen = () => {
                 <Paginate
                   pages={pages}
                   page={page}
-                  keyword={keyword ? keyword : ''}
-                  category = {category ? category : ''}
-                  filter = {filter ? filter: ''}
+                  keyword={keyword ? keyword : ""}
+                  category={category ? category : ""}
+                  filter={filter ? filter : ""}
                 />
               </>
             )}
           </Container>
         </Col>
-        <br/> <br/> <br/> <br/> <br/><br/> <br/>
+        <br /> <br /> <br /> <br /> <br />
+        <br /> <br />
       </main>
       <Footer />
-     
-      <MobileNavbar/>
-    
-    </>
-  )
-}
 
-export default HomeScreen
+      <MobileNavbar />
+    </>
+  );
+};
+
+export default HomeScreen;

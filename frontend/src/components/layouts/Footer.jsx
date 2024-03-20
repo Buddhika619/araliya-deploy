@@ -1,5 +1,5 @@
 import { style } from '@mui/system'
-import { Row, Col, Form, Button, Container } from 'react-bootstrap'
+import { Row, Col, Container } from 'react-bootstrap'
 import styled from 'styled-components'
 
 //TODO - neeed to fix overflow issue in footer
@@ -22,13 +22,6 @@ const Link = styled.a`
   }
 `
 
-const Input = styled.input`
-  background: #212529;
-  border-color: #545454;
-  &:focus {
-    background: #212529;
-  }
-`
 
 const Footer = () => {
   return (

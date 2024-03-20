@@ -52,12 +52,6 @@ const UserListScreen = () => {
 
   const user = userInfo
 
-  //   if(removeSuccess){
-  //     toast.error(`User Removed!`,{
-  //       position: "bottom-right",
-  //       autoClose: 1000,
-  //       theme: "colored",})
-  //   }
 
   useEffect(() => {
     dispatch(removeUserReset())

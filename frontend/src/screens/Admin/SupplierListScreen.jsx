@@ -54,13 +54,6 @@ const SuppplierListScreen = () => {
 
   const user = userInfo
 
-  //   if(removeSuccess){
-  //     toast.error(`User Removed!`,{
-  //       position: "bottom-right",
-  //       autoClose: 1000,
-  //       theme: "colored",})
-  //   }
-
   useEffect(() => {
     dispatch(viewSupplierReset())
     dispatch(viewSingleSupplierReset());

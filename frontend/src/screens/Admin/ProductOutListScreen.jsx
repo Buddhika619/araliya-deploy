@@ -137,35 +137,7 @@ const ProductOutListScreen = () => {
     { field: 'REVIEWNUMBER', headerName: 'No of Reviews', flex: 1 },
     { field: "supplier", headerName: "Supplier ID",  width: 220, },
 
-    // {
-    //   field: 'EDIT ',
-    //   renderCell: (cellValues) => {
-    //     return (
-    //       selectionModel< 1 && (
-    //         <Button
-    //         variant='contained'
-    //         onClick={() => updateHandler(selectionModel[0])}
-    //       >
-    //         <i className='fas fa-edit'></i>
-    //       </Button>
-    //     )
-    //     )
-    //   },
-    // },
-    // {
-    //   field: 'DELETE ',
-    //   renderCell: (cellValues) => {
-    //     return (
-    //       <Button
-    //         variant='danger'
-    //         className='btn-sm'
-    //         onClick={() => deleteHandler(selectionModel[0])}
-    //       >
-    //         <i className='fas fa-trash'></i>
-    //       </Button>
-    //     )
-    //   },
-    // },
+
   ]
 
   //showing rows if product list is laoded
